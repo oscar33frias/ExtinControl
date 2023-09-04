@@ -1,11 +1,6 @@
 import express from "express";
-import { registrar } from "../controllers/usuarioController.js";
+import { registrar ,autenticar} from "../controllers/usuarioController.js";
 const router = express.Router();
 router.post("/", registrar);
-
-router.get("/",(req,res)=>{
-    res.json({
-        message:"hola desde get"
-    })
-})
+router.post("/login",autenticar)
 export default router;

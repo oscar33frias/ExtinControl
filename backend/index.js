@@ -13,7 +13,7 @@ const main = async () => {
 try {
 await verificarTablasYCrearUsuario('Usuario');
 app.use("/api/usuarios", usuarioRoutes);
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 app.listen(PORT, () => {
 console.log("Servidor corriendo desde el puerto " + PORT);

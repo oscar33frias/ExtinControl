@@ -4,9 +4,9 @@ const createUsuarioTableQuery = `
 CREATE TABLE Usuario (
   id INT PRIMARY KEY IDENTITY(1,1),
   nombre NVARCHAR(50) NOT NULL,
-  password NVARCHAR(50) NOT NULL,
+  password NVARCHAR(200) NOT NULL,
   email NVARCHAR(50) NOT NULL UNIQUE,
-  token BIT DEFAULT 0,
+  token NVARCHAR(200) NOT NULL,
   confirmado BIT DEFAULT 0,
   createdAt DATETIME DEFAULT GETDATE(),
   updatedAt DATETIME DEFAULT GETDATE()
