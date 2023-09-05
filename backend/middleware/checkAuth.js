@@ -27,7 +27,7 @@ const checkAuth = async (req, res, next) => {
       if (result.recordset.length === 1) {
         // Usuario encontrado en la base de datos
         req.usuario = result.recordset[0];
-        next();
+        return next();
       } else {
         // Usuario no encontrado
         return res.status(404).json({ msg: "Usuario no encontrado" });
