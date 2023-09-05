@@ -2,19 +2,19 @@ import sql from "mssql";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-// const config = {
-//   user: process.env.USER,
-//   password: process.env.PASSWORD ,
-//   server: process.env.SERVER ,
-//   database: process.env.DATABASE ,
-//   options: {
-//     encrypt: false, // Cambiar a true si se necesita una conexión segura
-//   },
-// };
-
+/*
 const config = {
-  user: process.env.USER2,
+  user: process.env.USER,
+  password: process.env.PASSWORD ,
+  server: process.env.SERVER ,
+  database: process.env.DATABASE ,
+  options: {
+    encrypt: false, // Cambiar a true si se necesita una conexión segura
+  },
+};
+*/
+const config = {
+  user: process.env.USER2 ,
   password: process.env.PASSWORD2,
   server: process.env.SERVER2,
   database: process.env.DATABASE2,
