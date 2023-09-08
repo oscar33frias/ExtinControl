@@ -8,7 +8,7 @@ import {
   eliminarExtintor,
   agregarColaborador,
   eliminarColaborador,
-  obtenerCheckList,
+  //obtenerCheckList,
 } from "../controllers/extintoresController.js";
 
 import checkAuth from "../middleware/checkAuth.js";
@@ -26,7 +26,7 @@ router
   .put(checkAuth, editarExtintor)
   .delete(checkAuth, eliminarExtintor);
 
-router.get("/tareas/:id", checkAuth, obtenerCheckList);
+//router.get("/tareas/:id", checkAuth, obtenerCheckList);
 router.post("/agregar-colaborador/:id", checkAuth, agregarColaborador);
 router.post("/eliminar-colaborador/:id", checkAuth, eliminarColaborador);
 export default router;

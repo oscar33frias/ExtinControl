@@ -1,17 +1,46 @@
 import sql from "mssql";
 
 const obtenerExtintores = async (req, res) => {
+    const { id } = req.params;
+
   try {
     const pool = await sql.connect();
-    const query = `
+
+    // Verificar si el extintor existe
+    const extintorQuery = `
       SELECT * FROM Extintores
-      WHERE usuario_id = @usuarioId
+      WHERE id = @id AND usuario_id = @usuarioId
     `;
-    const result = await pool
+
+    const extintorResult = await pool
       .request()
+      .input("id", sql.Int, id)
       .input("usuarioId", sql.Int, req.usuario.id)
-      .query(query);
-    res.json(result.recordset);
+      .query(extintorQuery);
+
+    if (extintorResult.recordset.length === 0) {
+      return res.status(404).json({ msg: "El extintor no existe o no tienes permisos para verlo" });
+    }
+
+    const extintor = extintorResult.recordset[0];
+
+    // Aquí debes realizar la lógica para obtener las tareas relacionadas con el extintor
+    // Por ejemplo, puedes tener una tabla "Tareas" relacionada con "Extintores" mediante un campo "extintor_id"
+
+    // Consultar tareas relacionadas con el extintor (adapta según tu estructura)
+    const tareasQuery = `
+      SELECT * FROM Tareas
+      WHERE extintor_id = @extintorId
+    `;
+
+    const tareasResult = await pool
+      .request()
+      .input("extintorId", sql.Int, extintor.id)
+      .query(tareasQuery);
+
+    const tareas = tareasResult.recordset;
+
+    res.json({ extintor, tareas });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -135,7 +164,6 @@ const eliminarExtintor = async (req, res) => {
 };
 const agregarColaborador = async (req, res) => {};
 const eliminarColaborador = async (req, res) => {};
-const obtenerCheckList = async (req, res) => {};
 
 export {
   obtenerExtintores,
@@ -144,6 +172,5 @@ export {
   editarExtintor,
   eliminarExtintor,
   agregarColaborador,
-  eliminarColaborador,
-  obtenerCheckList,
+  eliminarColaborador
 };
