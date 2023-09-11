@@ -1,46 +1,18 @@
 import sql from "mssql";
 
 const obtenerExtintores = async (req, res) => {
-    const { id } = req.params;
-
   try {
     const pool = await sql.connect();
-
-    // Verificar si el extintor existe
-    const extintorQuery = `
+    const query = `
       SELECT * FROM Extintores
-      WHERE id = @id AND usuario_id = @usuarioId
+      WHERE usuario_id = @usuarioId
     `;
-
-    const extintorResult = await pool
+    const result = await pool
       .request()
-      .input("id", sql.Int, id)
-      .input("usuarioId", sql.Int, req.usuario.id)
-      .query(extintorQuery);
+      .input("usuarioId", sql.Int, req.usuario.id) // Suponiendo que req.usuario.id contiene el ID del usuario autenticado
+      .query(query);
 
-    if (extintorResult.recordset.length === 0) {
-      return res.status(404).json({ msg: "El extintor no existe o no tienes permisos para verlo" });
-    }
-
-    const extintor = extintorResult.recordset[0];
-
-    // Aquí debes realizar la lógica para obtener las tareas relacionadas con el extintor
-    // Por ejemplo, puedes tener una tabla "Tareas" relacionada con "Extintores" mediante un campo "extintor_id"
-
-    // Consultar tareas relacionadas con el extintor (adapta según tu estructura)
-    const tareasQuery = `
-      SELECT * FROM Tareas
-      WHERE extintor_id = @extintorId
-    `;
-
-    const tareasResult = await pool
-      .request()
-      .input("extintorId", sql.Int, extintor.id)
-      .query(tareasQuery);
-
-    const tareas = tareasResult.recordset;
-
-    res.json({ extintor, tareas });
+    res.json(result.recordset);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -74,26 +46,46 @@ const nuevoExtintor = async (req, res) => {
 
 const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
-  const usuarioId = req.usuario.id; // Asume que req.usuario contiene el objeto de usuario autenticado
 
   try {
     const pool = await sql.connect();
-    const query = `
-        SELECT * FROM Extintores
-        WHERE id = @ExtintoresId AND usuario_id = @usuarioId
-      `;
-    const result = await pool
-      .request()
-      .input("ExtintoresId", sql.Int, id)
-      .input("usuarioId", sql.Int, usuarioId)
-      .query(query);
 
-    if (result.recordset.length === 0) {
-      const error = new Error("Extintores no encontrado o no autorizado");
-      return res.status(404).json({ msg: error.message });
+    // Consulta para obtener un extintor por su ID
+    const extintorQuery = `
+        SELECT * FROM Extintores
+        WHERE id = @id
+      `;
+    
+    const extintorResult = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query(extintorQuery);
+
+    // Verificar si el extintor existe
+    if (extintorResult.recordset.length === 0) {
+      return res.status(404).json({ msg: "Extintor no encontrado" });
     }
 
-    res.json(result.recordset[0]);
+    const extintor = extintorResult.recordset[0];
+
+    // Verificar si el extintor pertenece al usuario autenticado (supongamos que el usuario_id se almacena en el req.usuario.id)
+    if (extintor.usuario_id !== req.usuario.id) {
+      return res.status(403).json({ msg: "No tienes permisos para ver este extintor" });
+    }
+
+    // Consulta para obtener la lista de checklist asociada a este extintor
+    const checklistQuery = `
+        SELECT * FROM checkList
+        WHERE extintorId = @id
+      `;
+
+    const checklistResult = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query(checklistQuery);
+
+    // Retornar el extintor y su lista de checklist
+    res.status(200).json({ extintor, checklist: checklistResult.recordset });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -172,5 +164,5 @@ export {
   editarExtintor,
   eliminarExtintor,
   agregarColaborador,
-  eliminarColaborador
+  eliminarColaborador,
 };
