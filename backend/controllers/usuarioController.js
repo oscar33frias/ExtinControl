@@ -233,6 +233,7 @@ const perfil=async(req,res)=>{
  
   res.json({msg:"desde perfin"})
 }
+  
 // Exportar las funciones para su uso en otros módulos
 export {
   registrar,
