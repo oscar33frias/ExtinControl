@@ -1,8 +1,8 @@
-
+//TODO: Me falta hacer esta parte
 
 const NuevoPassword = () => {
   return (
-    <div  className="flex items-center justify-center ">
+    <div  className="flex flex-col items-center justify-center">
   
       <h1 className="text-red-600 font-black text-6xl capitalize">
         Restablece tu password para acceder a tus

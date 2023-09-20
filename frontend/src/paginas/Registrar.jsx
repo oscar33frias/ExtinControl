@@ -1,12 +1,66 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Alerta from "../components/Alerta";
+import clienteAxios from "../../config/clienteAxios";
+
 
 const Registrar = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repetirPassword, setRepetirPassword] = useState("");
+  const [alerta, setAlerta] = useState({});
 
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    if ([nombre, email, password, repetirPassword].includes("")) {
+      setAlerta({
+        msg: "Todos los campos son obligatorios",
+        error: true,
+      });
+      return;
+    }
+    if (password !== repetirPassword) {
+      setAlerta({
+        msg: "Las contraseñas no son iguales",
+        error: true,
+      });
+      return;
+    }
+    if(password.length < 6){
+      setAlerta({
+        msg: "La contraseña debe tener al menos 6 caracteres",
+        error: true,
+      });
+      return;
+    }
+
+    setAlerta({})
+    try {
+      const {data} = await clienteAxios.post('/usuarios',{
+        nombre,
+        email,
+        password
+      })
+
+      setAlerta({
+        msg: data.msg,
+        error: false,
+      })
+
+      setNombre('')
+      setEmail('')
+      setPassword('')
+      setRepetirPassword('')
+
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      })
+    }
+  };
+  const {msg}=alerta
   return (
     <div className="flex items-center justify-center">
       <div className="w-2/3">
@@ -14,7 +68,8 @@ const Registrar = () => {
           Crea tu cuenta y administra tus
           <span className="text-yellow-700"> extintores</span>
         </h1>
-        <form className="my-10 bg-white shadow rounded-lg p-10">
+        {msg && <Alerta alerta={alerta} />}
+        <form className="my-10 bg-white shadow rounded-lg p-10" onSubmit={handleSubmit}>
           <div className="my-5">
             <label
               className="uppercase text-gray-600 block text-xl font-bold"

@@ -3,7 +3,7 @@ import sql from "mssql"; // Biblioteca para interactuar con SQL Server
 import bcrypt from "bcrypt"; // Biblioteca para el hashing de contraseñas
 import generarId from "../helpers/generarId.js"; // Función para generar un ID aleatorio
 import generarJWT from "../helpers/generarJWT.js"; // Función para generar tokens JWT
-
+import { emailOlvidePassword,emailRegistro } from "../helpers/email.js";
 // Función para registrar un nuevo usuario
 const registrar = async (req, res) => {
   const { nombre, password, email } = req.body; // Obtener datos del cuerpo de la solicitud (request body)
@@ -17,7 +17,8 @@ const registrar = async (req, res) => {
     const verificarResult = await pool.request().query(verificarQuery);
 
     if (verificarResult.recordset.length > 0) {
-      throw new Error("Usuario ya registrado");
+      const error = new Error("Usuario ya registrado");
+      return res.status(400).json({ msg: error.message });
     }
 
     // Encriptar la contraseña antes de almacenarla en la base de datos
@@ -35,13 +36,20 @@ const registrar = async (req, res) => {
     const insertResult = await pool.request().query(insertQuery);
 
     if (insertResult.rowsAffected[0] > 0) {
-      res.json({ message: "Usuario registrado exitosamente" });
+      res.json({ msg: "Usuario registrado exitosamente" });
+         // Aquí invocamos la función emailRegistro
+         emailRegistro({
+          email: email,
+          nombre: nombre,
+          token: token
+        });
+  
     } else {
       throw new Error("Error en el servidor al registrar usuario");
     }
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Error en el servidor" });
+    console.error(error.msg);
+    res.status(500).json({ msg: "Error en el servidor" });
   }
 };
 
@@ -75,14 +83,14 @@ const autenticar = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, usuario.password);
 
     if (passwordMatch) {
-        // Si la contraseña es correcta, generar un token JWT y enviarlo como respuesta
-        const token = generarJWT(usuario.id); // Utiliza el ID como número entero
+      // Si la contraseña es correcta, generar un token JWT y enviarlo como respuesta
+      const token = generarJWT(usuario.id); // Utiliza el ID como número entero
 
-        res.json({
-          _id: usuario.id,
-          nombre: usuario.nombre,
-          email: usuario.email,
-          token: token, // Utiliza el token generado
+      res.json({
+        _id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        token: token, // Utiliza el token generado
       });
     } else {
       // Si la contraseña es incorrecta, retornar un error 403
@@ -107,10 +115,11 @@ const confirmar = async (req, res) => {
     const usuarioConfirmar = await request.query(
       "SELECT * FROM Usuario WHERE Token = @token"
     );
-
+/*
     if (usuarioConfirmar.recordset.length === 0) {
       return res.status(403).json({ msg: "Token no válido" });
     }
+    */
 
     // Actualizar el usuario para confirmarlo
     const updateRequest = pool.request();
@@ -138,6 +147,8 @@ const olvidePassword = async (req, res) => {
       "SELECT * FROM Usuario WHERE email = @email"
     );
 
+    console.log("este es el usuario ",usuario);
+
     if (usuario.recordset.length === 0) {
       const error = new Error("El usuario no existe");
       return res.status(403).json({ msg: error.message });
@@ -145,7 +156,7 @@ const olvidePassword = async (req, res) => {
 
     const usuarioOlvidarPassword = usuario.recordset[0];
     usuarioOlvidarPassword.token = generarId();
-
+    console.log("este es el usuarioOlvidarPass ", usuarioOlvidarPassword);
     await pool
       .request()
       .input("token", sql.NVarChar, usuarioOlvidarPassword.token)
@@ -153,6 +164,12 @@ const olvidePassword = async (req, res) => {
       .query("UPDATE Usuario SET token = @token WHERE email = @email");
 
     res.json({ msg: "Hemos enviado un email con las instrucciones" });
+
+    emailOlvidePassword({
+      email: usuarioOlvidarPassword.email,
+      nombre: usuarioOlvidarPassword.nombre,
+      token: usuarioOlvidarPassword.token
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -192,7 +209,6 @@ const nuevoPassword = async (req, res) => {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-
   try {
     const pool = await sql.connect(); // Establecer una conexión con la base de datos SQL Server
 
@@ -229,11 +245,10 @@ const nuevoPassword = async (req, res) => {
   }
 };
 
-const perfil=async(req,res)=>{
- 
-  res.json({msg:"desde perfin"})
-}
-  
+const perfil = async (req, res) => {
+  res.json({ msg: "desde perfin" });
+};
+
 // Exportar las funciones para su uso en otros módulos
 export {
   registrar,
@@ -242,5 +257,5 @@ export {
   olvidePassword,
   comprobarPassword,
   nuevoPassword,
-  perfil
+  perfil,
 };
