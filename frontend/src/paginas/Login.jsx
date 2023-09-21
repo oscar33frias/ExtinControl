@@ -1,8 +1,38 @@
-
 import { Link } from "react-router-dom";
 import Image from "../img/extintores-login2.jpeg"; // Reemplaza "tu_imagen.jpg" con la ruta de tu imagen
+import { useState } from "react";
+import Alerta from "../components/Alerta";
+import clienteAxios from "../../config/clienteAxios";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [alerta, setAlerta] = useState({});
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if([email,password].includes('')){
+      setAlerta({
+        msg: "Todos los campos son obligatorios",
+        error: true,
+      });
+      return;
+    }
+    try {
+      const {data} = await clienteAxios.post('/usuarios/login', {email, password});
+      localStorage.setItem("token", data.token);
+      console.log(data.email,"inicio sesion");
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      }); 
+      }
+    }
+  
+const {msg} = alerta;
+
   return (
     <div className="flex">
       {/* Sección de la izquierda con la imagen */}
@@ -12,11 +42,12 @@ const Login = () => {
 
       {/* Sección de la derecha con el formulario */}
       <div className="w-1/3  p-10">
+        {msg && <Alerta alerta={alerta} />}
         <h1 className="text-red-600 font-black text-6xl capitalize">
           Inicia sesión y administra tus
           <span className="text-yellow-700"> extintores</span>
         </h1>
-        <form className="my-10">
+        <form className="my-10" onSubmit={handleSubmit}>
           <div className="my-5">
             <label
               className="uppercase text-gray-600 block text-xl font-bold"
@@ -29,13 +60,15 @@ const Login = () => {
               type="email"
               placeholder="Email de Registro"
               className="w-full mt-3 p-3 border rounded-xl bg-gray-200"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <div className="my-5">
             <label
               className="uppercase text-gray-600 block text-xl font-bold"
-              htmlFor="email"
+              htmlFor="password"
             >
               Password
             </label>
@@ -44,6 +77,8 @@ const Login = () => {
               type="password"
               placeholder="Password de Registro"
               className="w-full mt-3 p-3 border rounded-xl bg-gray-200"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

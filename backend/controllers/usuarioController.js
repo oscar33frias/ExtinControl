@@ -103,6 +103,8 @@ const autenticar = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+
+
 const confirmar = async (req, res) => {
   const { token } = req.params;
 
