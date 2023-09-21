@@ -5,6 +5,8 @@ import Registrar from "./paginas/Registrar";
 import OlvidePassword from "./paginas/OlvidePassword";
 import NuevoPassword from "./paginas/NuevoPassword";
 import ConfirmarCuenta from "./paginas/ConfirmarCuenta";
+import RutaProtegida from "./layouts/RutaProtegida";
+import Proyectos from "./paginas/Proyectos";
 
 function App() {
   return (
@@ -25,6 +27,11 @@ function App() {
             path="confirmar/:id"
             element={<ConfirmarCuenta></ConfirmarCuenta>}
           />
+        </Route>
+
+        <Route path="/proyectos" element={<RutaProtegida></RutaProtegida>}>
+          <Route index element={<Proyectos></Proyectos>} />
+
         </Route>
       </Routes>
     </BrowserRouter>
