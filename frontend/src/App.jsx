@@ -6,11 +6,16 @@ import OlvidePassword from "./paginas/OlvidePassword";
 import NuevoPassword from "./paginas/NuevoPassword";
 import ConfirmarCuenta from "./paginas/ConfirmarCuenta";
 import RutaProtegida from "./layouts/RutaProtegida";
-import Proyectos from "./paginas/Proyectos";
+import Extintores from "./paginas/Extintores";
+import NuevoExtintor from "./paginas/NuevoExtintor";
+import { AuthProvider } from "./context/AuthProvider";
+import { ExtintoresProvider } from "./context/ExtintoresProvider";
 
 function App() {
   return (
     <BrowserRouter>
+    <AuthProvider>
+      <ExtintoresProvider>
       <Routes>
         <Route path="/" element={<AuthLayout></AuthLayout>}>
           <Route index element={<Login></Login>} />
@@ -29,11 +34,13 @@ function App() {
           />
         </Route>
 
-        <Route path="/proyectos" element={<RutaProtegida></RutaProtegida>}>
-          <Route index element={<Proyectos></Proyectos>} />
-
+        <Route path="/extintores" element={<RutaProtegida></RutaProtegida>}>
+          <Route index element={<Extintores></Extintores>} />
+          <Route path="crear-extintor" element={<NuevoExtintor></NuevoExtintor>} />
         </Route>
       </Routes>
+      </ExtintoresProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
