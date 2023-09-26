@@ -7,6 +7,7 @@ import Sidebar from "../components/Sidebar"
 const RutaProtegida = () => {
     const {auth,cargando} = useAuth();
     console.log(auth)  
+    //todo: colocar spineer de cargado
     if(cargando) return "cargando..."
 
     console.log(auth.id,"desde ruta protegida")

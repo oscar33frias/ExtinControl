@@ -248,7 +248,8 @@ const nuevoPassword = async (req, res) => {
 };
 
 const perfil = async (req, res) => {
-  res.json({ msg: "desde perfin" });
+  const {usuario}= req;
+  res.json(usuario);
 };
 
 // Exportar las funciones para su uso en otros módulos

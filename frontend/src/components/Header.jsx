@@ -14,7 +14,7 @@ const Header = () => {
       </div>
       <div className="flex justify-end mt-auto">
   <div className="flex items-center gap-4 mt-5">
-    <Link to="/proyectos" className="font-bold uppercase">
+    <Link to="/extintores" className="font-bold uppercase">
       Extintores
     </Link>
     <button
