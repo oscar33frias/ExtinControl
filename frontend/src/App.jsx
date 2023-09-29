@@ -8,6 +8,7 @@ import ConfirmarCuenta from "./paginas/ConfirmarCuenta";
 import RutaProtegida from "./layouts/RutaProtegida";
 import Extintores from "./paginas/Extintores";
 import NuevoExtintor from "./paginas/NuevoExtintor";
+import Extintor from "./paginas/Extintor";
 import { AuthProvider } from "./context/AuthProvider";
 import { ExtintoresProvider } from "./context/ExtintoresProvider";
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/extintores" element={<RutaProtegida></RutaProtegida>}>
           <Route index element={<Extintores></Extintores>} />
           <Route path="crear-extintor" element={<NuevoExtintor></NuevoExtintor>} />
+          <Route path=":id" element={<Extintor></Extintor>} />
         </Route>
       </Routes>
       </ExtintoresProvider>

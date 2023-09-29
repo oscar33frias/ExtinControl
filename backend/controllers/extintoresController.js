@@ -18,7 +18,6 @@ const obtenerExtintores = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 const nuevoExtintor = async (req, res) => {
   const { codigo, marca, capacidad } = req.body;
   const usuarioId = req.usuario.id; // Asume que req.usuario contiene el objeto de usuario autenticado
@@ -27,9 +26,10 @@ const nuevoExtintor = async (req, res) => {
     const pool = await sql.connect();
     const query = `
       INSERT INTO Extintores (codigo, marca, capacidad, usuario_id)
+      OUTPUT INSERTED.*
       VALUES (@codigo, @marca, @capacidad, @usuarioId)
     `;
-    await pool
+    const result = await pool
       .request()
       .input("codigo", sql.NVarChar(200), codigo)
       .input("marca", sql.NVarChar(200), marca)
@@ -37,14 +37,13 @@ const nuevoExtintor = async (req, res) => {
       .input("usuarioId", sql.Int, usuarioId)
       .query(query);
 
-    res.json({ msg: "Extintores creado con éxito" });
+    const extintor = result.recordset[0];
+    res.json(extintor);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Error en el servidor" });
+    res.status(500).json({ msg: "Error en el servidor al crear el extintor" });
   }
-};
-
-const obtenerExtintor = async (req, res) => {
+};const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -55,7 +54,7 @@ const obtenerExtintor = async (req, res) => {
         SELECT * FROM Extintores
         WHERE id = @id
       `;
-    
+
     const extintorResult = await pool
       .request()
       .input("id", sql.Int, id)
@@ -70,22 +69,13 @@ const obtenerExtintor = async (req, res) => {
 
     // Verificar si el extintor pertenece al usuario autenticado (supongamos que el usuario_id se almacena en el req.usuario.id)
     if (extintor.usuario_id !== req.usuario.id) {
-      return res.status(403).json({ msg: "No tienes permisos para ver este extintor" });
+      return res
+        .status(403)
+        .json({ msg: "No tienes permisos para ver este extintor" });
     }
 
-    // Consulta para obtener la lista de checklist asociada a este extintor
-    const checklistQuery = `
-        SELECT * FROM checkList
-        WHERE extintorId = @id
-      `;
-
-    const checklistResult = await pool
-      .request()
-      .input("id", sql.Int, id)
-      .query(checklistQuery);
-
-    // Retornar el extintor y su lista de checklist
-    res.status(200).json({ extintor, checklist: checklistResult.recordset });
+    // Retornar solamente el objeto extintor
+    res.status(200).json( extintor );
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
