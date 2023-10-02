@@ -2,8 +2,8 @@ import sql from "mssql";
 import dotenv from "dotenv";
 
 dotenv.config();
-/*
-const config = {
+
+const config1 = {
   user: process.env.USER,
   password: process.env.PASSWORD ,
   server: process.env.SERVER ,
@@ -13,9 +13,9 @@ const config = {
   },
 };
 
-*/
 
-const config = {
+
+const config2 = {
   user: process.env.USER2 ,
   password: process.env.PASSWORD2,
   server: process.env.SERVER2,
@@ -28,7 +28,7 @@ const config = {
 
 export const conectarDB = async () => {
   try {
-    await sql.connect(config);
+    await sql.connect(config1);
     console.log("Conexión exitosa a SQL Server");
   } catch (error) {
     console.error(`Error: ${error.message}`);

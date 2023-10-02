@@ -9,6 +9,7 @@ const ExtintoresProvider = ({ children }) => {
   const [alerta, setAlerta] = useState({});
   const [extintor, setExtintor] = useState({});
   const [cargando, setCargando] = useState(false);
+  const [modalFormularioExtintor, setModalFormularioExtintor] = useState( false);
 
   const navigate = useNavigate();
 
@@ -168,6 +169,9 @@ const ExtintoresProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const handleModalExtintor = () => {
+    setModalFormularioExtintor(!modalFormularioExtintor);
+  };
   return (
     <ExtintoresContext.Provider
       value={{
@@ -179,6 +183,8 @@ const ExtintoresProvider = ({ children }) => {
         extintor,
         cargando,
         eliminarExtintor,
+        modalFormularioExtintor,
+        handleModalExtintor
       }}
     >
       {children}

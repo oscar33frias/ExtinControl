@@ -3,6 +3,7 @@ import sql from "mssql";
 const createCheckListTableQuery = `
 CREATE TABLE checkList (
   id INT PRIMARY KEY IDENTITY(1,1),
+  codigo NVARCHAR(50) NOT NULL,
   obstruido NVARCHAR(50) NOT NULL,
   instrucciones NVARCHAR(200) NOT NULL,
   senalamiento NVARCHAR(200) NOT NULL ,
