@@ -43,7 +43,8 @@ const nuevoExtintor = async (req, res) => {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor al crear el extintor" });
   }
-};const obtenerExtintor = async (req, res) => {
+};
+const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -75,14 +76,12 @@ const nuevoExtintor = async (req, res) => {
     }
 
     // Retornar solamente el objeto extintor
-    res.status(200).json( extintor );
+    res.status(200).json(extintor);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
-// Controlador para editar un Extintores existente
 const editarExtintor = async (req, res) => {
   const { id } = req.params;
   const usuarioId = req.usuario.id; // Asume que req.usuario contiene el objeto de usuario autenticado
@@ -90,32 +89,42 @@ const editarExtintor = async (req, res) => {
 
   try {
     const pool = await sql.connect();
-    const query = `
+    const updateQuery = `
         UPDATE Extintores
         SET codigo = @codigo, marca = @marca, capacidad = @capacidad
         WHERE id = @ExtintoresId AND usuario_id = @usuarioId
       `;
-    const result = await pool
+    const updateResult = await pool
       .request()
       .input("codigo", sql.NVarChar(200), codigo)
       .input("marca", sql.NVarChar(200), marca)
       .input("capacidad", sql.Float, capacidad)
       .input("ExtintoresId", sql.Int, id)
       .input("usuarioId", sql.Int, usuarioId)
-      .query(query);
+      .query(updateQuery);
 
-    if (result.rowsAffected[0] === 0) {
+    if (updateResult.rowsAffected[0] === 0) {
       const error = new Error("Extintores no encontrado o no autorizado");
       return res.status(404).json({ msg: error.message });
     }
 
-    res.json({ msg: "Extintores actualizado con éxito" });
+    const selectQuery = `
+        SELECT * FROM Extintores
+        WHERE id = @ExtintoresId AND usuario_id = @usuarioId
+      `;
+    const selectResult = await pool
+      .request()
+      .input("ExtintoresId", sql.Int, id)
+      .input("usuarioId", sql.Int, usuarioId)
+      .query(selectQuery);
+
+    const extintor = selectResult.recordset[0];
+    res.json(extintor);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 // Controlador para eliminar un Extintores
 const eliminarExtintor = async (req, res) => {
   const { id } = req.params;

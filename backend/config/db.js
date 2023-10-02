@@ -2,7 +2,7 @@ import sql from "mssql";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+/*
 const config = {
   user: process.env.USER,
   password: process.env.PASSWORD ,
@@ -13,8 +13,8 @@ const config = {
   },
 };
 
+*/
 
-/*
 const config = {
   user: process.env.USER2 ,
   password: process.env.PASSWORD2,
@@ -23,7 +23,7 @@ const config = {
   options: {
     encrypt: false, // Cambiar a true si se necesita una conexión segura
   },
-};*/
+};
 
 
 export const conectarDB = async () => {

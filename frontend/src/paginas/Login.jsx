@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link ,useNavigate,} from "react-router-dom";
 import Image from "../img/extintores-login2.jpeg"; // Reemplaza "tu_imagen.jpg" con la ruta de tu imagen
 import { useState } from "react";
 import Alerta from "../components/Alerta";
@@ -13,8 +13,12 @@ const Login = () => {
  
   const {setAuth} = useAuth();
 
+  const navigate= useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handleSubmit se está ejecutando");
 
     if([email,password].includes('')){
       setAlerta({
@@ -27,7 +31,9 @@ const Login = () => {
       const {data} = await clienteAxios.post('/usuarios/login', {email, password});
       localStorage.setItem("token", data.token);
       setAuth(data);
-      console.log("console.log desde Login ",data.email);
+      console.log(data);  // Verifica lo que devuelve el servidor
+      console.log("Navegando a /extintores");
+      navigate('/extintores');
     } catch (error) {
       setAlerta({
         msg: error.response.data.msg,

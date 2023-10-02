@@ -8,6 +8,8 @@ const ExtintoresProvider = ({ children }) => {
   const [extintores, setExtintores] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [extintor, setExtintor] = useState({});
+  const [cargando, setCargando] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +42,50 @@ const ExtintoresProvider = ({ children }) => {
     }, 3000);
   };
   const submitExtintor = async (extintor) => {
+    if (extintor.id) {
+      await editarExtintor(extintor);
+    } else {
+      await nuevoExtintor(extintor);
+    }
+  };
+
+  const editarExtintor = async (extintor) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await clienteAxios.put(
+        `/extintores/${extintor.id}`,
+        extintor,
+        config
+      );
+
+      const extintoresActualizados = extintores.map((extintor) =>
+        extintor.id === data.id ? data : extintor
+      );
+      setExtintores(extintoresActualizados);
+
+      setAlerta({
+        msg: "Extintor editado correctamente",
+        error: false,
+      });
+
+      setTimeout(() => {
+        setAlerta({});
+        navigate("/extintores");
+      }, 300);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const nuevoExtintor = async (extintor) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -66,8 +112,8 @@ const ExtintoresProvider = ({ children }) => {
       console.log(error);
     }
   };
-
   const obtenerExtintor = async (id) => {
+    setCargando(true);
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -83,6 +129,43 @@ const ExtintoresProvider = ({ children }) => {
       setExtintor(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setCargando(false);
+    }
+  };
+  const eliminarExtintor = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await clienteAxios.delete(`/extintores/${id}`, config);
+
+      const extintoresFiltrados = extintores.filter(
+        (extintor) => extintor.id !== id
+      );
+
+      console.log("extintores filtrados",extintoresFiltrados);
+
+      setExtintores(extintoresFiltrados);
+
+      setAlerta({
+        msg: data.msg,
+        error: false,
+      });
+
+      setTimeout(() => {
+        setAlerta({}),
+          navigate("/extintores");
+      }, 3000);
+
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -94,6 +177,8 @@ const ExtintoresProvider = ({ children }) => {
         submitExtintor,
         obtenerExtintor,
         extintor,
+        cargando,
+        eliminarExtintor,
       }}
     >
       {children}
