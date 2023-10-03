@@ -1,6 +1,9 @@
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
+import Alerta from "./Alerta";
+import { useParams } from "react-router-dom";
+
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
@@ -19,8 +22,61 @@ const ModalFomularioExtintor = () => {
   const [fechaCheckList, setFechaCheckList] = useState("");
   const [prioridad, setPrioridad] = useState("");
 
-  const { modalFormularioExtintor, handleModalExtintor } = useExtintores();
+  const params = useParams();
 
+  console.log("el parametro es" ,params.id)
+
+  const {
+    modalFormularioExtintor,
+    handleModalExtintor,
+    mostrarAlerta,
+    alerta,
+    submitCheckList,
+  } = useExtintores();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      [
+        codigo,
+        obstruido,
+        instrucciones,
+        senalamiento,
+        manometro,
+        sello,
+        condFisica,
+        manguera,
+        boquilla,
+        etiqueta,
+        fechaCheckList,
+        prioridad,
+      ].includes("")
+    ) {
+      mostrarAlerta({
+        msg: "Todos los campos son obligatorios",
+        error: true,
+      });
+      return;
+    }
+    submitCheckList({
+      codigo,
+      obstruido,
+      instrucciones,
+      senalamiento,
+      manometro,
+      sello,
+      condFisica,
+      manguera,
+      boquilla,
+      etiqueta,
+      fechaCheckList,
+      prioridad,
+      extintor: params.id,
+    });
+  };
+  console.log("el parametro es" ,params.id);
+  const { msg } = alerta;
   return (
     <Transition.Root show={modalFormularioExtintor} as={Fragment}>
       <Dialog
@@ -89,7 +145,8 @@ const ModalFomularioExtintor = () => {
                   >
                     Crear CheckList
                   </Dialog.Title>
-                  <form className=" m-10 ">
+                  {msg && <Alerta alerta={alerta} />}
+                  <form className=" m-10 " onSubmit={handleSubmit}>
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
@@ -99,7 +156,7 @@ const ModalFomularioExtintor = () => {
                       </label>
                       <input
                         type="text"
-                        id="nombre"
+                        id="codigo"
                         placeholder="Codigo del checklist"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
                         value={codigo}
@@ -278,15 +335,15 @@ const ModalFomularioExtintor = () => {
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="boquilla"
+                        htmlFor="etiqueta"
                       >
                         Etiqueta
                       </label>
                       <select
-                        id="boquilla"
+                        id="etiqueta"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={boquilla}
-                        onChange={(e) => setBoquilla(e.target.value)}
+                        value={etiqueta}
+                        onChange={(e) => setEtiqueta(e.target.value)}
                       >
                         <option value="">Selecionar</option>
 
@@ -296,47 +353,6 @@ const ModalFomularioExtintor = () => {
                       </select>
                     </div>
 
-                    <div>
-                      <label
-                        className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="boquilla"
-                      >
-                        Fecha del CheckList
-                      </label>
-                      <select
-                        id="boquilla"
-                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={boquilla}
-                        onChange={(e) => setBoquilla(e.target.value)}
-                      >
-                        <option value="">Selecionar</option>
-
-                        {CHECK.map((opcion) => (
-                          <option key={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label
-                        className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="boquilla"
-                      >
-                        Fecha del CheckList
-                      </label>
-                      <select
-                        id="boquilla"
-                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={boquilla}
-                        onChange={(e) => setBoquilla(e.target.value)}
-                      >
-                        <option value="">Selecionar</option>
-
-                        {CHECK.map((opcion) => (
-                          <option key={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                    </div>
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
@@ -352,12 +368,13 @@ const ModalFomularioExtintor = () => {
                         onChange={(e) => setFechaCheckList(e.target.value)}
                       />
                     </div>
+
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
                         htmlFor="prioridad"
                       >
-                        Etiqueta
+                        Prioridad
                       </label>
                       <select
                         type="prioridad"

@@ -9,7 +9,7 @@ const ExtintoresProvider = ({ children }) => {
   const [alerta, setAlerta] = useState({});
   const [extintor, setExtintor] = useState({});
   const [cargando, setCargando] = useState(false);
-  const [modalFormularioExtintor, setModalFormularioExtintor] = useState( false);
+  const [modalFormularioExtintor, setModalFormularioExtintor] = useState(false);
 
   const navigate = useNavigate();
 
@@ -151,7 +151,7 @@ const ExtintoresProvider = ({ children }) => {
         (extintor) => extintor.id !== id
       );
 
-      console.log("extintores filtrados",extintoresFiltrados);
+      console.log("extintores filtrados", extintoresFiltrados);
 
       setExtintores(extintoresFiltrados);
 
@@ -161,16 +161,33 @@ const ExtintoresProvider = ({ children }) => {
       });
 
       setTimeout(() => {
-        setAlerta({}),
-          navigate("/extintores");
+        setAlerta({}), navigate("/extintores");
       }, 3000);
-
     } catch (error) {
       console.log(error);
     }
   };
   const handleModalExtintor = () => {
     setModalFormularioExtintor(!modalFormularioExtintor);
+  };
+
+  const submitCheckList = async (checklist) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+     const {data} = await clienteAxios.post('/checklist', checklist, config)
+     console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ExtintoresContext.Provider
@@ -184,7 +201,8 @@ const ExtintoresProvider = ({ children }) => {
         cargando,
         eliminarExtintor,
         modalFormularioExtintor,
-        handleModalExtintor
+        handleModalExtintor,
+        submitCheckList,
       }}
     >
       {children}

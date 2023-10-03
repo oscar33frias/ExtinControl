@@ -60,15 +60,25 @@ const agregarCheckList = async (req, res) => {
       .input("extintorId", sql.Int, extintorId)
       .query(insertQuery);
 
-    // Responder con un mensaje de éxito
-    res.json({ msg: "Elemento de checkList agregado con éxito" });
+    // Obtener el elemento de checkList agregado
+    const checkListQuery = `
+      SELECT * FROM checkList
+      WHERE extintorId = @extintorId
+      ORDER BY id DESC
+    `;
+    const checkListResult = await pool
+      .request()
+      .input("extintorId", sql.Int, extintorId)
+      .query(checkListQuery);
+
+    // Responder con el elemento de checkList agregado
+    res.json(checkListResult.recordset[0]);
   } catch (error) {
     // Manejar errores y responder con un mensaje de error en caso de falla
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 const obtenerCheckList = async (req, res) => {
   // Obtener el parámetro 'id' de la solicitud
   const { id } = req.params;
