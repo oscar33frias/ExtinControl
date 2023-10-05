@@ -1,87 +1,84 @@
 import sql from "mssql";
 
 const obtenerExtintores = async (req, res) => {
+  const pool = await sql.connect();
+  const usuarioId = req.usuario.id;
+
+  const query = `
+    SELECT * 
+    FROM Extintores 
+    WHERE usuario_id = @usuarioId
+  `;
+
   try {
-    const pool = await sql.connect();
-    const query = `
-      SELECT * FROM Extintores
-      WHERE usuario_id = @usuarioId
-    `;
-    const result = await pool
-      .request()
-      .input("usuarioId", sql.Int, req.usuario.id) // Suponiendo que req.usuario.id contiene el ID del usuario autenticado
+    const result = await pool.request()
+      .input("usuarioId", sql.Int, usuarioId)
       .query(query);
 
     res.json(result.recordset);
   } catch (error) {
-    console.error(error);
+    console.error("Error al obtener extintores:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
 const nuevoExtintor = async (req, res) => {
   const { codigo, marca, capacidad } = req.body;
-  const usuarioId = req.usuario.id; // Asume que req.usuario contiene el objeto de usuario autenticado
+  const usuarioId = req.usuario.id;
+
+  const query = `
+    INSERT INTO Extintores (codigo, marca, capacidad, usuario_id)
+    OUTPUT INSERTED.*
+    VALUES (@codigo, @marca, @capacidad, @usuarioId)
+  `;
 
   try {
     const pool = await sql.connect();
-    const query = `
-      INSERT INTO Extintores (codigo, marca, capacidad, usuario_id)
-      OUTPUT INSERTED.*
-      VALUES (@codigo, @marca, @capacidad, @usuarioId)
-    `;
-    const result = await pool
-      .request()
+    const result = await pool.request()
       .input("codigo", sql.NVarChar(200), codigo)
       .input("marca", sql.NVarChar(200), marca)
       .input("capacidad", sql.Float, capacidad)
       .input("usuarioId", sql.Int, usuarioId)
       .query(query);
 
-    const extintor = result.recordset[0];
-    res.json(extintor);
+    res.json(result.recordset[0]);
   } catch (error) {
-    console.error(error);
+    console.error("Error al crear extintor:", error.message);
     res.status(500).json({ msg: "Error en el servidor al crear el extintor" });
   }
 };
 const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
+  const { id: usuarioId } = req.usuario; // Desestructuración directa
 
   try {
     const pool = await sql.connect();
 
-    // Consulta para obtener un extintor por su ID
-    const extintorQuery = `
-        SELECT * FROM Extintores
-        WHERE id = @id
-      `;
+    const query = `
+      SELECT * FROM Extintores
+      WHERE id = @id
+    `;
 
-    const extintorResult = await pool
-      .request()
+    const { recordset } = await pool.request()
       .input("id", sql.Int, id)
-      .query(extintorQuery);
+      .query(query);
 
-    // Verificar si el extintor existe
-    if (extintorResult.recordset.length === 0) {
+    if (recordset.length === 0) {
       return res.status(404).json({ msg: "Extintor no encontrado" });
     }
 
-    const extintor = extintorResult.recordset[0];
+    const [extintor] = recordset;
 
-    // Verificar si el extintor pertenece al usuario autenticado (supongamos que el usuario_id se almacena en el req.usuario.id)
-    if (extintor.usuario_id !== req.usuario.id) {
-      return res
-        .status(403)
-        .json({ msg: "No tienes permisos para ver este extintor" });
+    if (extintor.usuario_id !== usuarioId) {
+      return res.status(403).json({ msg: "No tienes permisos para ver este extintor" });
     }
 
-    // Retornar solamente el objeto extintor
     res.status(200).json(extintor);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+
 const editarExtintor = async (req, res) => {
   const { id } = req.params;
   const usuarioId = req.usuario.id; // Asume que req.usuario contiene el objeto de usuario autenticado
