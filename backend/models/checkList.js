@@ -10,7 +10,7 @@ CREATE TABLE checkList (
   manometro  nvarchar(200) NOT NULL,
   sello NVARCHAR(200) NOT NULL,
   condFisica NVARCHAR(200) NOT NULL,
-  mangera NVARCHAR(200) NOT NULL,  
+  manguera NVARCHAR(200) NOT NULL,  
   boquilla NVARCHAR(200) NOT NULL,
   etiqueta NVARCHAR(200) NOT NULL,
   fecha_checklist DATETIME DEFAULT GETDATE(),

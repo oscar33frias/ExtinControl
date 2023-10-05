@@ -9,6 +9,7 @@ CREATE TABLE Extintores (
   fecha_creacion DATETIME DEFAULT GETDATE(),
   usuario_id INT NOT NULL,
   colaboradores_id INT 
+  tareas_id INT,
 )
 `;
 

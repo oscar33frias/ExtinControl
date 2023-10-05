@@ -182,7 +182,8 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-
+      console.log("checklist", checklist)
+      
      const {data} = await clienteAxios.post('/checklist', checklist, config)
      console.log(data);
     } catch (error) {

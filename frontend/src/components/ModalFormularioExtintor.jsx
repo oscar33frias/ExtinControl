@@ -59,6 +59,7 @@ const ModalFomularioExtintor = () => {
       });
       return;
     }
+    console.log("la manguera es", manguera)
     submitCheckList({
       codigo,
       obstruido,
@@ -72,10 +73,10 @@ const ModalFomularioExtintor = () => {
       etiqueta,
       fechaCheckList,
       prioridad,
-      extintor: params.id,
+      extintorId: params.id,
     });
   };
-  console.log("el parametro es" ,params.id);
+
   const { msg } = alerta;
   return (
     <Transition.Root show={modalFormularioExtintor} as={Fragment}>

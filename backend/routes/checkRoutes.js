@@ -16,5 +16,4 @@ router
   .get(checkAuth, obtenerCheckList)
   .put(checkAuth, actualizarCheckList)
   .delete(checkAuth, eliminarCheckList);
-
 export default router;

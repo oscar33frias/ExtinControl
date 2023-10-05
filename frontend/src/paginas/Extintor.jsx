@@ -14,8 +14,9 @@ const Extintor = () => {
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);
-
   const { codigo } = extintor;
+
+  console.log("extintor", extintor);
 
   return cargando ? (
     "..."
@@ -69,6 +70,7 @@ const Extintor = () => {
         Nuevo CheckList
       </button>
 
+   
       <ModalFormularioExtintor modal={modal} setmodal={setModal} />
     </>
   );

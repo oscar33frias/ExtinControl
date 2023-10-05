@@ -1,7 +1,10 @@
 import sql from "mssql";
+
+
 const agregarCheckList = async (req, res) => {
   // Extraer datos del cuerpo de la solicitud
   const {
+    codigo,
     extintorId,
     obstruido,
     instrucciones,
@@ -9,7 +12,7 @@ const agregarCheckList = async (req, res) => {
     manometro,
     sello,
     condFisica,
-    mangera,
+    manguera,
     boquilla,
     etiqueta,
     prioridad,
@@ -42,18 +45,19 @@ const agregarCheckList = async (req, res) => {
 
     // Insertar un elemento en la lista de verificación (checkList)
     const insertQuery = `
-      INSERT INTO checkList (obstruido, instrucciones, senalamiento, manometro, sello, condFisica, mangera, boquilla, etiqueta, prioridad, extintorId)
-      VALUES (@obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @mangera, @boquilla, @etiqueta, @prioridad, @extintorId)
+      INSERT INTO checkList (codigo, obstruido, instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, prioridad, extintorId)
+      VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @prioridad, @extintorId)
     `;
     await pool
       .request()
+      .input("codigo", sql.VarChar(255), codigo)
       .input("obstruido", sql.NVarChar(200), obstruido)
       .input("instrucciones", sql.NVarChar(200), instrucciones)
       .input("senalamiento", sql.NVarChar(200), senalamiento)
       .input("manometro", sql.NVarChar(200), manometro)
       .input("sello", sql.NVarChar(200), sello)
       .input("condFisica", sql.NVarChar(200), condFisica)
-      .input("mangera", sql.NVarChar(200), mangera)
+      .input("manguera", sql.NVarChar(200), manguera)
       .input("boquilla", sql.NVarChar(200), boquilla)
       .input("etiqueta", sql.NVarChar(200), etiqueta)
       .input("prioridad", sql.VarChar(255), prioridad)
@@ -79,6 +83,7 @@ const agregarCheckList = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+
 const obtenerCheckList = async (req, res) => {
   // Obtener el parámetro 'id' de la solicitud
   const { id } = req.params;
@@ -192,7 +197,7 @@ const actualizarCheckList = async (req, res) => {
       manometro = existingCheckList.manometro,
       sello = existingCheckList.sello,
       condFisica = existingCheckList.condFisica,
-      mangera = existingCheckList.mangera,
+      manguera = existingCheckList.manguera,
       boquilla = existingCheckList.boquilla,
       etiqueta = existingCheckList.etiqueta,
       prioridad = existingCheckList.prioridad,
@@ -208,7 +213,7 @@ const actualizarCheckList = async (req, res) => {
         manometro = @manometro,
         sello = @sello,
         condFisica = @condFisica,
-        mangera = @mangera,
+        manguera = @manguera,
         boquilla = @boquilla,
         etiqueta = @etiqueta,
         prioridad = @prioridad
@@ -225,7 +230,7 @@ const actualizarCheckList = async (req, res) => {
       .input("manometro", sql.NVarChar(200), manometro)
       .input("sello", sql.NVarChar(200), sello)
       .input("condFisica", sql.NVarChar(200), condFisica)
-      .input("mangera", sql.NVarChar(200), mangera)
+      .input("manguera", sql.NVarChar(200), manguera)
       .input("boquilla", sql.NVarChar(200), boquilla)
       .input("etiqueta", sql.NVarChar(200), etiqueta)
       .input("prioridad", sql.VarChar(255), prioridad)
@@ -294,6 +299,20 @@ const eliminarCheckList = async (req, res) => {
 };
 
 const cambiarEstado = async (req, res) => {};
+
+
+export const obtenerCheckLists = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const checkLists = await CheckList.findAll({
+      where: { extintorId: id },
+    });
+    res.json(checkLists);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener los checklists" });
+  }
+};
 
 export {
   agregarCheckList,
