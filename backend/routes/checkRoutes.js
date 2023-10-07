@@ -3,7 +3,7 @@ import checkAuth from "../middleware/checkAuth.js";
 
 import {
   agregarCheckList,
-  obtenerCheckList,
+  obtenerCheckLists,
   actualizarCheckList,
   eliminarCheckList,
   cambiarEstado,
@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/", checkAuth, agregarCheckList);
 router
   .route("/:id")
-  .get(checkAuth, obtenerCheckList)
+  .get(checkAuth, obtenerCheckLists)
   .put(checkAuth, actualizarCheckList)
   .delete(checkAuth, eliminarCheckList);
 export default router;
