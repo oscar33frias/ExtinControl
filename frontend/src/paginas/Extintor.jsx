@@ -12,7 +12,7 @@ const Extintor = () => {
     extintor,
     cargando,
     handleModalExtintor,
-    checkList,
+    checkLists,
   } = useExtintores();
 
   const [modal, setModal] = useState(false);
@@ -80,8 +80,8 @@ const Extintor = () => {
       <p className=" font-bold text-xl mt-10"> CheckList del Extintor</p>
 
       <div className=" bg-white shadow mt-10 rounded-lg">
-        {checkList?.length ? (
-          checkList?.map((checklist) => (
+        {checkLists?.length ? (
+          checkLists?.map((checklist) => (
             <CheckList key={checklist.id} checklist={checklist} />
           ))
         ) : (

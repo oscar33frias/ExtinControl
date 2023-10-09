@@ -1,6 +1,5 @@
 const formatearFecha = (fecha) => {
   const nuevaFecha = new Date(fecha.split("T")[0].split("-"));
-  console.log("desde formatearFecha", fecha);
   const opciones = {
     weekday: "long",
     year: "numeric",

@@ -21,10 +21,9 @@ const ModalFomularioExtintor = () => {
   const [etiqueta, setEtiqueta] = useState("");
   const [fechaCheckList, setFechaCheckList] = useState("");
   const [prioridad, setPrioridad] = useState("");
+  const [id, setId] = useState("");
 
   const params = useParams();
-
-  const navigate= useNavigate();
 
   const {
     modalFormularioExtintor,
@@ -32,10 +31,45 @@ const ModalFomularioExtintor = () => {
     mostrarAlerta,
     alerta,
     submitCheckList,
-    extintor
+    checkList,
   } = useExtintores();
 
-  const handleSubmit = (e) => {
+  console.log("desde modal",checkList);
+
+  useEffect(() => {
+    if (checkList.id) {
+      setId(checkList.id)
+      setCodigo(checkList.codigo);
+      setObstruido(checkList.obstruido);
+      setInstrucciones(checkList.instrucciones);
+      setSenalamiento(checkList.senalamiento);
+      setManometro(checkList.manometro);
+      setSello(checkList.sello);
+      setCondFisica(checkList.condFisica);
+      setMangera(checkList.manguera);
+      setBoquilla(checkList.boquilla);
+      setEtiqueta(checkList.etiqueta);
+      setFechaCheckList(checkList.fecha_checklist?.split("T")[0]);
+      setPrioridad(checkList.prioridad);
+      return;
+    }
+    setId("");
+    setCodigo("");
+    setObstruido("");
+    setInstrucciones("");
+    setSenalamiento("");
+    setManometro("");
+    setSello("");
+    setCondFisica("");
+    setMangera("");
+    setBoquilla("");
+    setEtiqueta("");
+    setFechaCheckList("");
+    setPrioridad("");
+  }, [checkList]);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -60,7 +94,8 @@ const ModalFomularioExtintor = () => {
       });
       return;
     }
-    submitCheckList({
+    await submitCheckList({
+      id,
       codigo,
       obstruido,
       instrucciones,
@@ -75,7 +110,19 @@ const ModalFomularioExtintor = () => {
       prioridad,
       extintorId: params.id,
     });
-    navigate(`/extintores/${extintor.id}`);
+
+    setCodigo("");
+    setObstruido("");
+    setInstrucciones("");
+    setSenalamiento("");
+    setManometro("");
+    setSello("");
+    setCondFisica("");
+    setMangera("");
+    setBoquilla("");
+    setEtiqueta("");
+    setFechaCheckList("");
+    setPrioridad("");
   };
 
   const { msg } = alerta;
@@ -145,6 +192,7 @@ const ModalFomularioExtintor = () => {
                     as="h3"
                     className="text-lg leading-6 font-bold text-gray-900"
                   >
+                    {id ? "Editar CheckList" : "Crear CheckList"}
                     Crear CheckList
                   </Dialog.Title>
                   {msg && <Alerta alerta={alerta} />}
@@ -395,7 +443,7 @@ const ModalFomularioExtintor = () => {
                     <input
                       type="submit"
                       className="bg-yellow-500 w-full p-3 text-white uppercase font-bold block mt-5 text-center rounded-lg hover:bg-yellow-600 transition-colors duration-300"
-                      value="Guardar"
+                      value={id ? "Editar CheckList" : "Crear CheckList"}
                     />
                   </form>
                 </div>

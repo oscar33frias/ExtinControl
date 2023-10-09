@@ -10,7 +10,8 @@ const ExtintoresProvider = ({ children }) => {
   const [extintor, setExtintor] = useState({});
   const [cargando, setCargando] = useState(false);
   const [modalFormularioExtintor, setModalFormularioExtintor] = useState(false);
-  const [checkList, setCheckList] = useState([]);
+  const [checkLists, setCheckLists] = useState([]);
+  const [checkList, setCheckList] = useState({});
 
   const navigate = useNavigate();
 
@@ -129,7 +130,7 @@ const ExtintoresProvider = ({ children }) => {
 
       const { data } = await clienteAxios.get(`/extintores/${id}`, config);
       setExtintor(data.extintor);
-      setCheckList(data.checklists);
+      setCheckLists(data.checklists);
     } catch (error) {
       console.log(error);
     } finally {
@@ -171,6 +172,7 @@ const ExtintoresProvider = ({ children }) => {
   };
   const handleModalExtintor = () => {
     setModalFormularioExtintor(!modalFormularioExtintor);
+    setCheckList({});
   };
 
   const submitCheckList = async (checklist) => {
@@ -184,12 +186,10 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("checklist", checklist);
 
       const { data } = await clienteAxios.post("/checklist", checklist, config);
 
-      navigate(`/extintores/${extintor.id}`,{remplace: true});
-
+      setCheckLists([...checkLists, data]);
 
       setAlerta({});
       setModalFormularioExtintor(false);
@@ -197,6 +197,12 @@ const ExtintoresProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const handleModalEditarCheckList = (checklist) => {
+    setCheckList(checklist);
+    setModalFormularioExtintor(true);
+  };
+
   return (
     <ExtintoresContext.Provider
       value={{
@@ -211,6 +217,8 @@ const ExtintoresProvider = ({ children }) => {
         modalFormularioExtintor,
         handleModalExtintor,
         submitCheckList,
+        checkLists,
+        handleModalEditarCheckList,
         checkList,
       }}
     >
