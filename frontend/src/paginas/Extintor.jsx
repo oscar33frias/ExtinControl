@@ -2,21 +2,28 @@ import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import { useEffect, useState } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
+import CheckList from "../components/CheckList";
 
 const Extintor = () => {
   const params = useParams();
 
-  const { obtenerExtintor, extintor, cargando, handleModalExtintor } =
-    useExtintores();
+  const {
+    obtenerExtintor,
+    extintor,
+    cargando,
+    handleModalExtintor,
+    checkList,
+  } = useExtintores();
 
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);
-  const { codigo } = extintor;
+  
 
-  console.log("extintor", extintor);
+ 
+  const { codigo } = extintor;
 
   return cargando ? (
     "..."
@@ -70,7 +77,20 @@ const Extintor = () => {
         Nuevo CheckList
       </button>
 
-   
+      <p className=" font-bold text-xl mt-10"> CheckList del Extintor</p>
+
+      <div className=" bg-white shadow mt-10 rounded-lg">
+        {checkList?.length ? (
+          checkList?.map((checklist) => (
+            <CheckList key={checklist.id} checklist={checklist} />
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-96">
+            <h1 className="text-2xl font-bold">No hay CheckList</h1>
+          </div>
+        )}
+      </div>
+
       <ModalFormularioExtintor modal={modal} setmodal={setModal} />
     </>
   );

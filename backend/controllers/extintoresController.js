@@ -49,29 +49,44 @@ const obtenerExtintor = async (req, res) => {
 
   try {
     const pool = await sql.connect();
-    const { recordset } = await pool.request()
+    
+    // Primero, obtener el extintor
+    const extintorResponse = await pool.request()
       .input("id", sql.Int, id)
       .query(`
         SELECT * FROM Extintores
         WHERE id = @id
       `);
 
-    if (recordset.length === 0) {
+    if (extintorResponse.recordset.length === 0) {
       return res.status(404).json({ msg: "Extintor no encontrado" });
     }
 
-    const extintor = recordset[0];  // Renombrando la variable para claridad
+    const extintor = extintorResponse.recordset[0]; 
 
     if (extintor.usuario_id !== usuarioId) {
       return res.status(403).json({ msg: "No tienes permisos para ver este extintor" });
     }
 
-    res.json(extintor);
+    // A continuación, obtener los checklists relacionados con ese extintor
+    const checklistsResponse = await pool.request()
+      .input("extintorId", sql.Int, id)
+      .query(`
+        SELECT * FROM checkList
+        WHERE extintorId = @extintorId
+      `);
+    
+    const checklists = checklistsResponse.recordset;
+
+    // Enviar ambos, el extintor y sus checklists, en la respuesta
+    res.json({ extintor, checklists });
+
   } catch (error) {
-    console.error("Error al obtener extintor:", error.message);
+    console.error("Error al obtener extintor y sus checklists:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+
 
 
 const editarExtintor = async (req, res) => {

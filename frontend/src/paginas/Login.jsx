@@ -31,9 +31,7 @@ const Login = () => {
       const {data} = await clienteAxios.post('/usuarios/login', {email, password});
       localStorage.setItem("token", data.token);
       setAuth(data);
-      console.log(data);  // Verifica lo que devuelve el servidor
-      console.log("Navegando a /extintores");
-      navigate('/extintores');
+     navigate('/extintores');
     } catch (error) {
       setAlerta({
         msg: error.response.data.msg,

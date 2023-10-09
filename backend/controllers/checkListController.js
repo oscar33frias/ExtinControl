@@ -51,15 +51,19 @@ const agregarCheckList = async (req, res) => {
         VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @prioridad, @extintorId)
       `);
 
-    const [newChecklist] = await pool
+      
+      const result = await pool
       .request()
-      .input("extintorId", sql.Int, extintorId).query(`
-        SELECT TOP 1 * FROM checkList
-        WHERE extintorId = @extintorId
-        ORDER BY id DESC
-      `).recordset;
+      .input("extintorId", sql.Int, extintorId)
+      .query(`
+          SELECT TOP 1 * FROM checkList
+          WHERE extintorId = @extintorId
+          ORDER BY id DESC
+      `);
+  
+  
+    res.json(result.recordset[0]);
 
-    res.json(newChecklist);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });

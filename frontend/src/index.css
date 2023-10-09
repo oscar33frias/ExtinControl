@@ -3,4 +3,8 @@
 @tailwind utilities;
 
 
-
+html {
+    font-size: 12px; /* Ajusta según tus necesidades. El valor predeterminado suele ser 16px. */
+  }
+  
+  

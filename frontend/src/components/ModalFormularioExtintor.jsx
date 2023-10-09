@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
 import Alerta from "./Alerta";
@@ -7,7 +8,6 @@ import { useParams } from "react-router-dom";
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
-
 const ModalFomularioExtintor = () => {
   const [codigo, setCodigo] = useState("");
   const [obstruido, setObstruido] = useState("");
@@ -24,7 +24,7 @@ const ModalFomularioExtintor = () => {
 
   const params = useParams();
 
-  console.log("el parametro es" ,params.id)
+  const navigate= useNavigate();
 
   const {
     modalFormularioExtintor,
@@ -32,6 +32,7 @@ const ModalFomularioExtintor = () => {
     mostrarAlerta,
     alerta,
     submitCheckList,
+    extintor
   } = useExtintores();
 
   const handleSubmit = (e) => {
@@ -59,7 +60,6 @@ const ModalFomularioExtintor = () => {
       });
       return;
     }
-    console.log("la manguera es", manguera)
     submitCheckList({
       codigo,
       obstruido,
@@ -75,6 +75,7 @@ const ModalFomularioExtintor = () => {
       prioridad,
       extintorId: params.id,
     });
+    navigate(`/extintores/${extintor.id}`);
   };
 
   const { msg } = alerta;

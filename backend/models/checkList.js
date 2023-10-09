@@ -14,6 +14,7 @@ CREATE TABLE checkList (
   boquilla NVARCHAR(200) NOT NULL,
   etiqueta NVARCHAR(200) NOT NULL,
   fecha_checklist DATETIME DEFAULT GETDATE(),
+  estado bit default 0, 
   prioridad VARCHAR(255) NOT NULL CHECK (prioridad IN ('Baja', 'Media', 'Alta')),
   extintorId Int NOT NULL,
 )
