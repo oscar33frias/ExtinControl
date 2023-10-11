@@ -1,35 +1,50 @@
 import { useState } from "react";
-const FormularioColaborador = () => {
-    const [email,setEmail] = useState('');
+import useExtintores from "../hooks/useExtintores";
+import Alerta from "./Alerta";
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
+const FormularioColaborador = () => {
+  const [email, setEmail] = useState("");
+
+  const {mostrarAlerta, alerta,submitColaborador} = useExtintores();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email === "") {
+      mostrarAlerta({
+        msg: "El campo email es obligatorio",
+        error: true,
+      });
+      return;
     }
+    submitColaborador(email);
+  };
+
+  const { msg } = Alerta;
   return (
-    <form className="w-full max-w-lg" onSubmit={handleSubmit}>
-       <div>
-                      <label
-                        className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="enail"
-                      >
-                        Email Colaborador
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        placeholder="Email del Usuario"
-                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <input
-                      type="submit"
-                      className="bg-yellow-500 w-full p-3 text-white uppercase font-bold block mt-5 text-center rounded-lg hover:bg-yellow-600 transition-colors duration-300"
-                      value="Buscar Colaborador"
-                    />
-    </form>
+    <form className="w-full max-w-md mx-auto p-6 bg-white shadow-md rounded-lg" onSubmit={handleSubmit}>
+    {msg && <Alerta alerta={alerta} />}
+    <div className="mb-6">
+      <label htmlFor="email" className="block text-gray-700 text-lg font-bold mb-2">
+        Email del Colaborador
+      </label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Correo electrónico"
+        className="border-2 w-full py-3 px-4 rounded-lg text-lg placeholder-gray-400"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+    </div>
+    <button
+      type="submit"
+      className="w-full bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold py-3 rounded-lg transition duration-300"
+    >
+      Buscar Colaborador
+    </button>
+  </form>
+  
+  
   );
 };
 

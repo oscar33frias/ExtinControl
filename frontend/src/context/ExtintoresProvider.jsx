@@ -278,6 +278,9 @@ const ExtintoresProvider = ({ children }) => {
         console.log(error);
       }
   }
+  const submitColaborador=async (email)=>{
+      console.log("email",email)
+  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -297,7 +300,8 @@ const ExtintoresProvider = ({ children }) => {
         checkList,
         modalEliminarCheckList,
         handleModalEliminarCheckList,
-        eliminarCheckList
+        eliminarCheckList,
+        submitColaborador
       }}
     >
       {children}
