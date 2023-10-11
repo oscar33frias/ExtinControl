@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
 import Alerta from "./Alerta";
@@ -34,7 +33,6 @@ const ModalFomularioExtintor = () => {
     checkList,
   } = useExtintores();
 
-  console.log("desde modal",checkList);
 
   useEffect(() => {
     if (checkList.id) {
@@ -110,8 +108,12 @@ const ModalFomularioExtintor = () => {
       prioridad,
       extintorId: params.id,
     });
-
-    setCodigo("");
+    setId("");
+    
+    
+    
+    
+     setCodigo("");
     setObstruido("");
     setInstrucciones("");
     setSenalamiento("");

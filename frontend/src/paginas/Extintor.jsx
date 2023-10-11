@@ -2,7 +2,9 @@ import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import { useEffect, useState } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
+import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
 import CheckList from "../components/CheckList";
+import Alerta from "../components/Alerta";
 
 const Extintor = () => {
   const params = useParams();
@@ -13,17 +15,15 @@ const Extintor = () => {
     cargando,
     handleModalExtintor,
     checkLists,
+    alerta,
   } = useExtintores();
-
-  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);
-  
 
- 
   const { codigo } = extintor;
+  const { msg } = alerta;
 
   return cargando ? (
     "..."
@@ -78,20 +78,33 @@ const Extintor = () => {
       </button>
 
       <p className=" font-bold text-xl mt-10"> CheckList del Extintor</p>
-
+      {msg && <Alerta alerta={alerta} />}
       <div className=" bg-white shadow mt-10 rounded-lg">
         {checkLists?.length ? (
-          checkLists?.map((checklist) => (
-            <CheckList key={checklist.id} checklist={checklist} />
-          ))
+          checkLists
+            .slice()
+            .reverse()
+            .map((checklist) => (
+              <CheckList key={checklist.id} checklist={checklist} />
+            ))
         ) : (
           <div className="flex justify-center items-center h-96">
             <h1 className="text-2xl font-bold">No hay CheckList</h1>
           </div>
         )}
       </div>
+      <div className="flex items-center justify-between mt-10">
+        <h2 className="text-2xl font-semibold">Colaboradores</h2>
+        <Link
+          to={`/extintores/nuevo-colaborador/${extintor.id}`}
+          className="text-gray-500 font-semibold hover:text-gray-700 transition-colors"
+        >
+          Añadir Colaborador
+        </Link>
+      </div>
 
-      <ModalFormularioExtintor modal={modal} setmodal={setModal} />
+      <ModalFormularioExtintor />
+      <ModalEliminarCheckList />
     </>
   );
 };

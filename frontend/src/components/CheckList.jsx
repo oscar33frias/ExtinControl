@@ -3,8 +3,7 @@ import imagenExtinto from "../img/extintor-preview.png";
 import useExtintores from "../hooks/useExtintores";
 
 const CheckList = ({ checklist }) => {
-
-  const { handleModalEditarCheckList } = useExtintores();
+  const { handleModalEditarCheckList, handleModalEliminarCheckList } = useExtintores();
   const {
     id,
     codigo,
@@ -22,12 +21,13 @@ const CheckList = ({ checklist }) => {
     estado,
   } = checklist;
 
-
   return (
     <div className="border p-6 bg-white shadow-lg rounded-xl mb-4">
       <div className="flex justify-between items-start flex-wrap mb-5">
         <div className="flex-grow pr-5">
-          <p className="text-3xl font-bold mb-5">{codigo}</p>
+          <p className="text-3xl font-bold mb-5">
+            {formatearFecha(fecha_checklist)}
+          </p>
           <div className="grid grid-cols-2 gap-y-3 gap-x-8">
             <p className="text-sm font-bold">
               Obstruido <span className=" text-gray-500">{obstruido}</span>
@@ -60,7 +60,11 @@ const CheckList = ({ checklist }) => {
               Etiqueta <span className=" text-gray-500">{etiqueta}</span>
             </p>
             <p className="text-sm font-bold ">
-              {formatearFecha(fecha_checklist)}
+              Fecha Esperada de Revision
+              <span className=" text-gray-500">
+                {" "}
+                {formatearFecha(fecha_checklist)}
+              </span>
             </p>
             <p className="text-sm font-bold ">
               Prioridad <span className=" text-gray-500">{prioridad}</span>
@@ -70,8 +74,9 @@ const CheckList = ({ checklist }) => {
 
         <div className="flex flex-col mt-5">
           <div className="flex space-x-3">
-            <button className="bg-indigo-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-indigo-700 transition-colors duration-300"
-            onClick={() => handleModalEditarCheckList(checklist)}
+            <button
+              className="bg-indigo-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-indigo-700 transition-colors duration-300"
+              onClick={() => handleModalEditarCheckList(checklist)}
             >
               Editar
             </button>
@@ -84,7 +89,10 @@ const CheckList = ({ checklist }) => {
                 Incompleta
               </button>
             )}
-            <button className="bg-red-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-red-700 transition-colors duration-300">
+            <button
+              className="bg-red-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-red-700 transition-colors duration-300"
+              onClick={() => handleModalEliminarCheckList(checklist)}
+            >
               Eliminar
             </button>
           </div>

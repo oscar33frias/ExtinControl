@@ -100,13 +100,13 @@ const {msg} = alerta;
         <nav className="lg:flex lg:justify-between">
           <Link
             to="/registrar"
-            className="block text-center my-5 text-yellow-500 uppercase text-sm"
+            className="block font-bold text-center my-5 text-yellow-500 uppercase text-sm hover:cursor-pointer hover:bg-red-800 transition-colors"
           >
             ¿No tienes cuenta? Regístrate
           </Link>
           <Link
             to="/olvide-password"
-            className="block text-center my-5 text-yellow-500 uppercase text-sm"
+            className="block font-bold text-center my-5 text-yellow-500 uppercase text-sm hover:cursor-pointer hover:bg-red-800 transition-colors"
           >
             Olvidé mi password
           </Link>

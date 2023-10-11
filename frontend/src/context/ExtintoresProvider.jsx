@@ -12,6 +12,7 @@ const ExtintoresProvider = ({ children }) => {
   const [modalFormularioExtintor, setModalFormularioExtintor] = useState(false);
   const [checkLists, setCheckLists] = useState([]);
   const [checkList, setCheckList] = useState({});
+  const [modalEliminarCheckList, setModalEliminarCheckList] = useState(false);
 
   const navigate = useNavigate();
 
@@ -176,6 +177,14 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const submitCheckList = async (checklist) => {
+    if (checklist.id) {
+      await editarCheckList(checklist);
+    } else {
+      await crearCheckList(checklist);
+    }
+  };
+
+  const crearCheckList = async (checklist) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -197,12 +206,78 @@ const ExtintoresProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const editarCheckList = async (checklist) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await clienteAxios.put(
+        `/checklist/${checklist.id}`,
+        checklist,
+        config
+      );
+
+      //TODO ACTUALIZAR EL DOM
+      setAlerta({})
+      setModalFormularioExtintor(false);
+
+      setCheckLists(checkLists.map((check) => check.id === data.id ? data : check))
+        
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleModalEditarCheckList = (checklist) => {
     setCheckList(checklist);
     setModalFormularioExtintor(true);
   };
 
+  const handleModalEliminarCheckList = (checklist) => {
+    setCheckList(checklist)
+    setModalEliminarCheckList(!modalEliminarCheckList)
+    console.log("modal eliminar extintor",modalEliminarCheckList)
+  }
+
+  const eliminarCheckList = async (checklist) => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+  
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+  
+        const { data } = await clienteAxios.delete(
+          `/checklist/${checklist.id}`,
+          config
+        );
+  
+        //TODO ACTUALIZAR EL DOM
+        setAlerta({
+          msg: data.msg,
+          error: false,
+        })
+        setModalEliminarCheckList(false);
+
+        setCheckLists(checkLists.filter(check => check.id !== checklist.id))
+        setCheckLists({})
+        setTimeout(() => {
+          setAlerta({})
+        }, 3000);
+      } catch (error) {
+        console.log(error);
+      }
+  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -220,6 +295,9 @@ const ExtintoresProvider = ({ children }) => {
         checkLists,
         handleModalEditarCheckList,
         checkList,
+        modalEliminarCheckList,
+        handleModalEliminarCheckList,
+        eliminarCheckList
       }}
     >
       {children}

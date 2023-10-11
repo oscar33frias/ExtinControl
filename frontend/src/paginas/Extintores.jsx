@@ -1,10 +1,9 @@
 import useExtintores from "../hooks/useExtintores";
 import PreviewExtintor from "../components/PreviewExtintor";
 
-
 const Extintores = () => {
-  const { extintores } = useExtintores();
-
+  const { extintores, } = useExtintores();
+ 
   return (
     <>
       <h1 className=" text-4xl font-black">Extintores</h1>
