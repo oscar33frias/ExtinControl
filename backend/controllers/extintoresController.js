@@ -150,7 +150,29 @@ const eliminarExtintor = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+const buscarColaborador = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+    const pool = await sql.connect();
+    const result = await pool.request()
+      .input("email", sql.String, email)
+      .query(`
+        SELECT * FROM usuario
+        WHERE email = @email
+      `);
 
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
+  
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error("Error al buscar usuario:", error.message);
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
 const agregarColaborador = async (req, res) => {};
 const eliminarColaborador = async (req, res) => {};
 
@@ -162,4 +184,5 @@ export {
   eliminarExtintor,
   agregarColaborador,
   eliminarColaborador,
+  buscarColaborador
 };

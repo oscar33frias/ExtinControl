@@ -8,6 +8,7 @@ import {
   eliminarExtintor,
   agregarColaborador,
   eliminarColaborador,
+  buscarColaborador
   //obtenerCheckList,
 } from "../controllers/extintoresController.js";
 
@@ -27,6 +28,7 @@ router
   .delete(checkAuth, eliminarExtintor);
 
 //router.get("/tareas/:id", checkAuth, obtenerCheckList);
-router.post("/agregar-colaborador/:id", checkAuth, agregarColaborador);
-router.post("/eliminar-colaborador/:id", checkAuth, eliminarColaborador);
+router.post("/colaboradores", checkAuth, buscarColaborador);
+router.post("/colaboradores/:id", checkAuth, agregarColaborador);
+router.delete("/colaboradores/:id", checkAuth, eliminarColaborador);
 export default router;
