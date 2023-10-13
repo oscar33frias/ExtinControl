@@ -153,10 +153,9 @@ const eliminarExtintor = async (req, res) => {
 const buscarColaborador = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email);
     const pool = await sql.connect();
     const result = await pool.request()
-      .input("email", sql.String, email)
+      .input("email", sql.VarChar, email)
       .query(`
         SELECT * FROM usuario
         WHERE email = @email

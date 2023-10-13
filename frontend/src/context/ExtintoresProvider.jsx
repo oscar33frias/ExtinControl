@@ -13,6 +13,7 @@ const ExtintoresProvider = ({ children }) => {
   const [checkLists, setCheckLists] = useState([]);
   const [checkList, setCheckList] = useState({});
   const [modalEliminarCheckList, setModalEliminarCheckList] = useState(false);
+  const [colaborador, setColaborador] = useState({});
 
   const navigate = useNavigate();
 
@@ -280,6 +281,7 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const submitColaborador = async (email) => {
+    setCargando(true);
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -290,14 +292,24 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("email", email);
-      const {data} = await clienteAxios.post("/extintores/colaboradores", {email}, config);
-
-      console.log(" submitColaboradores ",data);
+      const { data } = await clienteAxios.post(
+        "/extintores/colaboradores",
+        { email },
+        config
+      );
+      setColaborador(data);
+      setAlerta({});
     } catch (error) {
-      console.log(error);
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      });
     }
+    setCargando(false);
   };
+  const agregarColaborador = async (email) => {
+    console.log("agregar colaborador", email);
+  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -319,6 +331,8 @@ const ExtintoresProvider = ({ children }) => {
         handleModalEliminarCheckList,
         eliminarCheckList,
         submitColaborador,
+        colaborador,
+        agregarColaborador
       }}
     >
       {children}
