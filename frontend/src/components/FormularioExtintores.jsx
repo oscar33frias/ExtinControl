@@ -58,19 +58,18 @@ export const FormularioExtintores = () => {
 >
       {msg && <Alerta alerta={alerta} />}
       
-      {/* Utilizando rojo para los labels */}
       <div className="mb-5">
         <label
           className="text-red-700 uppercase font-bold text-sm"
           htmlFor="codigo"
         >
-          Codigo del Extintor
+          Numero del Extintor
         </label>
         <input
           type="text"
           id="codigo"
           className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-          placeholder="Codigo del Extintor"
+          placeholder="Agrega el Numero del Extintor(Ej: 001)"
           value={codigo}
           onChange={(e) => setCodigo(e.target.value)}
         />

@@ -14,6 +14,9 @@ const ExtintoresProvider = ({ children }) => {
   const [checkList, setCheckList] = useState({});
   const [modalEliminarCheckList, setModalEliminarCheckList] = useState(false);
   const [colaborador, setColaborador] = useState({});
+  const [colaboradores, setColaboradores] = useState([]);
+  const [modalEliminarColaborador, setModalEliminarColaborador] =
+    useState(false);
 
   const navigate = useNavigate();
 
@@ -133,6 +136,8 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.get(`/extintores/${id}`, config);
       setExtintor(data.extintor);
       setCheckLists(data.checklists);
+
+      setColaboradores(data.colaboradores);
     } catch (error) {
       console.log(error);
     } finally {
@@ -199,6 +204,8 @@ const ExtintoresProvider = ({ children }) => {
 
       const { data } = await clienteAxios.post("/checklist", checklist, config);
 
+      console.log("checklist", data);
+
       setCheckLists([...checkLists, data]);
 
       setAlerta({});
@@ -264,7 +271,6 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
 
-      //TODO ACTUALIZAR EL DOM
       setAlerta({
         msg: data.msg,
         error: false,
@@ -272,7 +278,8 @@ const ExtintoresProvider = ({ children }) => {
       setModalEliminarCheckList(false);
 
       setCheckLists(checkLists.filter((check) => check.id !== checklist.id));
-      setCheckLists({});
+
+      setCheckList({});
       setTimeout(() => {
         setAlerta({});
       }, 3000);
@@ -280,6 +287,7 @@ const ExtintoresProvider = ({ children }) => {
       console.log(error);
     }
   };
+
   const submitColaborador = async (email) => {
     setCargando(true);
     try {
@@ -308,8 +316,77 @@ const ExtintoresProvider = ({ children }) => {
     setCargando(false);
   };
   const agregarColaborador = async (email) => {
-    console.log("agregar colaborador", email);
-  }
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await clienteAxios.post(
+        `/extintores/colaboradores/${extintor.id}`,
+        email,
+        config
+      );
+      setAlerta({
+        msg: data.msg,
+        error: false,
+      });
+      setColaborador({});
+      setTimeout(() => {
+        setAlerta({});
+      }, 3000);
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      });
+    }
+  };
+
+  const handleModalEliminarColaborador = (colaborador) => {
+    setModalEliminarColaborador(!modalEliminarColaborador);
+    setColaborador(colaborador);
+  };
+  const eliminarColaborador = async (colaborador) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await clienteAxios.delete(
+        `/extintores/colaboradores/${colaborador.id}`,
+        config
+      );
+
+      setAlerta({
+        msg: data.msg,
+        error: false,
+      });
+
+      setColaboradores(colaboradores.filter((c) => c.id !== colaborador.id));
+      setColaborador({});
+
+      setTimeout(() => {
+        setAlerta({});
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+      setAlerta({
+        msg: "Error al eliminar el colaborador",
+        error: true,
+      });
+    }
+  };
   return (
     <ExtintoresContext.Provider
       value={{
@@ -332,7 +409,11 @@ const ExtintoresProvider = ({ children }) => {
         eliminarCheckList,
         submitColaborador,
         colaborador,
-        agregarColaborador
+        agregarColaborador,
+        colaboradores,
+        handleModalEliminarColaborador,
+        modalEliminarColaborador,
+        eliminarColaborador,
       }}
     >
       {children}

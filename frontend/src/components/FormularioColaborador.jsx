@@ -19,7 +19,6 @@ const FormularioColaborador = () => {
   };
 
   const { msg } = alerta;
-  console.log(msg);
   return (
     <form className="w-full max-w-md mx-auto p-6 bg-white shadow-md rounded-lg" onSubmit={handleSubmit}>
     {msg && <Alerta alerta={alerta} />}

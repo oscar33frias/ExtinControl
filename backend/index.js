@@ -4,10 +4,12 @@ import {
   verificarTablasYCrearUsuario,
   verificarTablasYCrearExtintor,
   verificarTablasYCrearCheckList,
+  verificarTablasYCrearExtintorColaborador
 } from "./utils/verificarTablas.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import extintorRoutes from "./routes/extintorRoutes.js";
 import checkListRoutes from "./routes/checkRoutes.js";
+
 import cors from "cors";
 
 const app = express();
@@ -32,6 +34,7 @@ const main = async () => {
     await verificarTablasYCrearUsuario("Usuario");
     await verificarTablasYCrearExtintor("Extintores");
     await verificarTablasYCrearCheckList("checkList");
+    await verificarTablasYCrearExtintorColaborador("ExtintorColaborador");
     app.use("/api/usuarios", usuarioRoutes);
     app.use("/api/extintores", extintorRoutes);
     app.use("/api/checkList", checkListRoutes);

@@ -1,11 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
 import CheckList from "../components/CheckList";
 import Alerta from "../components/Alerta";
-
+import Colaborador from "../components/Colaborador";
+import ModalEliminarColaborador from "../components/ModalEliminarColaborador";
 const Extintor = () => {
   const params = useParams();
 
@@ -16,8 +17,8 @@ const Extintor = () => {
     handleModalExtintor,
     checkLists,
     alerta,
+    colaboradores,
   } = useExtintores();
-
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);
@@ -102,7 +103,21 @@ const Extintor = () => {
           Añadir Colaborador
         </Link>
       </div>
-
+      <div className=" bg-white shadow mt-10 rounded-lg">
+        {colaboradores?.length ? (
+          colaboradores
+            .slice()
+            .reverse()
+            .map((colaborador) => (
+              <Colaborador key={colaborador.id} colaborador={colaborador} />
+            ))
+        ) : (
+          <div className="flex justify-center items-center h-96">
+            <h1 className="text-2xl font-bold">No hay Colaboradores</h1>
+          </div>
+        )}
+      </div>
+      <ModalEliminarColaborador></ModalEliminarColaborador>
       <ModalFormularioExtintor />
       <ModalEliminarCheckList />
     </>

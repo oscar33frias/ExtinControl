@@ -3,6 +3,7 @@ import { conectarDB } from "../config/db.js";
 import { crearTablaUsuario } from "../models/Usuarios.js";
 import { crearTablaExtintores } from "../models/Extintores.js";
 import { createTablaCheckList } from "../models/checkList.js";
+import { crearTablaExtintorColaborador } from "../models/extintorColaborador.js";
 
 export const verificarTablasYCrearUsuario = async (tabla) => {
   try {
@@ -78,3 +79,29 @@ export const verificarTablasYCrearCheckList = async (tabla) => {
       process.exit(1);
     }
   };
+
+
+
+export const verificarTablasYCrearExtintorColaborador = async (tabla) => {
+  try {
+    await conectarDB();
+
+    const pool = await sql.connect();
+    const tablaCheckExiste = await pool
+      .request()
+      .query(
+        `SELECT COUNT(*) AS existe FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '${tabla}'`
+      );
+
+    if (tablaCheckExiste.recordset[0].existe === 0) {
+      // La tabla Usuario no existe, la creamos
+      await crearTablaExtintorColaborador();
+      console.log("Tabla extintorColaborador creada");
+    } else {
+      console.log("La tabla extintorColaborador ya está creada");
+    }
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
