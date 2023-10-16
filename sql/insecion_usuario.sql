@@ -1,62 +1,61 @@
+use ControlSeg
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Juan Pérez', '123456', 'juanperez@example.com', '', 1);
+VALUES ('Joaquín Rodríguez', '123456', 'joaquin@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('María García', '123456', 'mariagarcia@example.com', '', 1);
+VALUES ('Isabella Gómez', '123456', 'isabella@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Luis Rodríguez', '123456', 'luisrodriguez@example.com', '', 1);
+VALUES ('Eduardo Martínez', '123456', 'eduardo@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Ana Martínez', '123456', 'anamartinez@example.com', '', 1);
+VALUES ('Valentina Sánchez', '123456', 'valentina@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Carlos Sánchez', '123456', 'carlossanchez@example.com', '', 1);
+VALUES ('Lorenzo Pérez', '123456', 'lorenzo@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Sofía López', '123456', 'sofialopez@example.com', '', 1);
+VALUES ('Camila García', '123456', 'camila@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Pedro Ramírez', '123456', 'pedroramirez@example.com', '', 1);
+VALUES ('Emilio Torres', '123456', 'emilio@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Laura González', '123456', 'lauragonzalez@example.com', '', 1);
+VALUES ('Mariana Díaz', '123456', 'mariana@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Miguel Torres', '123456', 'migueltorres@example.com', '', 1);
+VALUES ('Francisco Ruiz', '123456', 'francisco@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Carmen Ruiz', '123456', 'carmenruiz@example.com', '', 1);
+VALUES ('Valeria Vargas', '123456', 'valeria@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Javier Vargas', '123456', 'javiervargas@example.com', '', 1);
+VALUES ('Martín Navarro', '123456', 'martin@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Isabel Díaz', '123456', 'isabeldiaz@example.com', '', 1);
+VALUES ('Andrea Castro', '123456', 'andrea@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Diego Herrera', '123456', 'diegoherrera@example.com', '', 1);
+VALUES ('Tomás Jiménez', '123456', 'tomas@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Patricia Castro', '123456', 'patriciacastro@example.com', '', 1);
+VALUES ('Luz Flores', '123456', 'luz@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Manuel Jiménez', '123456', 'manueljimenez@example.com', '', 1);
+VALUES ('Matías Ortega', '123456', 'matias@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Rosa Flores', '123456', 'rosaflores@example.com', '', 1);
+VALUES ('Diana Paredes', '123456', 'diana@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Alejandro Ortega', '123456', 'alejandroortega@example.com', '', 1);
+VALUES ('Adrián Mendoza', '123456', 'adrian@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Lucía Paredes', '123456', 'luciaparedes@example.com', '', 1);
+VALUES ('Carolina Herrera', '123456', 'carolina@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Andrés Mendoza', '123456', 'andres@example.com', '', 1);
+VALUES ('Santiago Sánchez', '123456', 'santiago@example.com', '', 1);
 
 INSERT INTO Usuario (nombre, password, email, token, confirmado)
-VALUES ('Elena Navarro', '123456', 'elenanavarro@example.com', '', 1);
-
-
+VALUES ('Paula Torres', '123456', 'paula@example.com', '', 1);
