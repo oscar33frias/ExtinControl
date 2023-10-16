@@ -9,7 +9,7 @@ SET @jsonData = '
   "condFisica": "Buena",
   "estado": false,
   "etiqueta": "Si",
-  "extintorId": 1,
+  "extintorId": ,
   "fecha_checklist": "2023-10-15T03:12:06.343Z",
   "id": 1002,
   "instrucciones": "Si",
