@@ -94,30 +94,7 @@ const Extintor = () => {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between mt-10">
-        <h2 className="text-2xl font-semibold">Colaboradores</h2>
-        <Link
-          to={`/extintores/nuevo-colaborador/${extintor.id}`}
-          className="text-gray-500 font-semibold hover:text-gray-700 transition-colors"
-        >
-          Añadir Colaborador
-        </Link>
-      </div>
-      <div className=" bg-white shadow mt-10 rounded-lg">
-        {colaboradores?.length ? (
-          colaboradores
-            .slice()
-            .reverse()
-            .map((colaborador) => (
-              <Colaborador key={colaborador.id} colaborador={colaborador} />
-            ))
-        ) : (
-          <div className="flex justify-center items-center h-96">
-            <h1 className="text-2xl font-bold">No hay Colaboradores</h1>
-          </div>
-        )}
-      </div>
-      <ModalEliminarColaborador></ModalEliminarColaborador>
+     
       <ModalFormularioExtintor />
       <ModalEliminarCheckList />
     </>
