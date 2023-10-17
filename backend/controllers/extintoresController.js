@@ -3,18 +3,40 @@ const obtenerExtintores = async (req, res) => {
   try {
     const pool = await sql.connect();
     const usuarioId = req.usuario.id;
-    const result = await pool.request()
-      .input("usuarioId", sql.Int, usuarioId)
-      .query(`
+
+    // Consulta para obtener extintores
+    const extintoresResult = await pool
+      .request()
+      .input("usuarioId", sql.Int, usuarioId).query(`
         SELECT e.* 
         FROM Extintores e
         LEFT JOIN ExtintorColaborador ec ON e.id = ec.extintor_id
         WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
       `);
 
-    res.json(result.recordset);
+    // Consulta para obtener colaboradores
+    // Consulta para obtener colaboradores
+    const colaboradoresResult = await pool
+      .request()
+      .input("usuarioId", sql.Int, usuarioId).query(`
+  SELECT DISTINCT u.id, u.email
+  FROM usuario u
+  INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
+  INNER JOIN Extintores e ON ec.extintor_id = e.id
+  WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
+`);
+
+    const extintores = extintoresResult.recordset;
+    const colaboradores = colaboradoresResult.recordset;
+
+    console.log("Colaboradores:", colaboradores);
+
+    res.json({ extintores, colaboradores });
   } catch (error) {
-    console.error("Error al obtener extintores:", error.message);
+    console.error(
+      "Error al obtener extintores y colaboradores:",
+      error.message
+    );
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
@@ -65,10 +87,10 @@ const obtenerExtintor = async (req, res) => {
     const extintor = extintorResponse.recordset[0];
 
     // Verificar si el usuario tiene permisos para ver el extintor
-    const colaboradorResponse = await pool.request()
+    const colaboradorResponse = await pool
+      .request()
       .input("extintorId", sql.Int, id)
-      .input("usuarioId", sql.Int, usuarioId)
-      .query(`
+      .input("usuarioId", sql.Int, usuarioId).query(`
         SELECT COUNT(*) AS count
         FROM ExtintorColaborador
         WHERE extintor_id = @extintorId AND colaborador_id = @usuarioId
@@ -200,12 +222,13 @@ const buscarColaborador = async (req, res) => {
 };
 
 const agregarColaborador = async (req, res) => {
-  const { id } = req.params;
-  const { email } = req.body;
+  const { email, extintorId } = req.body; // Obtener el correo electrónico y el ID del extintor del cuerpo de la solicitud
 
+  console.log(email, extintorId);
   try {
     const pool = await sql.connect();
 
+    // Verificar si el colaborador ya está agregado al extintor
     const verificarQuery = `
       SELECT COUNT(*) AS count
       FROM ExtintorColaborador
@@ -216,7 +239,7 @@ const agregarColaborador = async (req, res) => {
 
     const verificarResult = await pool
       .request()
-      .input("extintorId", sql.Int, id)
+      .input("extintorId", sql.Int, extintorId)
       .input("email", sql.VarChar, email)
       .query(verificarQuery);
 
@@ -226,6 +249,7 @@ const agregarColaborador = async (req, res) => {
         .json({ msg: "El colaborador ya está agregado al extintor" });
     }
 
+    // Obtener el ID del colaborador por correo electrónico
     const colaboradorQuery = `
       SELECT id FROM usuario WHERE email = @email
     `;
@@ -237,6 +261,7 @@ const agregarColaborador = async (req, res) => {
 
     const colaborador_id = colaboradorResult.recordset[0].id;
 
+    // Agregar al colaborador al extintor
     const agregarQuery = `
       INSERT INTO ExtintorColaborador (extintor_id, colaborador_id)
       OUTPUT INSERTED.*
@@ -245,7 +270,7 @@ const agregarColaborador = async (req, res) => {
 
     const agregarResult = await pool
       .request()
-      .input("extintorId", sql.Int, id)
+      .input("extintorId", sql.Int, extintorId)
       .input("colaboradorId", sql.Int, colaborador_id)
       .query(agregarQuery);
 
@@ -278,11 +303,9 @@ const eliminarColaborador = async (req, res) => {
       .query(verificarQuery);
 
     if (verificarResult.recordset[0].count === 0) {
-      return res
-        .status(404)
-        .json({
-          msg: "Colaborador no encontrado o no autorizado para eliminar",
-        });
+      return res.status(404).json({
+        msg: "Colaborador no encontrado o no autorizado para eliminar",
+      });
     }
 
     const eliminarQuery = `

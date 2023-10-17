@@ -6,7 +6,7 @@ import Colaborador from "./Colaborador";
 
 const Sidebar = () => {
   const { auth } = useAuth();
-  const { extintor, colaboradores } = useExtintores();
+  const { colaboradores } = useExtintores();
 
   return (
     <aside className="md:w-80 lg:w-96 px-6 py-8 bg-white shadow-lg rounded-lg">
@@ -24,9 +24,11 @@ const Sidebar = () => {
       </Link>
 
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold text-yellow-500 mb-4">Colaboradores</h2>
+        <h2 className="text-2xl font-semibold text-yellow-500 mb-4">
+          Colaboradores
+        </h2>
         <Link
-          to={`/extintores/nuevo-colaborador/${extintor.id}`}
+          to={`/extintores/nuevo-colaborador`}
           className="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors"
         >
           Añadir Colaborador
@@ -36,9 +38,12 @@ const Sidebar = () => {
       <div className="mt-6">
         <div className="bg-white shadow rounded-lg">
           {colaboradores?.length ? (
-            colaboradores.slice().reverse().map((colaborador) => (
-              <Colaborador key={colaborador.id} colaborador={colaborador} />
-            ))
+            colaboradores
+              .slice()
+              .reverse()
+              .map((colaborador) => (
+                <Colaborador key={colaborador.id} colaborador={colaborador} />
+              ))
           ) : (
             <div className="flex justify-center items-center h-60">
               <h1 className="text-2xl font-extrabold text-red-600">

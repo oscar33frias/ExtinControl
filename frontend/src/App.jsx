@@ -44,11 +44,12 @@ function App() {
                 element={<NuevoExtintor></NuevoExtintor>}
               />
               <Route
-                path="nuevo-colaborador/:id"
+                path="nuevo-colaborador/"
                 element={<NuevoColaborador></NuevoColaborador>}
               />
 
               <Route path=":id" element={<Extintor></Extintor>} />
+              
               <Route
                 path="editar/:id"
                 element={<EditarExtintor></EditarExtintor>}

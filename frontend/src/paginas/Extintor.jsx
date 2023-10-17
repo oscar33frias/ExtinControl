@@ -5,8 +5,6 @@ import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
 import CheckList from "../components/CheckList";
 import Alerta from "../components/Alerta";
-import Colaborador from "../components/Colaborador";
-import ModalEliminarColaborador from "../components/ModalEliminarColaborador";
 const Extintor = () => {
   const params = useParams();
 
@@ -17,8 +15,9 @@ const Extintor = () => {
     handleModalExtintor,
     checkLists,
     alerta,
-    colaboradores,
   } = useExtintores();
+
+  
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);

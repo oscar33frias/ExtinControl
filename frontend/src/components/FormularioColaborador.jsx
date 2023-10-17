@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useExtintores from "../hooks/useExtintores";
 import Alerta from "./Alerta";
+import { useEffect } from "react";
 const FormularioColaborador = () => {
   const [email, setEmail] = useState("");
 
-  const {mostrarAlerta, alerta,submitColaborador} = useExtintores();
+  const {mostrarAlerta, alerta,submitColaborador,} = useExtintores();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

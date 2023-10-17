@@ -1,29 +1,43 @@
 import FormularioColaborador from "../components/FormularioColaborador";
 import { useEffect } from "react";
 import useExtintores from "../hooks/useExtintores";
-import { useParams } from "react-router-dom";
 
 const NuevoColaborador = () => {
   const {
-    obtenerExtintor,
-    extintor,
-    cargando,
+    extintores,
     colaborador,
     agregarColaborador,
+    cargando,
+    colaboradores
   } = useExtintores();
-  const params = useParams();
+
 
   useEffect(() => {
-    obtenerExtintor(params.id);
-  }, []);
 
+  }, [colaboradores]);
   
+  const agregarColaboradorAExtintores = async () => {
+    try {
+      if (colaborador.email) {
+        for (const extintor of extintores) {
+          await agregarColaborador({
+            email: colaborador.email,
+            extintorId: extintor.id,
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   if (cargando) return <p>Cargando...</p>;
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
         <h1 className="text-4xl font-bold mb-6">
-          Añadir Colaborador(a) al Extintor {extintor.codigo}
+          Añadir Colaborador(a) a todos los Extintores
         </h1>
 
         <div className="mt-8">
@@ -40,13 +54,9 @@ const NuevoColaborador = () => {
               <button
                 className="bg-blue-500 text-white font-semibold
                  py-2 px-4 rounded-full hover:bg-blue-600"
-                onClick={() =>
-                  agregarColaborador({
-                    email: colaborador.email,
-                  })
-                }
+                onClick={agregarColaboradorAExtintores}
               >
-                Agregar al Extintor
+                Agregar a todos los Extintores
               </button>
             </div>
           </div>

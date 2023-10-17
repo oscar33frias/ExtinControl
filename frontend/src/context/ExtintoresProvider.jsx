@@ -34,7 +34,9 @@ const ExtintoresProvider = ({ children }) => {
         };
 
         const { data } = await clienteAxios.get("/extintores", config);
-        setExtintores(data);
+        setExtintores(data.extintores);
+        setColaboradores(data.colaboradores);
+        
       } catch (error) {
         console.log(error);
       }
@@ -136,8 +138,8 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.get(`/extintores/${id}`, config);
       setExtintor(data.extintor);
       setCheckLists(data.checklists);
-
       setColaboradores(data.colaboradores);
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -315,7 +317,8 @@ const ExtintoresProvider = ({ children }) => {
     }
     setCargando(false);
   };
-  const agregarColaborador = async (email) => {
+
+  const agregarColaborador = async (datos) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -327,8 +330,8 @@ const ExtintoresProvider = ({ children }) => {
         },
       };
       const { data } = await clienteAxios.post(
-        `/extintores/colaboradores/${extintor.id}`,
-        email,
+        `/extintores/colaboradores/agregar`,
+        datos,
         config
       );
       setAlerta({
