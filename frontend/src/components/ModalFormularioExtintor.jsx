@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
-const ModalFomularioExtintor = () => {
+const ModalFormularioCheckList = () => {
   const [codigo, setCodigo] = useState("");
   const [obstruido, setObstruido] = useState("");
   const [instrucciones, setInstrucciones] = useState("");
@@ -458,4 +458,4 @@ const ModalFomularioExtintor = () => {
   );
 };
 
-export default ModalFomularioExtintor;
+export default ModalFormularioCheckList;

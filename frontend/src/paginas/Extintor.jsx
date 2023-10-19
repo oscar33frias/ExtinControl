@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
+import useAdmin from "../hooks/useAdmin";
 import { useEffect } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
@@ -17,13 +18,15 @@ const Extintor = () => {
     alerta,
   } = useExtintores();
 
-  
+  const admin=useAdmin();
+
   useEffect(() => {
     obtenerExtintor(params.id);
   }, []);
 
   const { codigo } = extintor;
   const { msg } = alerta;
+
 
   return cargando ? (
     "..."

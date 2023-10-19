@@ -29,7 +29,6 @@ const obtenerExtintores = async (req, res) => {
     const extintores = extintoresResult.recordset;
     const colaboradores = colaboradoresResult.recordset;
 
-    console.log("Colaboradores:", colaboradores);
 
     res.json({ extintores, colaboradores });
   } catch (error) {
@@ -224,7 +223,6 @@ const buscarColaborador = async (req, res) => {
 const agregarColaborador = async (req, res) => {
   const { email, extintorId } = req.body; // Obtener el correo electrónico y el ID del extintor del cuerpo de la solicitud
 
-  console.log(email, extintorId);
   try {
     const pool = await sql.connect();
 

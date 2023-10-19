@@ -36,13 +36,12 @@ const ExtintoresProvider = ({ children }) => {
         const { data } = await clienteAxios.get("/extintores", config);
         setExtintores(data.extintores);
         setColaboradores(data.colaboradores);
-        
       } catch (error) {
         console.log(error);
       }
     };
     obtenerExtintores();
-  }, []);
+  }, [colaboradores]);
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
@@ -139,7 +138,6 @@ const ExtintoresProvider = ({ children }) => {
       setExtintor(data.extintor);
       setCheckLists(data.checklists);
       setColaboradores(data.colaboradores);
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -253,7 +251,7 @@ const ExtintoresProvider = ({ children }) => {
   const handleModalEliminarCheckList = (checklist) => {
     setCheckList(checklist);
     setModalEliminarCheckList(!modalEliminarCheckList);
-    console.log("modal eliminar extintor", modalEliminarCheckList);
+    console.log("checklist", checklist);
   };
 
   const eliminarCheckList = async (checklist) => {
