@@ -15,8 +15,7 @@ const ExtintoresProvider = ({ children }) => {
   const [modalEliminarCheckList, setModalEliminarCheckList] = useState(false);
   const [colaborador, setColaborador] = useState({});
   const [colaboradores, setColaboradores] = useState([]);
-  const [modalEliminarColaborador, setModalEliminarColaborador] =
-    useState(false);
+  const [modalEliminarColaborador, setModalEliminarColaborador] = useState(false);
 
   const navigate = useNavigate();
 
@@ -204,8 +203,6 @@ const ExtintoresProvider = ({ children }) => {
 
       const { data } = await clienteAxios.post("/checklist", checklist, config);
 
-      console.log("checklist", data);
-
       setCheckLists([...checkLists, data]);
 
       setAlerta({});
@@ -349,34 +346,36 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const handleModalEliminarColaborador = (colaborador) => {
-    setModalEliminarColaborador(!modalEliminarColaborador);
     setColaborador(colaborador);
+    setModalEliminarColaborador(!modalEliminarColaborador);
   };
   const eliminarColaborador = async (colaborador) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-
+  
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
-
+  
       const { data } = await clienteAxios.delete(
         `/extintores/colaboradores/${colaborador.id}`,
         config
       );
-
+  
       setAlerta({
         msg: data.msg,
         error: false,
       });
-
+  
       setColaboradores(colaboradores.filter((c) => c.id !== colaborador.id));
+      setModalEliminarCheckList(false);
+  
       setColaborador({});
-
+  
       setTimeout(() => {
         setAlerta({});
       }, 3000);
@@ -386,6 +385,8 @@ const ExtintoresProvider = ({ children }) => {
         msg: "Error al eliminar el colaborador",
         error: true,
       });
+    } finally {
+      setModalEliminarColaborador(false);
     }
   };
   return (
