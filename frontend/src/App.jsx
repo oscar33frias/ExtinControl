@@ -13,7 +13,7 @@ import EditarExtintor from "./paginas/EditarExtintor";
 import NuevoColaborador from "./paginas/NuevoColaborador";
 import { AuthProvider } from "./context/AuthProvider";
 import { ExtintoresProvider } from "./context/ExtintoresProvider";
-
+import MapaPlanta from "./paginas/MapaPlanta";
 function App() {
   return (
     <BrowserRouter>
@@ -54,6 +54,10 @@ function App() {
                 path="editar/:id"
                 element={<EditarExtintor></EditarExtintor>}
               />
+            </Route>
+
+            <Route path="/mapa" element={<RutaProtegida></RutaProtegida>}>
+              <Route index element={<MapaPlanta></MapaPlanta>} />
             </Route>
           </Routes>
         </ExtintoresProvider>

@@ -9,7 +9,7 @@ const obtenerExtintores = async (req, res) => {
       .request()
       .input("usuarioId", sql.Int, usuarioId).query(`
         SELECT e.* 
-        FROM Extintores e
+        FROM Extintores e 
         LEFT JOIN ExtintorColaborador ec ON e.id = ec.extintor_id
         WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
       `);

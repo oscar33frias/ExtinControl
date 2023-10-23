@@ -9,8 +9,8 @@ const Sidebar = () => {
   const { auth } = useAuth();
   const { colaboradores } = useExtintores();
 
-  console.log(colaboradores);
   const admin = useAdmin();
+  console.log(admin);
   return (
     <aside className="md:w-80 lg:w-96 px-6 py-8 bg-white shadow-lg rounded-lg">
       <div className="mb-6">

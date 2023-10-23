@@ -18,6 +18,9 @@ const Header = () => {
           <Link to="/extintores" className="font-bold uppercase text-red-400 hover:text-red-500">
             Extintores
           </Link>
+          <a href="/mapa" className="font-bold uppercase text-red-400 hover:text-red-500">
+            Ver mapa de la planta
+          </a>
           <button
             type="button"
             className="text-white text-sm bg-red-600 hover:bg-red-700 p-3 rounded-md uppercase font-bold"
