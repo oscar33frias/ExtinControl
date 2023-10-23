@@ -35,12 +35,14 @@ const ExtintoresProvider = ({ children }) => {
         const { data } = await clienteAxios.get("/extintores", config);
         setExtintores(data.extintores);
         setColaboradores(data.colaboradores);
+       
       } catch (error) {
         console.log(error);
       }
     };
     obtenerExtintores();
-  }, [colaboradores]);
+    
+  }, [colaboradores.length]);
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);

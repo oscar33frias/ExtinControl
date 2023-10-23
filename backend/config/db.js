@@ -13,15 +13,6 @@ const config1 = {
   },
 };
 
-const config3 = {
-  user: process.env.USER3,
-  password: process.env.PASSWORD3 ,
-  server: process.env.SERVER3 ,
-  database: process.env.DATABASE3 ,
-  options: {
-    encrypt: false, // Cambiar a true si se necesita una conexión segura
-  },
-};
 
 const config2 = {
   user: process.env.USER2 ,
@@ -36,7 +27,7 @@ const config2 = {
 
 export const conectarDB = async () => {
   try {
-    await sql.connect(config3);
+    await sql.connect(config2);
     console.log("Conexión exitosa a SQL Server");
   } catch (error) {
     console.error(`Error: ${error.message}`);

@@ -1,9 +1,11 @@
 import formatearFecha from "../helpers/formatearFecha";
 import imagenExtinto from "../img/extintor-preview.png";
 import useExtintores from "../hooks/useExtintores";
+import useAdmin from "../hooks/useAdmin";
 
 const CheckList = ({ checklist }) => {
-  const { handleModalEditarCheckList, handleModalEliminarCheckList } = useExtintores();
+  const { handleModalEditarCheckList, handleModalEliminarCheckList } =
+    useExtintores();
   const {
     id,
     codigo,
@@ -21,6 +23,7 @@ const CheckList = ({ checklist }) => {
     estado,
   } = checklist;
 
+  const admin = useAdmin();
   return (
     <div className="border p-6 bg-white shadow-lg rounded-xl mb-4">
       <div className="flex justify-between items-start flex-wrap mb-5">
@@ -73,29 +76,32 @@ const CheckList = ({ checklist }) => {
         </div>
 
         <div className="flex flex-col mt-5">
-          <div className="flex space-x-3">
-            <button
-              className="bg-indigo-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-indigo-700 transition-colors duration-300"
-              onClick={() => handleModalEditarCheckList(checklist)}
-            >
-              Editar
-            </button>
-            {estado ? (
-              <button className="bg-sky-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-sky-700 transition-colors duration-300">
-                Completa
+          {admin && (
+            <div className="flex space-x-3">
+              <button
+                className="bg-indigo-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-indigo-700 transition-colors duration-300"
+                onClick={() => handleModalEditarCheckList(checklist)}
+              >
+                Editar
               </button>
-            ) : (
-              <button className="bg-gray-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-gray-700 transition-colors duration-300">
-                Incompleta
+              {estado ? (
+                <button className="bg-sky-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-sky-700 transition-colors duration-300">
+                  Completa
+                </button>
+              ) : (
+                <button className="bg-gray-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-gray-700 transition-colors duration-300">
+                  Incompleta
+                </button>
+              )}
+              <button
+                className="bg-red-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-red-700 transition-colors duration-300"
+                onClick={() => handleModalEliminarCheckList(checklist)}
+              >
+                Eliminar
               </button>
-            )}
-            <button
-              className="bg-red-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-red-700 transition-colors duration-300"
-              onClick={() => handleModalEliminarCheckList(checklist)}
-            >
-              Eliminar
-            </button>
-          </div>
+            </div>
+          )}
+
           <div className="flex justify-center">
             <img
               src={imagenExtinto}

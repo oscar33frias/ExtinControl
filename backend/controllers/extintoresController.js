@@ -14,22 +14,28 @@ const obtenerExtintores = async (req, res) => {
         WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
       `);
 
-    // Consulta para obtener colaboradores
-    // Consulta para obtener colaboradores
-    const colaboradoresResult = await pool
-      .request()
-      .input("usuarioId", sql.Int, usuarioId).query(`
-  SELECT DISTINCT u.id, u.email
-  FROM usuario u
-  INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
-  INNER JOIN Extintores e ON ec.extintor_id = e.id
-  WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
-`);
+     // Consulta para obtener colaboradores
+     const colaboradoresResult = await pool
+     .request()
+     .input("usuarioId", sql.Int, usuarioId)
+     .query(`
+       SELECT DISTINCT u.id, u.email
+       FROM usuario u
+       INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
+       WHERE ec.extintor_id IN (
+         SELECT e.id
+         FROM Extintores e
+         WHERE e.usuario_id = @usuarioId
+       )
+     `);
+
+   const colaboradores = colaboradoresResult.recordset;
 
     const extintores = extintoresResult.recordset;
-    const colaboradores = colaboradoresResult.recordset;
 
 
+    console.log("extintores", extintores);
+    console.log("colaboradores", colaboradores);
     res.json({ extintores, colaboradores });
   } catch (error) {
     console.error(
