@@ -9,6 +9,7 @@ export const FormularioExtintores = () => {
   const [marca, setMarca] = useState("");
   const [capacidad, setCapacidad] = useState("");
   const [fechaCreacion, setFechaCreacion] = useState("");
+  const [posicion, setPosicion] = useState("");
 
   const params = useParams();
 
@@ -22,12 +23,13 @@ export const FormularioExtintores = () => {
       setMarca(extintor.marca);
       setCapacidad(extintor.capacidad);
       setFechaCreacion(extintor.fecha_creacion?.split("T")[0]);
+      setPosicion(extintor.posicion);
     }
   }, [params]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ([codigo, marca, capacidad, fechaCreacion].includes("")) {
+    if ([codigo, marca, capacidad, fechaCreacion, posicion].includes("")) {
       mostrarAlerta({
         msg: "Todos los campos son obligatorios",
         error: true,
@@ -41,6 +43,7 @@ export const FormularioExtintores = () => {
       marca,
       capacidad,
       fechaCreacion,
+      posicion,
     });
 
     setId(null);
@@ -48,14 +51,15 @@ export const FormularioExtintores = () => {
     setCodigo("");
     setFechaCreacion("");
     setMarca("");
+    setPosicion("");
   };
 
   const { msg } = alerta;
   return (
     <form
-  className="bg-gray-800 py-20 px-5 md:w-1/2 rounded-lg shadow mx-auto"
-  onSubmit={handleSubmit}
->
+      className="bg-gray-800 py-20 px-5 md:w-1/2 rounded-lg shadow mx-auto"
+      onSubmit={handleSubmit}
+    >
       {msg && <Alerta alerta={alerta} />}
       
       <div className="mb-5">
@@ -122,6 +126,23 @@ export const FormularioExtintores = () => {
           className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md"
           value={fechaCreacion}
           onChange={(e) => setFechaCreacion(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-5">
+        <label
+          className="text-red-700 uppercase font-bold text-sm"
+          htmlFor="posicion"
+        >
+          Posición del Extintor
+        </label>
+        <input
+          type="number"
+          id="posicion"
+          className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+          placeholder="Posición del Extintor"
+          value={posicion}
+          onChange={(e) => setPosicion(e.target.value)}
         />
       </div>
       

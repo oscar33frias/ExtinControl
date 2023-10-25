@@ -50,7 +50,7 @@ const EXTN = "EXTN";
 
 const nuevoExtintor = async (req, res) => {
   try {
-    const { codigo, marca, capacidad } = req.body;
+    const { codigo, marca, capacidad,posicion } = req.body;
     const { id: usuarioId } = req.usuario;
     const pool = await sql.connect();
 
@@ -59,10 +59,11 @@ const nuevoExtintor = async (req, res) => {
       .input("codigo", sql.NVarChar(200), EXTN + codigo)
       .input("marca", sql.NVarChar(200), marca)
       .input("capacidad", sql.Float, capacidad)
+      .input("posicion", sql.Int, posicion)
       .input("usuarioId", sql.Int, usuarioId).query(`
-        INSERT INTO Extintores (codigo, marca, capacidad, usuario_id)
+        INSERT INTO Extintores (codigo, marca, capacidad,posicion, usuario_id)
         OUTPUT INSERTED.*
-        VALUES (@codigo, @marca, @capacidad, @usuarioId)
+        VALUES (@codigo, @marca, @capacidad,@posicion, @usuarioId)
       `);
 
     res.json(result.recordset[0]);
@@ -286,6 +287,7 @@ const agregarColaborador = async (req, res) => {
 };
 
 const eliminarColaborador = async (req, res) => {
+  
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;
 
@@ -325,6 +327,38 @@ const eliminarColaborador = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+
+const agregarPosicion = async (req, res) => {
+  const { x, y,id } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
+
+  console.log(req.body)
+  try {
+    const pool = await sql.connect();
+
+    // Agregar la nueva posición a la base de datos
+    const agregarQuery = `
+      INSERT INTO Posicion (x, y,id)
+      OUTPUT INSERTED.*
+      VALUES (@x, @y,@id)
+    `;
+
+    const agregarResult = await pool
+      .request()
+      .input("x", sql.Float, x)
+      .input("y", sql.Float, y)
+      .input("id", sql.Int, id)
+
+      .query(agregarQuery);
+
+    res.json({ msg: "Posición agregada con éxito", posicion: agregarResult.recordset[0] });
+  } catch (error) {
+    console.error("Error al agregar posición:", error.message);
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
+
+
+
 export {
   obtenerExtintores,
   nuevoExtintor,
@@ -334,4 +368,5 @@ export {
   agregarColaborador,
   eliminarColaborador,
   buscarColaborador,
+  agregarPosicion
 };

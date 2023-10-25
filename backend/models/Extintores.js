@@ -8,7 +8,8 @@ CREATE TABLE Extintores (
   capacidad FLOAT,
   fecha_creacion DATETIME DEFAULT GETDATE(),
   usuario_id INT NOT NULL,
-  colaboradores_igid INT 
+  colaboradores_id INT ,
+  posicion INT,
 )
 `;
 

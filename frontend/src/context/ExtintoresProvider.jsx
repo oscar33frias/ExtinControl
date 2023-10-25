@@ -1,7 +1,7 @@
 import { useState, createContext, useEffect } from "react";
 import clienteAxios from "../../config/clienteAxios";
 import { useNavigate } from "react-router-dom";
-
+import useMarkers from "../hooks/useMarkers";
 const ExtintoresContext = createContext();
 
 const ExtintoresProvider = ({ children }) => {
@@ -19,6 +19,8 @@ const ExtintoresProvider = ({ children }) => {
     useState(false);
 
   const navigate = useNavigate();
+
+  const { markers } = useMarkers();
 
   useEffect(() => {
     const obtenerExtintores = async () => {
@@ -390,6 +392,44 @@ const ExtintoresProvider = ({ children }) => {
       setModalEliminarColaborador(false);
     }
   };
+  const agregarPosicion = async (datos) => {
+
+    try {
+  
+      const token = localStorage.getItem('token');
+  
+      if(!token) return;
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+  
+      const {data} = await clienteAxios.post('/extintores/posicion', datos, config);
+  
+      setAlerta({
+        msg: data.msg,
+        error: false
+      });
+  
+      // Reiniciar el estado de la posición
+  
+      setTimeout(() => {
+        setAlerta({}); 
+      }, 3000);
+  
+    } catch (error) {
+      
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true
+      });
+  
+    }
+  
+  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -417,6 +457,7 @@ const ExtintoresProvider = ({ children }) => {
         handleModalEliminarColaborador,
         modalEliminarColaborador,
         eliminarColaborador,
+        agregarPosicion
       }}
     >
       {children}

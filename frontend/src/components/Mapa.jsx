@@ -1,83 +1,15 @@
 import LAY_OUT_EXTINTORES_PLANTA_1_2023 from "../img/LAY_OUT_EXTINTORES_PLANTA_1_2023.jpg";
-import { useState } from 'react';
+import { useState } from "react";
+import useExtintores from "../hooks/useExtintores";
 
 const Mapa = () => {
-  const [markers, setMarkers] = useState([
-    { x: 1298, y: 722 },
-    { x: 1061, y: 763 },
-    { x: 1038, y: 742 },
-    { x: 880, y: 809 },
-    { x: 839, y: 867 },
-    { x: 899, y: 880 },
-    { x: 1011, y: 812 },
-    { x: 1237, y: 1065 },
-    { x: 1354, y: 1010 },
-    { x: 913, y: 805 },
-    { x: 688, y: 818 },
-    { x: 629, y: 819 },
-    { x: 630, y: 739 },
-    { x: 415, y: 743 },
-    { x: 399, y: 878 },
-    { x: 325, y: 834 },
-    { x: 72, y: 836 },
-    { x: 70, y: 741 },
-    { x: 234, y: 741 },
-    { x: 74, y: 581 },
-    { x: 234, y: 579 },
-    { x: 418, y: 577 },
-    { x: 630, y: 578 },
-    { x: 811, y: 579 },
-    { x: 983, y: 490 },
-    { x: 986, y: 218 },
-    { x: 983, y: 333 },
-    { x: 809, y: 491 },
-    { x: 631, y: 491 },
-    { x: 416, y: 488 },
-    { x: 235, y: 491 },
-    { x: 73, y: 489 },
-    { x: 71, y: 332 },
-    { x: 235, y: 335 },
-    { x: 235, y: 218 },
-    { x: 363, y: 218 },
-    { x: 416, y: 335 },
-    { x: 658, y: 266 },
-    { x: 694, y: 222 },
-    { x: 758, y: 231 },
-    { x: 809, y: 331 },
-    { x: 1063, y: 261 },
-    { x: 1084, y: 313 },
-    { x: 1099, y: 261 },
-    { x: 1119, y: 265 },
-    { x: 1138, y: 286 },
-    { x: 1121, y: 314 },
-    { x: 1155, y: 261 },
-    { x: 1388, y: 480 },
-    { x: 1295, y: 198 },
-    { x: 1075, y: 196 },
-    { x: 757, y: 196 },
-    { x: 482, y: 195 },
-    { x: 52, y: 199 },
-    { x: 54, y: 538 },
-    { x: 54, y: 1241 },
-    { x: 89, y: 938 },
-    { x: 79, y: 963 },
-    { x: 124, y: 1071 },
-    { x: 188, y: 1037 },
-    { x: 250, y: 973 },
-    { x: 188, y: 898 },
-    { x: 149, y: 1241 },
-    { x: 397, y: 903 },
-    { x: 610, y: 902 },
-    { x: 822, y: 900 },
-    { x: 595, y: 1086 },
-    { x: 862, y: 1102 },
-    { x: 1000, y: 1199 },
-    { x: 879, y: 1196 },
-    { x: 1108, y: 1198 },
-    { x: 1034, y: 666 },
-    { x: 1030, y: 594 },
-    { x: 1034, y: 332 },
-  ]);
+  const [markers, setMarkers] = useState(
+    [].map((marker, index) => ({
+      ...marker,
+      id: `Extintor-${index + 1}`, // Asignar ID único
+    }))
+  );
+  const { agregarPosicion } = useExtintores();
 
   const handleMapClick = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
@@ -85,7 +17,15 @@ const Mapa = () => {
     setMarkers([...markers, marker]);
   };
 
-  console.log(markers);
+  const handleGuardarClick = () => {
+    agregarPosicion({ posiciones: markers })
+      .then(() => {
+        console.log("Posiciones guardadas con éxito");
+      })
+      .catch((error) => {
+        console.error("Error al guardar posiciones:", error.message);
+      });
+  };
 
   return (
     <div
@@ -102,17 +42,38 @@ const Mapa = () => {
           key={index}
           style={{
             position: "absolute",
-            left: marker.x-6,
-            top: marker.y-9,
+            left: marker.x - 6,
+            top: marker.y - 9,
             width: "20px",
             height: "20px",
             borderRadius: "50%",
             backgroundColor: "orange",
           }}
         >
-          {index+1}
+          {index + 1}
         </div>
       ))}
+      <button
+        className="bg-indigo-500 mt-10 text-white py-4 px-6 rounded-full hover:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+        onClick={handleGuardarClick}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8 inline-block align-text-top"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+          />
+        </svg>
+
+        <span className="inline-block pl-3 text-2xl">Guardar Posiciones</span>
+      </button>
     </div>
   );
 };

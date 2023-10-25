@@ -8,8 +8,8 @@ import {
   eliminarExtintor,
   agregarColaborador,
   eliminarColaborador,
-  buscarColaborador
-  //obtenerCheckList,
+  buscarColaborador,
+  agregarPosicion,
 } from "../controllers/extintoresController.js";
 
 import checkAuth from "../middleware/checkAuth.js";
@@ -26,6 +26,8 @@ router
   .get(checkAuth, obtenerExtintor)
   .put(checkAuth, editarExtintor)
   .delete(checkAuth, eliminarExtintor);
+
+  router.route("/posicion").post(checkAuth, agregarPosicion);
 
 //router.get("/tareas/:id", checkAuth, obtenerCheckList);
 router.post("/colaboradores", checkAuth, buscarColaborador);

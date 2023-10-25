@@ -49,15 +49,13 @@ function App() {
               />
 
               <Route path=":id" element={<Extintor></Extintor>} />
-              
+
               <Route
                 path="editar/:id"
                 element={<EditarExtintor></EditarExtintor>}
               />
-            </Route>
 
-            <Route path="/mapa" element={<RutaProtegida></RutaProtegida>}>
-              <Route index element={<MapaPlanta></MapaPlanta>} />
+              <Route path="agregar-puntos-mapa" element={<MapaPlanta></MapaPlanta>} />
             </Route>
           </Routes>
         </ExtintoresProvider>
