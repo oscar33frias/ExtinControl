@@ -5,17 +5,16 @@ dotenv.config();
 
 const config1 = {
   user: process.env.USER,
-  password: process.env.PASSWORD ,
-  server: process.env.SERVER ,
-  database: process.env.DATABASE ,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER,
+  database: process.env.DATABASE,
   options: {
     encrypt: false, // Cambiar a true si se necesita una conexión segura
   },
 };
 
-
 const config2 = {
-  user: process.env.USER2 ,
+  user: process.env.USER2,
   password: process.env.PASSWORD2,
   server: process.env.SERVER2,
   database: process.env.DATABASE2,
@@ -23,7 +22,6 @@ const config2 = {
     encrypt: false, // Cambiar a true si se necesita una conexión segura
   },
 };
-
 
 export const conectarDB = async () => {
   try {

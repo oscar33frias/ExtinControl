@@ -1,4 +1,6 @@
 import sql from "mssql";
+
+
 const agregarCheckList = async (req, res) => {
   const {
     codigo,
@@ -51,19 +53,14 @@ const agregarCheckList = async (req, res) => {
         VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @prioridad, @extintorId)
       `);
 
-      
-      const result = await pool
-      .request()
-      .input("extintorId", sql.Int, extintorId)
+    const result = await pool.request().input("extintorId", sql.Int, extintorId)
       .query(`
           SELECT TOP 1 * FROM checkList
           WHERE extintorId = @extintorId
           ORDER BY id DESC
       `);
-  
-  
-    res.json(result.recordset[0]);
 
+    res.json(result.recordset[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -170,13 +167,11 @@ const actualizarCheckList = async (req, res) => {
       .query(updateQuery);
 
     res.json(updatedCheckList);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 
 const eliminarCheckList = async (req, res) => {
   const { id } = req.params;
@@ -199,8 +194,8 @@ const eliminarCheckList = async (req, res) => {
       .query(checkListQuery);
 
     if (checkListResult.recordset.length === 0) {
-      return res.status(404).json({ 
-        msg: "El checklist no existe o no tienes permisos para eliminarlo" 
+      return res.status(404).json({
+        msg: "El checklist no existe o no tienes permisos para eliminarlo",
       });
     }
 
@@ -213,13 +208,11 @@ const eliminarCheckList = async (req, res) => {
     await pool.request().input("id", sql.Int, id).query(deleteQuery);
 
     res.json({ msg: "Checklist eliminado con éxito" });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 
 const cambiarEstado = async (req, res) => {};
 
@@ -247,7 +240,6 @@ const obtenerCheckLists = async (req, res) => {
     res.status(500).json({ msg: "Error al obtener los checklists" });
   }
 };
-
 
 export {
   agregarCheckList,

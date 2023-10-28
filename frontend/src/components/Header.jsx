@@ -19,7 +19,11 @@ const Header = () => {
             Extintores
           </Link>
           <Link to="/extintores/agregar-puntos-mapa" className="font-bold uppercase text-red-400 hover:text-red-500">
-            Ver mapa de la planta
+           Indicar Posiciones en el Mapa
+          </Link>
+
+          <Link to="/extintores/ver-mapa" className="font-bold uppercase text-red-400 hover:text-red-500">
+          Ver mapa de extintores 🗺
           </Link>
           <button
             type="button"

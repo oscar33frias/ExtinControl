@@ -1,7 +1,7 @@
 import { useState, createContext, useEffect } from "react";
 import clienteAxios from "../../config/clienteAxios";
 import { useNavigate } from "react-router-dom";
-import useMarkers from "../hooks/useMarkers";
+
 const ExtintoresContext = createContext();
 
 const ExtintoresProvider = ({ children }) => {
@@ -17,10 +17,9 @@ const ExtintoresProvider = ({ children }) => {
   const [colaboradores, setColaboradores] = useState([]);
   const [modalEliminarColaborador, setModalEliminarColaborador] =
     useState(false);
+    const [markers, setMarkers] = useState([]);
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
-
-  const { markers } = useMarkers();
 
   useEffect(() => {
     const obtenerExtintores = async () => {
@@ -352,6 +351,7 @@ const ExtintoresProvider = ({ children }) => {
     setColaborador(colaborador);
     setModalEliminarColaborador(!modalEliminarColaborador);
   };
+
   const eliminarColaborador = async (colaborador) => {
     try {
       const token = localStorage.getItem("token");
@@ -393,43 +393,68 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const agregarPosicion = async (datos) => {
+    const posiciones = datos.posiciones;
 
     try {
-  
-      const token = localStorage.getItem('token');
-  
-      if(!token) return;
+      const token = localStorage.getItem("token");
+
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Recorrer el arreglo posiciones y enviar cada objeto individualmente
+      for (let i = 0; i < posiciones.length; i++) {
+        const { data } = await clienteAxios.post(
+          "/extintores/posiciones",
+          posiciones[i],
+          config
+        );
+
+        setAlerta({
+          msg: data.msg,
+          error: false,
+        });
+
+        setMarkers([posiciones]);
+        console.log("posiciones", posiciones);
+        setTimeout(() => {
+          setAlerta({});
+        }, 3000);
+      }
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      });
+    }
+  };
+  const obtenerPosiciones = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
   
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      }
+          Authorization: `Bearer ${token}`,
+        },
+      };
   
-      const {data} = await clienteAxios.post('/extintores/posicion', datos, config);
-  
-      setAlerta({
-        msg: data.msg,
-        error: false
-      });
-  
-      // Reiniciar el estado de la posición
-  
-      setTimeout(() => {
-        setAlerta({}); 
-      }, 3000);
-  
-    } catch (error) {
+      const { data } = await clienteAxios.get("/extintores/obtener/posiciones", config);
+      setMarkers(data.posiciones);  
       
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true
-      });
-  
+      return data.posiciones;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error al obtener posiciones");
     }
+  };
   
-  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -457,7 +482,10 @@ const ExtintoresProvider = ({ children }) => {
         handleModalEliminarColaborador,
         modalEliminarColaborador,
         eliminarColaborador,
-        agregarPosicion
+        agregarPosicion,
+        markers,
+        setMarkers,
+        obtenerPosiciones,
       }}
     >
       {children}

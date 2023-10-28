@@ -18,7 +18,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit se está ejecutando");
 
     if([email,password].includes('')){
       setAlerta({

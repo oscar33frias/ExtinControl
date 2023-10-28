@@ -14,11 +14,10 @@ const obtenerExtintores = async (req, res) => {
         WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
       `);
 
-     // Consulta para obtener colaboradores
-     const colaboradoresResult = await pool
-     .request()
-     .input("usuarioId", sql.Int, usuarioId)
-     .query(`
+    // Consulta para obtener colaboradores
+    const colaboradoresResult = await pool
+      .request()
+      .input("usuarioId", sql.Int, usuarioId).query(`
        SELECT DISTINCT u.id, u.email
        FROM usuario u
        INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
@@ -29,13 +28,10 @@ const obtenerExtintores = async (req, res) => {
        )
      `);
 
-   const colaboradores = colaboradoresResult.recordset;
+    const colaboradores = colaboradoresResult.recordset;
 
     const extintores = extintoresResult.recordset;
 
-
-    console.log("extintores", extintores);
-    console.log("colaboradores", colaboradores);
     res.json({ extintores, colaboradores });
   } catch (error) {
     console.error(
@@ -50,7 +46,7 @@ const EXTN = "EXTN";
 
 const nuevoExtintor = async (req, res) => {
   try {
-    const { codigo, marca, capacidad,posicion } = req.body;
+    const { codigo, marca, capacidad, posicion } = req.body;
     const { id: usuarioId } = req.usuario;
     const pool = await sql.connect();
 
@@ -76,6 +72,7 @@ const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;
 
+  console.log("desde obtener extintor");
   try {
     const pool = await sql.connect();
 
@@ -139,9 +136,10 @@ const obtenerExtintor = async (req, res) => {
       "Error al obtener extintor, checklists y colaboradores:",
       error.message
     );
-    res.status(500).json({ msg: "Error en el servidor" });
+    res.status(500).json({ msg: "Error en el servidor desde obtener extintor" });
   }
 };
+
 const editarExtintor = async (req, res) => {
   const { id } = req.params;
   const usuarioId = req.usuario.id;
@@ -287,7 +285,6 @@ const agregarColaborador = async (req, res) => {
 };
 
 const eliminarColaborador = async (req, res) => {
-  
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;
 
@@ -329,9 +326,8 @@ const eliminarColaborador = async (req, res) => {
 };
 
 const agregarPosicion = async (req, res) => {
-  const { x, y,id } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
-
-  console.log(req.body)
+  const { x, y, id } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
+  console.log(x, y, id);
   try {
     const pool = await sql.connect();
 
@@ -350,14 +346,34 @@ const agregarPosicion = async (req, res) => {
 
       .query(agregarQuery);
 
-    res.json({ msg: "Posición agregada con éxito", posicion: agregarResult.recordset[0] });
+    res.json({
+      msg: "Posición agregada con éxito",
+      posicion: agregarResult.recordset[0],
+    });
   } catch (error) {
     console.error("Error al agregar posición:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
 
+const obtenerPosiciones = async (req, res) => {
+  try {
+    const pool = await sql.connect();
 
+    console.log("desde obtener posicion");
+    const obtenerQuery = `
+      SELECT *
+      FROM Posicion
+    `;
+
+    const obtenerResult = await pool.request().query(obtenerQuery);
+
+    res.json({ posiciones: obtenerResult.recordset });
+  } catch (error) {
+    console.error("Error al obtener posiciones:", error.message);
+    res.status(500).json({ msg: "Error en el servidor para mostrar posicion" });
+  }
+};
 
 export {
   obtenerExtintores,
@@ -368,5 +384,6 @@ export {
   agregarColaborador,
   eliminarColaborador,
   buscarColaborador,
-  agregarPosicion
+  agregarPosicion,
+  obtenerPosiciones,
 };

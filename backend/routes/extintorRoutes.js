@@ -10,6 +10,7 @@ import {
   eliminarColaborador,
   buscarColaborador,
   agregarPosicion,
+  obtenerPosiciones,
 } from "../controllers/extintoresController.js";
 
 import checkAuth from "../middleware/checkAuth.js";
@@ -27,10 +28,16 @@ router
   .put(checkAuth, editarExtintor)
   .delete(checkAuth, eliminarExtintor);
 
-  router.route("/posicion").post(checkAuth, agregarPosicion);
+router
+  .route("/posiciones")
+  .post(checkAuth, agregarPosicion)
+
+
+router.get("/obtener/posiciones", checkAuth, obtenerPosiciones);
 
 //router.get("/tareas/:id", checkAuth, obtenerCheckList);
 router.post("/colaboradores", checkAuth, buscarColaborador);
 router.post("/colaboradores/agregar", checkAuth, agregarColaborador);
 router.delete("/colaboradores/:id", checkAuth, eliminarColaborador);
+
 export default router;
