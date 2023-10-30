@@ -72,7 +72,6 @@ const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;
 
-  console.log("desde obtener extintor");
   try {
     const pool = await sql.connect();
 
@@ -327,7 +326,6 @@ const eliminarColaborador = async (req, res) => {
 
 const agregarPosicion = async (req, res) => {
   const { x, y, id } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
-  console.log(x, y, id);
   try {
     const pool = await sql.connect();
 
@@ -360,7 +358,6 @@ const obtenerPosiciones = async (req, res) => {
   try {
     const pool = await sql.connect();
 
-    console.log("desde obtener posicion");
     const obtenerQuery = `
       SELECT *
       FROM Posicion
@@ -374,6 +371,24 @@ const obtenerPosiciones = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor para mostrar posicion" });
   }
 };
+const eliminarTodasPosiciones = async (req, res) => {
+  try {
+    const pool = await sql.connect();
+
+    // Consulta para eliminar todas las posiciones
+    const eliminarQuery = `
+      DELETE FROM Posicion
+    `;
+
+    await pool.request().query(eliminarQuery);
+
+    res.json({ msg: "Todas las posiciones han sido eliminadas con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar posiciones:", error.message);
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
+
 
 export {
   obtenerExtintores,
@@ -386,4 +401,5 @@ export {
   buscarColaborador,
   agregarPosicion,
   obtenerPosiciones,
+  eliminarTodasPosiciones
 };

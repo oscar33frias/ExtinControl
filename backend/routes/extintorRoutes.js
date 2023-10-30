@@ -11,6 +11,7 @@ import {
   buscarColaborador,
   agregarPosicion,
   obtenerPosiciones,
+  eliminarTodasPosiciones
 } from "../controllers/extintoresController.js";
 
 import checkAuth from "../middleware/checkAuth.js";
@@ -34,6 +35,9 @@ router
 
 
 router.get("/obtener/posiciones", checkAuth, obtenerPosiciones);
+
+router.delete("/posiciones/eliminar", checkAuth,   eliminarTodasPosiciones
+);
 
 //router.get("/tareas/:id", checkAuth, obtenerCheckList);
 router.post("/colaboradores", checkAuth, buscarColaborador);

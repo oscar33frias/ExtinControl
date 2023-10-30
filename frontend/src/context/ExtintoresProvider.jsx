@@ -17,10 +17,9 @@ const ExtintoresProvider = ({ children }) => {
   const [colaboradores, setColaboradores] = useState([]);
   const [modalEliminarColaborador, setModalEliminarColaborador] =
     useState(false);
-    const [markers, setMarkers] = useState([]);
-    const navigate = useNavigate();
-
-
+  const [markers, setMarkers] = useState([]);
+  const navigate = useNavigate();
+const [haymarkers, setHaymarkers] = useState(false);
   useEffect(() => {
     const obtenerExtintores = async () => {
       try {
@@ -43,6 +42,11 @@ const ExtintoresProvider = ({ children }) => {
     };
     obtenerExtintores();
   }, [colaborador]);
+  
+  
+  useEffect(() => {
+    console.log("markers use effect", markers);
+  }, [markers,haymarkers]);
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
@@ -162,7 +166,6 @@ const ExtintoresProvider = ({ children }) => {
         (extintor) => extintor.id !== id
       );
 
-      console.log("extintores filtrados", extintoresFiltrados);
 
       setExtintores(extintoresFiltrados);
 
@@ -250,7 +253,6 @@ const ExtintoresProvider = ({ children }) => {
   const handleModalEliminarCheckList = (checklist) => {
     setCheckList(checklist);
     setModalEliminarCheckList(!modalEliminarCheckList);
-    console.log("checklist", checklist);
   };
 
   const eliminarCheckList = async (checklist) => {
@@ -421,7 +423,6 @@ const ExtintoresProvider = ({ children }) => {
         });
 
         setMarkers([posiciones]);
-        console.log("posiciones", posiciones);
         setTimeout(() => {
           setAlerta({});
         }, 3000);
@@ -437,6 +438,36 @@ const ExtintoresProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await clienteAxios.get(
+        "/extintores/obtener/posiciones",
+        config
+      );
+      const posiciones = data.posiciones;
+
+setHaymarkers(true);
+      console.log("posiciones desde obtenerposiciones", posiciones);
+      console.log("hay markers desde obtenerposiciones", haymarkers);
+      setMarkers(posiciones);
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error al obtener posiciones");
+    }
+  };
+  const eliminarPosiciones = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      if (!token) return;
   
       const config = {
         headers: {
@@ -445,16 +476,29 @@ const ExtintoresProvider = ({ children }) => {
         },
       };
   
-      const { data } = await clienteAxios.get("/extintores/obtener/posiciones", config);
-      setMarkers(data.posiciones);  
-      
-      return data.posiciones;
+      const { data } = await clienteAxios.delete("/extintores/posiciones/eliminar", config);
+  
+      setHaymarkers(false);
+      setAlerta({
+        msg: data.msg,
+        error: false,
+      });
+  
+      // Limpiar la lista de marcadores (posiciones)
+      setMarkers([]);
+  
+      setTimeout(() => {
+        setAlerta({});
+      }, 3000);
     } catch (error) {
-      console.log(error);
-      throw new Error("Error al obtener posiciones");
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true,
+      });
     }
   };
   
+
   return (
     <ExtintoresContext.Provider
       value={{
@@ -486,6 +530,8 @@ const ExtintoresProvider = ({ children }) => {
         markers,
         setMarkers,
         obtenerPosiciones,
+        eliminarPosiciones,
+        haymarkers
       }}
     >
       {children}

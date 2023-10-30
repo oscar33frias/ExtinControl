@@ -25,7 +25,7 @@ const config2 = {
 
 export const conectarDB = async () => {
   try {
-    await sql.connect(config1);
+    await sql.connect(config2);
     console.log("Conexión exitosa a SQL Server");
   } catch (error) {
     console.error(`Error: ${error.message}`);
