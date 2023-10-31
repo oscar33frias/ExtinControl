@@ -22,6 +22,7 @@ const Mapa = () => {
     const index = markers.length + 1;
     const markerId = index; // Generate unique ID
     const marker = { id: markerId, x: offsetX, y: offsetY };
+    console.log("marker", marker);
     setMarkers([...markers, marker]);
   };
 
@@ -69,8 +70,8 @@ const Mapa = () => {
                 key={index}
                 style={{
                   position: "absolute",
-                  left: marker.x - 6,
-                  top: marker.y + 15, // Cambiar a marker.y para un posicionamiento exacto
+                  left: marker.x - 10,
+                  top: marker.y+25, // Cambiar a marker.y para un posicionamiento exacto
                   width: "20px",
                   height: "20px",
                   borderRadius: "50%",

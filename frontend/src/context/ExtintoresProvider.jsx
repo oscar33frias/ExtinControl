@@ -1,8 +1,11 @@
 import { useState, createContext, useEffect } from "react";
 import clienteAxios from "../../config/clienteAxios";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
 const ExtintoresContext = createContext();
+
+let socket;
 
 const ExtintoresProvider = ({ children }) => {
   const [extintores, setExtintores] = useState([]);
@@ -19,7 +22,10 @@ const ExtintoresProvider = ({ children }) => {
     useState(false);
   const [markers, setMarkers] = useState([]);
   const navigate = useNavigate();
-const [haymarkers, setHaymarkers] = useState(false);
+  const [haymarkers, setHaymarkers] = useState(false);
+  const [buscador, setBuscador] = useState(false);
+
+
   useEffect(() => {
     const obtenerExtintores = async () => {
       try {
@@ -42,12 +48,16 @@ const [haymarkers, setHaymarkers] = useState(false);
     };
     obtenerExtintores();
   }, [colaborador]);
-  
-  
+
+
   useEffect(() => {
     console.log("markers use effect", markers);
-  }, [markers,haymarkers]);
+  }, [markers, haymarkers]);
 
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL);
+
+  },[])
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
 
@@ -166,7 +176,6 @@ const [haymarkers, setHaymarkers] = useState(false);
         (extintor) => extintor.id !== id
       );
 
-
       setExtintores(extintoresFiltrados);
 
       setAlerta({
@@ -212,6 +221,9 @@ const [haymarkers, setHaymarkers] = useState(false);
 
       setAlerta({});
       setModalFormularioExtintor(false);
+
+      socket.emit("nuevo checklist", data);
+      
     } catch (error) {
       console.log(error);
     }
@@ -452,7 +464,7 @@ const [haymarkers, setHaymarkers] = useState(false);
       );
       const posiciones = data.posiciones;
 
-setHaymarkers(true);
+      setHaymarkers(true);
       console.log("posiciones desde obtenerposiciones", posiciones);
       console.log("hay markers desde obtenerposiciones", haymarkers);
       setMarkers(posiciones);
@@ -466,27 +478,30 @@ setHaymarkers(true);
   const eliminarPosiciones = async () => {
     try {
       const token = localStorage.getItem("token");
-  
+
       if (!token) return;
-  
+
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
-  
-      const { data } = await clienteAxios.delete("/extintores/posiciones/eliminar", config);
-  
+
+      const { data } = await clienteAxios.delete(
+        "/extintores/posiciones/eliminar",
+        config
+      );
+
       setHaymarkers(false);
       setAlerta({
         msg: data.msg,
         error: false,
       });
-  
+
       // Limpiar la lista de marcadores (posiciones)
       setMarkers([]);
-  
+
       setTimeout(() => {
         setAlerta({});
       }, 3000);
@@ -497,8 +512,9 @@ setHaymarkers(true);
       });
     }
   };
-  
-
+  const handleBuscador = () => {
+    setBuscador(!buscador);
+  }
   return (
     <ExtintoresContext.Provider
       value={{
@@ -531,7 +547,9 @@ setHaymarkers(true);
         setMarkers,
         obtenerPosiciones,
         eliminarPosiciones,
-        haymarkers
+        haymarkers,
+        handleBuscador,
+        buscador
       }}
     >
       {children}

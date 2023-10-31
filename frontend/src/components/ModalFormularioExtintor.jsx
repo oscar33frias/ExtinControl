@@ -73,21 +73,11 @@ const ModalFormularioCheckList = () => {
     if (
       [
         codigo,
-        obstruido,
-        instrucciones,
-        senalamiento,
-        manometro,
-        sello,
-        condFisica,
-        manguera,
-        boquilla,
-        etiqueta,
-        fechaCheckList,
         prioridad,
       ].includes("")
     ) {
       mostrarAlerta({
-        msg: "Todos los campos son obligatorios",
+        msg: "Codigo y prioridad son obligatorios ",
         error: true,
       });
       return;
@@ -410,7 +400,7 @@ const ModalFormularioCheckList = () => {
                         className=" text-gray-700 uppercase font-bold text-sm"
                         htmlFor="fecha-creacion"
                       >
-                        Fecha de Creacion
+                        Fecha de Revision
                       </label>
                       <input
                         type="date"

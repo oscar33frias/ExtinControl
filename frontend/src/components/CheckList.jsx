@@ -33,44 +33,44 @@ const CheckList = ({ checklist }) => {
           </p>
           <div className="grid grid-cols-2 gap-y-3 gap-x-8">
             <p className="text-sm font-bold">
-              Obstruido <span className=" text-gray-500">{obstruido}</span>
+              Obstruido <span className=" text-green-600">{obstruido}</span>
             </p>
             <p className="text-sm font-bold ">
               Instrucciones{" "}
-              <span className=" text-gray-500">{instrucciones}</span>
+              <span className=" text-green-600">{instrucciones}</span>
             </p>
             <p className="text-sm font-bold ">
               Señalamiento{" "}
-              <span className=" text-gray-500">{senalamiento}</span>
+              <span className=" text-green-600">{senalamiento}</span>
             </p>
             <p className="text-sm font-bold ">
-              Manometro <span className=" text-gray-500">{manometro}</span>
+              Manometro <span className=" text-green-600">{manometro}</span>
             </p>
             <p className="text-sm font-bold  ">
-              Sello <span className=" text-gray-500">{sello}</span>
+              Sello <span className=" text-green-600">{sello}</span>
             </p>
             <p className="text-sm font-bold ">
               Condicion Fisica{" "}
-              <span className=" text-gray-500">{condFisica}</span>
+              <span className=" text-green-600">{condFisica}</span>
             </p>
             <p className="text-sm font-bold ">
-              Manguera <span className=" text-gray-500">{manguera}</span>
+              Manguera <span className=" text-green-600">{manguera}</span>
             </p>
             <p className="text-sm font-bold ">
-              Boquilla <span className=" text-gray-500">{boquilla}</span>
+              Boquilla <span className=" text-green-600">{boquilla}</span>
             </p>
             <p className="text-sm font-bold ">
-              Etiqueta <span className=" text-gray-500">{etiqueta}</span>
+              Etiqueta <span className=" text-green-600">{etiqueta}</span>
             </p>
             <p className="text-sm font-bold ">
               Fecha Esperada de Revision
-              <span className=" text-gray-500">
+              <span className=" text-green-600">
                 {" "}
                 {formatearFecha(fecha_checklist)}
               </span>
             </p>
             <p className="text-sm font-bold ">
-              Prioridad <span className=" text-gray-500">{prioridad}</span>
+              Prioridad <span className=" text-green-600">{prioridad}</span>
             </p>
           </div>
         </div>
