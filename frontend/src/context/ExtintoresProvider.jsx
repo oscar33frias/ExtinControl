@@ -1,11 +1,9 @@
 import { useState, createContext, useEffect } from "react";
 import clienteAxios from "../../config/clienteAxios";
 import { useNavigate } from "react-router-dom";
-import io from "socket.io-client";
+import useAuth from "../hooks/useAuth";
 
 const ExtintoresContext = createContext();
-
-let socket;
 
 const ExtintoresProvider = ({ children }) => {
   const [extintores, setExtintores] = useState([]);
@@ -24,7 +22,7 @@ const ExtintoresProvider = ({ children }) => {
   const navigate = useNavigate();
   const [haymarkers, setHaymarkers] = useState(false);
   const [buscador, setBuscador] = useState(false);
-
+  const {auth}= useAuth();
 
   useEffect(() => {
     const obtenerExtintores = async () => {
@@ -47,17 +45,12 @@ const ExtintoresProvider = ({ children }) => {
       }
     };
     obtenerExtintores();
-  }, [colaborador]);
-
+  }, [colaborador,auth]);
 
   useEffect(() => {
     console.log("markers use effect", markers);
   }, [markers, haymarkers]);
 
-  useEffect(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL);
-
-  },[])
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
 
@@ -221,9 +214,6 @@ const ExtintoresProvider = ({ children }) => {
 
       setAlerta({});
       setModalFormularioExtintor(false);
-
-      socket.emit("nuevo checklist", data);
-      
     } catch (error) {
       console.log(error);
     }
@@ -514,7 +504,12 @@ const ExtintoresProvider = ({ children }) => {
   };
   const handleBuscador = () => {
     setBuscador(!buscador);
-  }
+  };
+  const cerrarSesionExtintores = () => {
+    setExtintor({});
+    setExtintores([]);
+    setAlerta({});
+  };
   return (
     <ExtintoresContext.Provider
       value={{
@@ -549,7 +544,8 @@ const ExtintoresProvider = ({ children }) => {
         eliminarPosiciones,
         haymarkers,
         handleBuscador,
-        buscador
+        buscador,
+        cerrarSesionExtintores,
       }}
     >
       {children}

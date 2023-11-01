@@ -18,7 +18,12 @@ const ModalFormularioCheckList = () => {
   const [manguera, setMangera] = useState("");
   const [boquilla, setBoquilla] = useState("");
   const [etiqueta, setEtiqueta] = useState("");
+  const [fechaUltimaHidrostatica, setFechaUltimaHidrostatica] = useState("");
+  const [fechaProximaHidrostatica, setFechaProximaHidrostatica] = useState("");
+  const [fechaUltimaRecarga, setFechaUltimaRecarga] = useState("");
+  const [fechaProximaRecarga, setFechaProximaRecarga] = useState("");
   const [fechaCheckList, setFechaCheckList] = useState("");
+
   const [prioridad, setPrioridad] = useState("");
   const [id, setId] = useState("");
 
@@ -33,10 +38,9 @@ const ModalFormularioCheckList = () => {
     checkList,
   } = useExtintores();
 
-
   useEffect(() => {
     if (checkList.id) {
-      setId(checkList.id)
+      setId(checkList.id);
       setCodigo(checkList.codigo);
       setObstruido(checkList.obstruido);
       setInstrucciones(checkList.instrucciones);
@@ -49,6 +53,14 @@ const ModalFormularioCheckList = () => {
       setEtiqueta(checkList.etiqueta);
       setFechaCheckList(checkList.fecha_checklist?.split("T")[0]);
       setPrioridad(checkList.prioridad);
+      setFechaUltimaHidrostatica(
+        checkList.fecha_ultima_hidrostatica?.split("T")[0]
+      );
+      setFechaProximaHidrostatica(
+        checkList.fecha_proxima_hidrostatica?.split("T")[0]
+      );
+      setFechaUltimaRecarga(checkList.fecha_ultima_recarga?.split("T")[0]);
+      setFechaProximaRecarga(checkList.fecha_proxima_recarga?.split("T")[0]);
       return;
     }
     setId("");
@@ -64,18 +76,16 @@ const ModalFormularioCheckList = () => {
     setEtiqueta("");
     setFechaCheckList("");
     setPrioridad("");
+    setFechaUltimaHidrostatica("");
+    setFechaProximaHidrostatica("");
+    setFechaUltimaRecarga("");
+    setFechaProximaRecarga("");
   }, [checkList]);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      [
-        codigo,
-        prioridad,
-      ].includes("")
-    ) {
+    if ([codigo, prioridad].includes("")) {
       mostrarAlerta({
         msg: "Codigo y prioridad son obligatorios ",
         error: true,
@@ -96,14 +106,15 @@ const ModalFormularioCheckList = () => {
       etiqueta,
       fechaCheckList,
       prioridad,
+      fechaUltimaHidrostatica,
+      fechaProximaHidrostatica,
+      fechaUltimaRecarga,
+      fechaProximaRecarga,
       extintorId: params.id,
     });
     setId("");
-    
-    
-    
-    
-     setCodigo("");
+
+    setCodigo("");
     setObstruido("");
     setInstrucciones("");
     setSenalamiento("");
@@ -115,6 +126,10 @@ const ModalFormularioCheckList = () => {
     setEtiqueta("");
     setFechaCheckList("");
     setPrioridad("");
+    setFechaUltimaHidrostatica("");
+    setFechaProximaHidrostatica("");
+    setFechaUltimaRecarga("");
+    setFechaProximaRecarga("");
   };
 
   const { msg } = alerta;
@@ -393,6 +408,71 @@ const ModalFormularioCheckList = () => {
                           <option key={opcion}>{opcion}</option>
                         ))}
                       </select>
+                    </div>
+
+
+                    <div>
+                      <label
+                        className=" text-gray-700 uppercase font-bold text-sm"
+                        htmlFor="fecha-ultimo-hidrostatica"
+                      >
+                        Fecha Ultima Prueba Hidrostatica
+                      </label>
+                      <input
+                        type="date"
+                        id="fecha-ultimo-hidrostatica"
+                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        value={fechaUltimaHidrostatica}
+                        onChange={(e) => setFechaUltimaHidrostatica(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className=" text-gray-700 uppercase font-bold text-sm"
+                        htmlFor="fecha-proxima-hidrostatica"
+                      >
+                        Fecha Proxima Prueba Hidrostatica
+                      </label>
+                      <input
+                        type="date"
+                        id="fecha-proxima-hidrostatica"
+                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        value={fechaProximaHidrostatica}
+                        onChange={(e) => setFechaProximaHidrostatica(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className=" text-gray-700 uppercase font-bold text-sm"
+                        htmlFor="fecha-ultima-recarga"
+                      >
+                        Fecha Ultima Recarga
+                      </label>
+                      <input
+                        type="date"
+                        id="fecha-ultima-recarga"
+                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        value={fechaUltimaRecarga}
+                        onChange={(e) => setFechaUltimaHidrostatica(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className=" text-gray-700 uppercase font-bold text-sm"
+                        htmlFor="fecha-ultima-recarga"
+                      >
+                        Fecha Proxima Recarga
+                      </label>
+                      <input
+                        type="date"
+                        id="fecha-proxima-recarga"
+                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        value={fechaProximaRecarga}
+                        onChange={(e) => setFechaProximaRecarga(e.target.value)}
+                      />
                     </div>
 
                     <div>

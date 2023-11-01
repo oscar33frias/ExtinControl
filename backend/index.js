@@ -54,26 +54,4 @@ const main = async () => {
   }
 };
 
-import { Server } from "socket.io";
-
-// Call main and use the returned server
-main().then((servidor) => {
-  const io = new Server(servidor, {
-    pingTimeout: 60000,
-    cors: {
-      origin: process.env.FRONTEND_URL,
-    },
-  });
-
-  // io.on("connection", (socket) => {
-  //   console.log("Conectado a Socket.IO");
-
-  //   socket.on("abrir extintor", (extintor) => {
-  //     socket.join(extintor);
-  //   });
-  //   socket.on("nuevo checklist", (checklist) => {
-  //     const { extintor } = checklist;
-  //     socket.on(extintor).emmit("checklist agregado", checklist);");
-  //   });
-  // });
-});
+main();

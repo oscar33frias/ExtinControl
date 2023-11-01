@@ -10,6 +10,8 @@ export const FormularioExtintores = () => {
   const [capacidad, setCapacidad] = useState("");
   const [fechaCreacion, setFechaCreacion] = useState("");
   const [posicion, setPosicion] = useState("");
+  const [ubicacion, setUbicacion] = useState("");
+  const [tipo, setTipo] = useState("");
 
   const params = useParams();
 
@@ -24,12 +26,14 @@ export const FormularioExtintores = () => {
       setCapacidad(extintor.capacidad);
       setFechaCreacion(extintor.fecha_creacion?.split("T")[0]);
       setPosicion(extintor.posicion);
+      setUbicacion(extintor.ubicacion);
+      setTipo(extintor.tipo);
     }
   }, [params]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ([codigo, marca, capacidad, fechaCreacion, posicion].includes("")) {
+    if ([codigo, marca, capacidad, fechaCreacion, posicion,ubicacion,tipo].includes("")) {
       mostrarAlerta({
         msg: "Todos los campos son obligatorios",
         error: true,
@@ -44,6 +48,8 @@ export const FormularioExtintores = () => {
       capacidad,
       fechaCreacion,
       posicion,
+      ubicacion,
+      tipo
     });
 
     setId(null);
@@ -52,6 +58,8 @@ export const FormularioExtintores = () => {
     setFechaCreacion("");
     setMarca("");
     setPosicion("");
+    setUbicacion("");
+    setTipo("");
   };
 
   const { msg } = alerta;
@@ -93,6 +101,41 @@ export const FormularioExtintores = () => {
           placeholder="Marca del Extintor"
           value={marca}
           onChange={(e) => setMarca(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-5">
+        <label
+          className="text-red-700 uppercase font-bold text-sm"
+          htmlFor="tipo"
+        >
+          Tipo
+        </label>
+        <input
+          type="text"
+          id="tipo"
+          className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+          placeholder="Tipo"
+          value={tipo}
+          onChange={(e) => setTipo(e.target.value)}
+        />
+      </div>
+
+
+      <div className="mb-5">
+        <label
+          className="text-red-700 uppercase font-bold text-sm"
+          htmlFor="ubicacion"
+        >
+          Ubicacion
+        </label>
+        <input
+          type="text"
+          id="ubicacion"
+          className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+          placeholder="Ubicacion"
+          value={ubicacion}
+          onChange={(e) => setUbicacion(e.target.value)}
         />
       </div>
 

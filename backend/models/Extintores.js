@@ -10,6 +10,8 @@ CREATE TABLE Extintores (
   usuario_id INT NOT NULL,
   colaboradores_id INT ,
   posicion INT,
+  ubicacion NVARCHAR(200),
+  tipo NVARCHAR(200),
 )
 `;
 

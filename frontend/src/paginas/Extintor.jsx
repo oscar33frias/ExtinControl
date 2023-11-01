@@ -6,8 +6,6 @@ import CheckList from "../components/CheckList";
 import Alerta from "../components/Alerta";
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
-import io from "socket.io-client";
-let socket;
 
 const Extintor = () => {
   const params = useParams();
@@ -27,18 +25,7 @@ const Extintor = () => {
     obtenerExtintor(params.id);
   }, []);
 
-  useEffect(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL);
-    socket.emit("abrir extintor", params.id);
 
-   
-  },[]);
-
-  useEffect(() => {
-    socket.on("respuesta", (data) => {
-      console.log(data);
-    });
-  })
   const { codigo } = extintor;
   const { msg } = alerta;
 
