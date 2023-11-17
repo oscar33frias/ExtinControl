@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 dotenv.config();
 
-const whitelist = [process.env.FRONTEND_URL];
+const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_URL2];
 
 const corsOptions = {
   origin: function (origin, callback) {
