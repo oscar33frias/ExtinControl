@@ -26,8 +26,6 @@ const Mapa = () => {
     setMarkers([...markers, marker]);
   };
 
-  console.log("hay markers", haymarkers);
-
   const handleGuardarClick = () => {
     const posiciones = markers.map((marker) => ({
       id: marker.id,

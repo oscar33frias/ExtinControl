@@ -1,11 +1,12 @@
 import useAdmin from "../hooks/useAdmin";
-import { useEffect } from "react";
+import { useEffect ,useRef} from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
 import CheckList from "../components/CheckList";
 import Alerta from "../components/Alerta";
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
+import QrCodeGenerator from "../components/QRcodeGenerator";
 
 const Extintor = () => {
   const params = useParams();
@@ -25,8 +26,20 @@ const Extintor = () => {
     obtenerExtintor(params.id);
   }, []);
 
+  const qrCodeRef = useRef(null);
 
-  const { codigo } = extintor;
+  const exportImage = () => {
+    const canvas = qrCodeRef.current.querySelector("canvas");
+
+    if (canvas) {
+      const imageUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = "codigo_qr.png";
+      link.click();
+    }
+  };
+  const { codigo ,id} = extintor;
   const { msg } = alerta;
 
   return cargando ? (
@@ -34,6 +47,11 @@ const Extintor = () => {
   ) : (
     <>
       <div className=" flex justify-between">
+      <h1 className="font-black text-4xl">{codigo}</h1>
+        <div ref={qrCodeRef}>
+        <QrCodeGenerator codigo={"http://192.168.1.9:3001/extintores"+id} />
+      </div>
+      <button onClick={exportImage}>Exportar Código QR</button>
         <h1 className=" font-black text-4xl">{codigo}</h1>
         {admin && (
           <div className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-transform duration-300 transform hover:scale-110">

@@ -31,27 +31,30 @@ console.log("extintores" ,extintores)
           alt="Mapa de la planta"
           style={{ width: "100%", height: "100%" }}
         />
-        {markers.map((marker) => (
-          <div
-            key={marker.id}
-            style={{
-              position: "absolute",
-              left: marker.x - 10, // Ajusta el valor según la ubicación deseada
-              top: marker.y + 25, // Ajusta el valor según la ubicación deseada
-            }}
-          >
-            <img
-              src={extintorMarcador}
-              alt={`Extintor ID: ${marker.id}`}
-              style={{
-                width: "20px", // Ajusta el tamaño de la imagen del marcador
-                height: "20px", // Ajusta el tamaño de la imagen del marcador
-                cursor: "pointer", // Cambia el cursor al hacer clic en un marcador
-              }}
-              onClick={() => handleMarkerClick(marker.id)}
-            />
-          </div>
-        ))}
+        {markers.map((marker, index) => (
+  <div
+    key={index}
+    style={{
+      position: "absolute",
+      left: marker.x + 15, // Ajusta el valor según la ubicación deseada
+      top: marker.y + 25,
+      width: "20px",
+      height: "20px",
+      backgroundColor: "blue",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "white",
+      fontWeight: "bold",
+      zIndex: 1,
+    }}
+    onClick={() => handleMarkerClick(marker.id)}
+
+  >
+    {index + 1}
+  </div>
+))}
+
       </div>
     </div>
   );
