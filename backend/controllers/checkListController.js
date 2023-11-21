@@ -148,6 +148,7 @@ const actualizarCheckList = async (req, res) => {
         boquilla = @boquilla,
         etiqueta = @etiqueta,
         prioridad = @prioridad
+        idUsuario = @idUsuario
       WHERE id = @id
     `;
 
@@ -164,6 +165,7 @@ const actualizarCheckList = async (req, res) => {
       .input("boquilla", sql.NVarChar(200), updatedCheckList.boquilla)
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
       .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
+      .input("ipUsuario", sql.VarChar(255), updatedCheckList.idUsuario)
       .query(updateQuery);
 
     res.json(updatedCheckList);
