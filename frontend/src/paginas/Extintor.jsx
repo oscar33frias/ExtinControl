@@ -49,7 +49,7 @@ const Extintor = () => {
       <div className=" flex justify-between">
       <h1 className="font-black text-4xl">{codigo}</h1>
         <div ref={qrCodeRef}>
-        <QrCodeGenerator codigo={"http://192.168.1.9:3001/extintores"+id} />
+        <QrCodeGenerator codigo={"http://192.168.1.9:3000/extintorescheck/editar/"+id} />
       </div>
       <button onClick={exportImage}>Exportar Código QR</button>
         <h1 className=" font-black text-4xl">{codigo}</h1>
