@@ -48,7 +48,7 @@ const ExtintoresProvider = ({ children }) => {
   }, [colaborador,auth]);
 
   useEffect(() => {
-    console.log("markers use effect", markers);
+    console.log("🚀 ~ file: ExtintoresProvider.jsx:53 ~ ExtintoresProvider ~ markers:", markers)
   }, [markers, haymarkers]);
 
   const mostrarAlerta = (alerta) => {
@@ -455,8 +455,7 @@ const ExtintoresProvider = ({ children }) => {
       const posiciones = data.posiciones;
 
       setHaymarkers(true);
-      console.log("posiciones desde obtenerposiciones", posiciones);
-      console.log("hay markers desde obtenerposiciones", haymarkers);
+
       setMarkers(posiciones);
 
       return data;

@@ -7,6 +7,7 @@ import {
   actualizarCheckList,
   eliminarCheckList,
   cambiarEstado,
+  actualizarCheckListMovil
 } from "../controllers/checkListController.js";
 
 const router = express.Router();
@@ -16,4 +17,6 @@ router
   .get(checkAuth, obtenerCheckLists)
   .put(checkAuth, actualizarCheckList)
   .delete(checkAuth, eliminarCheckList);
+
+router.put("/actualizar/:id", checkAuth, actualizarCheckListMovil);
 export default router;

@@ -21,6 +21,7 @@ const CheckList = ({ checklist }) => {
     fecha_checklist,
     prioridad,
     estado,
+    usuario
   } = checklist;
 
   const admin = useAdmin();
@@ -71,6 +72,9 @@ const CheckList = ({ checklist }) => {
             </p>
             <p className="text-sm font-bold ">
               Prioridad <span className=" text-green-600">{prioridad}</span>
+            </p>
+            <p className="text-sm font-bold ">
+              Completado por: <span className=" text-blue-600">{usuario}</span>
             </p>
           </div>
         </div>

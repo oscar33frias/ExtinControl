@@ -22,7 +22,6 @@ const Mapa = () => {
     const index = markers.length + 1;
     const markerId = index; // Generate unique ID
     const marker = { id: markerId, x: offsetX, y: offsetY };
-    console.log("marker", marker);
     setMarkers([...markers, marker]);
   };
 

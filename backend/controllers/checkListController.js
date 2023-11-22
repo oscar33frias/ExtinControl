@@ -73,28 +73,24 @@ const obtenerCheckList = async (req, res) => {
   try {
     const pool = await sql.connect();
 
-    // Consulta combinada para obtener el checklist y verificar si pertenece al usuario autenticado en una sola operación
     const query = `
       SELECT *
       FROM checkList
       INNER JOIN Extintores ON checkList.extintorId = Extintores.id
-      WHERE checkList.id = @id AND Extintores.usuario_id = @usuarioId
+      WHERE checkList.id = @id
     `;
 
     const result = await pool
       .request()
       .input("id", sql.Int, id)
-      .input("usuarioId", sql.Int, req.usuario.id)
       .query(query);
 
-    // Si no se encuentra el checklist o no pertenece al usuario autenticado, responder con un mensaje adecuado
     if (result.recordset.length === 0) {
       return res.status(404).json({
-        msg: "Checklist no encontrado o no tienes permisos para verlo",
+        msg: "Checklist no encontrado",
       });
     }
 
-    // Usar desestructuración para extraer el primer registro de la respuesta
     const [checkList] = result.recordset;
 
     res.json(checkList);
@@ -103,12 +99,11 @@ const obtenerCheckList = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 const actualizarCheckList = async (req, res) => {
   const { id } = req.params;
 
-  console.log(req.body);
   
+
   try {
     const pool = await sql.connect();
 
@@ -116,18 +111,17 @@ const actualizarCheckList = async (req, res) => {
       SELECT *
       FROM checkList
       INNER JOIN Extintores ON checkList.extintorId = Extintores.id
-      WHERE checkList.id = @id AND Extintores.usuario_id = @usuarioId
+      WHERE checkList.id = @id 
     `;
 
     const fetchedChecklist = await pool
       .request()
       .input("id", sql.Int, id)
-      .input("usuarioId", sql.Int, req.usuario.id)
       .query(fetchQuery);
 
     if (fetchedChecklist.recordset.length === 0) {
       return res.status(404).json({
-        msg: "Checklist no encontrado o no tienes permiso para actualizarlo",
+        msg: "Checklist no encontrado",
       });
     }
 
@@ -149,8 +143,9 @@ const actualizarCheckList = async (req, res) => {
         manguera = @manguera,
         boquilla = @boquilla,
         etiqueta = @etiqueta,
-        prioridad = @prioridad
-        usuario = @usuario
+        prioridad = @prioridad,
+        usuario = @usuario,
+        estado = @estado
       WHERE id = @id
     `;
 
@@ -168,6 +163,7 @@ const actualizarCheckList = async (req, res) => {
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
       .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
+      .input("estado", sql.Bit, updatedCheckList.estado)
       .query(updateQuery);
 
     res.json(updatedCheckList);
@@ -176,7 +172,79 @@ const actualizarCheckList = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+const actualizarCheckListMovil = async (req, res) => {
+  const { id } = req.params;
+console.log("entro al backend")
+  
 
+  try {
+    const pool = await sql.connect();
+
+    const fetchQuery = `
+      SELECT *
+      FROM checkList
+      INNER JOIN Extintores ON checkList.extintorId = Extintores.id
+      WHERE checkList.id = @id 
+    `;
+
+    const fetchedChecklist = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query(fetchQuery);
+
+    if (fetchedChecklist.recordset.length === 0) {
+      return res.status(404).json({
+        msg: "Checklist no encontrado",
+      });
+    }
+
+    const existingCheckList = fetchedChecklist.recordset[0];
+    const updatedCheckList = {
+      ...existingCheckList,
+      ...req.body,
+    };
+
+    const updateQuery = `
+      UPDATE checkList
+      SET
+        obstruido = @obstruido,
+        instrucciones = @instrucciones,
+        senalamiento = @senalamiento,
+        manometro = @manometro,
+        sello = @sello,
+        condFisica = @condFisica,
+        manguera = @manguera,
+        boquilla = @boquilla,
+        etiqueta = @etiqueta,
+        prioridad = @prioridad,
+        usuario = @usuario,
+        estado = @estado
+      WHERE id = @id
+    `;
+
+    await pool
+      .request()
+      .input("id", sql.Int, id)
+      .input("obstruido", sql.NVarChar(50), updatedCheckList.obstruido)
+      .input("instrucciones", sql.NVarChar(200), updatedCheckList.instrucciones)
+      .input("senalamiento", sql.NVarChar(200), updatedCheckList.senalamiento)
+      .input("manometro", sql.NVarChar(200), updatedCheckList.manometro)
+      .input("sello", sql.NVarChar(200), updatedCheckList.sello)
+      .input("condFisica", sql.NVarChar(200), updatedCheckList.condFisica)
+      .input("manguera", sql.NVarChar(200), updatedCheckList.manguera)
+      .input("boquilla", sql.NVarChar(200), updatedCheckList.boquilla)
+      .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
+      .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
+      .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
+      .input("estado", sql.Bit, updatedCheckList.estado)
+      .query(updateQuery);
+
+    res.json(updatedCheckList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
 const eliminarCheckList = async (req, res) => {
   const { id } = req.params;
 
@@ -251,4 +319,5 @@ export {
   actualizarCheckList,
   eliminarCheckList,
   cambiarEstado,
+  actualizarCheckListMovil
 };

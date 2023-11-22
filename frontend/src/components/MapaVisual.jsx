@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import LAY_OUT_EXTINTORES_PLANTA_1_2023 from "../img/LAY_OUT_EXTINTORES_PLANTA_1_2023.jpg";
 import useExtintores from "../hooks/useExtintores";
-import extintorMarcador from "../img/extintor-marcador.png";
 
 const MapaVisual = () => {
   const { markers, obtenerPosiciones ,extintores} = useExtintores();
-console.log("extintores" ,extintores)
   useEffect(() => {
     obtenerPosiciones();
   }, []);
@@ -36,8 +34,8 @@ console.log("extintores" ,extintores)
     key={index}
     style={{
       position: "absolute",
-      left: marker.x + 15, // Ajusta el valor según la ubicación deseada
-      top: marker.y + 25,
+      left: marker.x-10, // Ajusta el valor según la ubicación deseada
+      top: marker.y + 30,
       width: "20px",
       height: "20px",
       backgroundColor: "blue",

@@ -20,6 +20,7 @@ CREATE TABLE checkList (
   fechaProximaRecarga DATETIME,
   fechaCheckList DATETIME,
   estado bit default 0, 
+  usuario VARCHAR(255)  ,
   prioridad VARCHAR(255)  CHECK (prioridad IN ('Baja', 'Media', 'Alta')),
   extintorId Int NOT NULL,
 )
