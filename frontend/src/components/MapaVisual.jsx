@@ -15,7 +15,6 @@ const MapaVisual = () => {
 
     const url=`/extintores/${extintorClickeado.id}`
     window.location.href=url
-    console.log("extintorClickeado", extintorClickeado);
   };
 
   return (

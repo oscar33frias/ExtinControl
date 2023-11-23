@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "host": "node index.js --host port=4000",
+    "host": "nodemon index.js --host port=4000",
     "start": "node index.js"
   },
   "author": "",

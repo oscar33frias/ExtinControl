@@ -13,7 +13,6 @@ CREATE TABLE checkList (
   manguera NVARCHAR(200) ,  
   boquilla NVARCHAR(200) ,
   etiqueta NVARCHAR(200) ,
-  fecha_checklist DATETIME DEFAULT GETDATE(),
   fechaUltimaHidrostatica DATETIME,
   fechaProximaHidrostatica DATETIME,
   fechaUltimaRecarga DATETIME,

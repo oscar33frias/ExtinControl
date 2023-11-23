@@ -22,7 +22,7 @@ const ExtintoresProvider = ({ children }) => {
   const navigate = useNavigate();
   const [haymarkers, setHaymarkers] = useState(false);
   const [buscador, setBuscador] = useState(false);
-  const {auth}= useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const obtenerExtintores = async () => {
@@ -45,11 +45,9 @@ const ExtintoresProvider = ({ children }) => {
       }
     };
     obtenerExtintores();
-  }, [colaborador,auth]);
+  }, [colaborador, auth]);
 
-  useEffect(() => {
-    console.log("🚀 ~ file: ExtintoresProvider.jsx:53 ~ ExtintoresProvider ~ markers:", markers)
-  }, [markers, haymarkers]);
+  useEffect(() => {}, [markers, haymarkers]);
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
@@ -207,6 +205,8 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
+      checklist.usuario = auth.nombre;
+      console.log("🚀 ~ file: ExtintoresProvider.jsx:209 ~ crearCheckList ~ checklist:", checklist)
 
       const { data } = await clienteAxios.post("/checklist", checklist, config);
 

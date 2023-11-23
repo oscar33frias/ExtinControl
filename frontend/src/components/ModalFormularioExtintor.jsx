@@ -7,6 +7,10 @@ import { useParams } from "react-router-dom";
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
+const ESTADO = [
+  { value: 1, label: "Completo" },
+  { value: 0, label: "Incompleto" },
+];
 const ModalFormularioCheckList = () => {
   const [codigo, setCodigo] = useState("");
   const [obstruido, setObstruido] = useState("");
@@ -23,9 +27,9 @@ const ModalFormularioCheckList = () => {
   const [fechaUltimaRecarga, setFechaUltimaRecarga] = useState("");
   const [fechaProximaRecarga, setFechaProximaRecarga] = useState("");
   const [fechaCheckList, setFechaCheckList] = useState("");
-
   const [prioridad, setPrioridad] = useState("");
   const [id, setId] = useState("");
+  const [estado, setEstado] = useState("");
 
   const params = useParams();
 
@@ -51,7 +55,7 @@ const ModalFormularioCheckList = () => {
       setMangera(checkList.manguera);
       setBoquilla(checkList.boquilla);
       setEtiqueta(checkList.etiqueta);
-      setFechaCheckList(checkList.fecha_checklist?.split("T")[0]);
+      setFechaCheckList(checkList.fechaCheckList?.split("T")[0]);
       setPrioridad(checkList.prioridad);
       setFechaUltimaHidrostatica(
         checkList.fecha_ultima_hidrostatica?.split("T")[0]
@@ -61,6 +65,7 @@ const ModalFormularioCheckList = () => {
       );
       setFechaUltimaRecarga(checkList.fecha_ultima_recarga?.split("T")[0]);
       setFechaProximaRecarga(checkList.fecha_proxima_recarga?.split("T")[0]);
+      setEstado(checkList.estado);
       return;
     }
     setId("");
@@ -80,17 +85,63 @@ const ModalFormularioCheckList = () => {
     setFechaProximaHidrostatica("");
     setFechaUltimaRecarga("");
     setFechaProximaRecarga("");
+    setEstado("");
   }, [checkList]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([codigo, prioridad].includes("")) {
-      mostrarAlerta({
-        msg: "Codigo y prioridad son obligatorios ",
-        error: true,
-      });
-      return;
+    if (
+      [
+        codigo,
+        obstruido,
+        instrucciones,
+        senalamiento,
+        manometro,
+        sello,
+        condFisica,
+        manguera,
+        boquilla,
+        etiqueta,
+        fechaUltimaHidrostatica,
+        fechaProximaHidrostatica,
+        fechaUltimaRecarga,
+        fechaProximaRecarga,
+        fechaCheckList,
+        prioridad,
+   
+        estado,
+      ].includes("")
+    ) {
+      
+      const campos = {
+        codigo,
+        obstruido,
+        instrucciones,
+        senalamiento,
+        manometro,
+        sello,
+        condFisica,
+        manguera,
+        boquilla,
+        etiqueta,
+        fechaUltimaHidrostatica,
+        fechaProximaHidrostatica,
+        fechaUltimaRecarga,
+        fechaProximaRecarga,
+        fechaCheckList,
+        prioridad,
+        estado,
+      };
+      for (let campo in campos) {
+        if (campos[campo] === "") {
+          mostrarAlerta({
+            msg: `El campo ${campo} es obligatorio`,
+            error: true,
+          });
+          return;
+        }
+      }
     }
     await submitCheckList({
       id,
@@ -111,6 +162,7 @@ const ModalFormularioCheckList = () => {
       fechaUltimaRecarga,
       fechaProximaRecarga,
       extintorId: params.id,
+      estado,
     });
     setId("");
 
@@ -130,6 +182,7 @@ const ModalFormularioCheckList = () => {
     setFechaProximaHidrostatica("");
     setFechaUltimaRecarga("");
     setFechaProximaRecarga("");
+    setEstado("");
   };
 
   const { msg } = alerta;
@@ -410,7 +463,6 @@ const ModalFormularioCheckList = () => {
                       </select>
                     </div>
 
-
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
@@ -423,7 +475,10 @@ const ModalFormularioCheckList = () => {
                         id="fecha-ultimo-hidrostatica"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
                         value={fechaUltimaHidrostatica}
-                        onChange={(e) => setFechaUltimaHidrostatica(e.target.value)}
+                        onChange={(e) =>
+                          setFechaUltimaHidrostatica(e.target.value)
+                        }
+                        
                       />
                     </div>
 
@@ -439,7 +494,10 @@ const ModalFormularioCheckList = () => {
                         id="fecha-proxima-hidrostatica"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
                         value={fechaProximaHidrostatica}
-                        onChange={(e) => setFechaProximaHidrostatica(e.target.value)}
+                        onChange={(e) =>
+                          setFechaProximaHidrostatica(e.target.value)
+                        }
+                      
                       />
                     </div>
 
@@ -455,7 +513,7 @@ const ModalFormularioCheckList = () => {
                         id="fecha-ultima-recarga"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
                         value={fechaUltimaRecarga}
-                        onChange={(e) => setFechaUltimaHidrostatica(e.target.value)}
+                        onChange={(e) => setFechaUltimaRecarga(e.target.value)}
                       />
                     </div>
 
@@ -509,6 +567,30 @@ const ModalFormularioCheckList = () => {
 
                         {PRIORIDAD.map((opcion) => (
                           <option key={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        className=" text-gray-700 uppercase font-bold text-sm"
+                        htmlFor="prioridad"
+                      >
+                        Estado
+                      </label>
+                      <select
+                        type="estado"
+                        id="estado"
+                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        value={estado}
+                        onChange={(e) => setEstado(e.target.value)}
+                      >
+                        <option value="">Selecionar</option>
+
+                        {ESTADO.map((opcion) => (
+                          <option key={opcion.value} value={opcion.value}>
+                            {opcion.label}
+                          </option>
                         ))}
                       </select>
                     </div>

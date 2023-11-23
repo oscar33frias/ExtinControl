@@ -1,32 +1,51 @@
 import sql from "mssql";
 
-
 const agregarCheckList = async (req, res) => {
-  const {
-    codigo,
-    extintorId,
-    obstruido,
-    instrucciones,
-    senalamiento,
-    manometro,
-    sello,
-    condFisica,
-    manguera,
+  console.log("dentro de agregar checklist");
+  var {
     boquilla,
+    condFisica,
+    estado,
     etiqueta,
+    fechaProximaHidrostatica,
+    fechaProximaRecarga,
+    fechaUltimaHidrostatica,
+    fechaUltimaRecarga,
+    instrucciones,
+    manguera,
+    manometro,
+    obstruido,
     prioridad,
+    sello,
+    senalamiento,
+    usuario,
+    extintorId,
+    codigo,
+    fechaCheckList
   } = req.body;
-  const usuarioId = req.usuario.id;
+// Función para formatear una fecha en el formato 'YYYY-MM-DD HH:MM:SS'
+function formatFecha(fecha) {
+  const date = new Date(fecha);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day} 00:00:00`;
+}
 
+// Formatea las fechas
+fechaCheckList = formatFecha(fechaCheckList);
+fechaUltimaHidrostatica = formatFecha(fechaUltimaHidrostatica);
+fechaProximaHidrostatica = formatFecha(fechaProximaHidrostatica);
+fechaUltimaRecarga = formatFecha(fechaUltimaRecarga);
+fechaProximaRecarga = formatFecha(fechaProximaRecarga);
   try {
     const pool = await sql.connect();
 
     const isExtintorOwnedByUser = await pool
       .request()
-      .input("extintorId", sql.Int, extintorId)
-      .input("usuarioId", sql.Int, usuarioId).query(`
+      .input("extintorId", sql.Int, extintorId).query(`
         SELECT 1 FROM Extintores
-        WHERE id = @extintorId AND usuario_id = @usuarioId
+        WHERE id = @extintorId 
       `);
 
     if (!isExtintorOwnedByUser.recordset.length) {
@@ -34,7 +53,6 @@ const agregarCheckList = async (req, res) => {
         .status(404)
         .json({ msg: "Extintor no encontrado o no pertenece al usuario" });
     }
-
     await pool
       .request()
       .input("codigo", sql.VarChar(255), codigo)
@@ -48,11 +66,17 @@ const agregarCheckList = async (req, res) => {
       .input("boquilla", sql.NVarChar(200), boquilla)
       .input("etiqueta", sql.NVarChar(200), etiqueta)
       .input("prioridad", sql.VarChar(255), prioridad)
-      .input("extintorId", sql.Int, extintorId).query(`
-        INSERT INTO checkList (codigo, obstruido, instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, prioridad, extintorId)
-        VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @prioridad, @extintorId)
-      `);
-
+      .input("estado", sql.Int, estado)
+      .input("usuario", sql.VarChar(255), usuario) // Agrega usuario aquí
+      .input("extintorId", sql.Int, extintorId)
+      .input("fechaUltimaHidrostatica", sql.DateTime, fechaUltimaHidrostatica)
+      .input("fechaProximaHidrostatica", sql.DateTime, fechaProximaHidrostatica)
+      .input("fechaUltimaRecarga", sql.DateTime, fechaUltimaRecarga)
+      .input("fechaCheckList", sql.DateTime, fechaCheckList)
+      .input("fechaProximaRecarga", sql.DateTime, fechaProximaRecarga).query(`
+  INSERT INTO checkList (codigo, obstruido,fechaCheckList ,instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, fechaUltimaHidrostatica, fechaProximaHidrostatica, fechaUltimaRecarga, fechaProximaRecarga, prioridad, estado, usuario, extintorId)
+  VALUES (@codigo, @obstruido, @instrucciones,@fechaCheckList, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @fechaUltimaHidrostatica, @fechaProximaHidrostatica, @fechaUltimaRecarga, @fechaProximaRecarga, @prioridad, @estado, @usuario, @extintorId)
+  `);
     const result = await pool.request().input("extintorId", sql.Int, extintorId)
       .query(`
           SELECT TOP 1 * FROM checkList
@@ -80,10 +104,7 @@ const obtenerCheckList = async (req, res) => {
       WHERE checkList.id = @id
     `;
 
-    const result = await pool
-      .request()
-      .input("id", sql.Int, id)
-      .query(query);
+    const result = await pool.request().input("id", sql.Int, id).query(query);
 
     if (result.recordset.length === 0) {
       return res.status(404).json({
@@ -101,8 +122,6 @@ const obtenerCheckList = async (req, res) => {
 };
 const actualizarCheckList = async (req, res) => {
   const { id } = req.params;
-
-  
 
   try {
     const pool = await sql.connect();
@@ -174,8 +193,7 @@ const actualizarCheckList = async (req, res) => {
 };
 const actualizarCheckListMovil = async (req, res) => {
   const { id } = req.params;
-console.log("entro al backend")
-  
+  console.log("entro al backend");
 
   try {
     const pool = await sql.connect();
@@ -319,5 +337,5 @@ export {
   actualizarCheckList,
   eliminarCheckList,
   cambiarEstado,
-  actualizarCheckListMovil
+  actualizarCheckListMovil,
 };
