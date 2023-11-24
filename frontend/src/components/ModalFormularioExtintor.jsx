@@ -26,7 +26,6 @@ const ModalFormularioCheckList = () => {
   const [fechaProximaHidrostatica, setFechaProximaHidrostatica] = useState("");
   const [fechaUltimaRecarga, setFechaUltimaRecarga] = useState("");
   const [fechaProximaRecarga, setFechaProximaRecarga] = useState("");
-  const [fechaCheckList, setFechaCheckList] = useState("");
   const [prioridad, setPrioridad] = useState("");
   const [id, setId] = useState("");
   const [estado, setEstado] = useState("");
@@ -41,6 +40,7 @@ const ModalFormularioCheckList = () => {
     submitCheckList,
     checkList,
   } = useExtintores();
+    console.log("🚀 ~ file: ModalFormularioExtintor.jsx:44 ~ ModalFormularioCheckList ~ checkList:", checkList)
 
   useEffect(() => {
     if (checkList.id) {
@@ -55,16 +55,15 @@ const ModalFormularioCheckList = () => {
       setMangera(checkList.manguera);
       setBoquilla(checkList.boquilla);
       setEtiqueta(checkList.etiqueta);
-      setFechaCheckList(checkList.fechaCheckList?.split("T")[0]);
       setPrioridad(checkList.prioridad);
       setFechaUltimaHidrostatica(
-        checkList.fecha_ultima_hidrostatica?.split("T")[0]
+        checkList.fechaUltimaHidrostatica?.split("T")[0]
       );
       setFechaProximaHidrostatica(
-        checkList.fecha_proxima_hidrostatica?.split("T")[0]
+        checkList.fechaProximaHidrostatica?.split("T")[0]
       );
-      setFechaUltimaRecarga(checkList.fecha_ultima_recarga?.split("T")[0]);
-      setFechaProximaRecarga(checkList.fecha_proxima_recarga?.split("T")[0]);
+      setFechaUltimaRecarga(checkList.fechaUltimaRecarga?.split("T")[0]);
+      setFechaProximaRecarga(checkList.fechaProximaRecarga?.split("T")[0]);
       setEstado(checkList.estado);
       return;
     }
@@ -79,7 +78,6 @@ const ModalFormularioCheckList = () => {
     setMangera("");
     setBoquilla("");
     setEtiqueta("");
-    setFechaCheckList("");
     setPrioridad("");
     setFechaUltimaHidrostatica("");
     setFechaProximaHidrostatica("");
@@ -107,7 +105,6 @@ const ModalFormularioCheckList = () => {
         fechaProximaHidrostatica,
         fechaUltimaRecarga,
         fechaProximaRecarga,
-        fechaCheckList,
         prioridad,
    
         estado,
@@ -129,7 +126,7 @@ const ModalFormularioCheckList = () => {
         fechaProximaHidrostatica,
         fechaUltimaRecarga,
         fechaProximaRecarga,
-        fechaCheckList,
+       
         prioridad,
         estado,
       };
@@ -156,7 +153,7 @@ const ModalFormularioCheckList = () => {
       manguera,
       boquilla,
       etiqueta,
-      fechaCheckList,
+    
       prioridad,
       fechaUltimaHidrostatica,
       fechaProximaHidrostatica,
@@ -177,7 +174,7 @@ const ModalFormularioCheckList = () => {
     setMangera("");
     setBoquilla("");
     setEtiqueta("");
-    setFechaCheckList("");
+  
     setPrioridad("");
     setFechaUltimaHidrostatica("");
     setFechaProximaHidrostatica("");
@@ -534,21 +531,7 @@ const ModalFormularioCheckList = () => {
                       />
                     </div>
 
-                    <div>
-                      <label
-                        className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="fecha-creacion"
-                      >
-                        Fecha de Revision
-                      </label>
-                      <input
-                        type="date"
-                        id="fecha-creacion"
-                        className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={fechaCheckList}
-                        onChange={(e) => setFechaCheckList(e.target.value)}
-                      />
-                    </div>
+                 
 
                     <div>
                       <label

@@ -17,7 +17,7 @@ CREATE TABLE checkList (
   fechaProximaHidrostatica DATETIME,
   fechaUltimaRecarga DATETIME,
   fechaProximaRecarga DATETIME,
-  fechaCheckList DATETIME,
+  fechaCheckList DATETIME DEFAULT GETDATE(),
   estado bit default 0, 
   usuario VARCHAR(255)  ,
   prioridad VARCHAR(255)  CHECK (prioridad IN ('Baja', 'Media', 'Alta')),

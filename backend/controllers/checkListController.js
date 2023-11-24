@@ -21,7 +21,7 @@ const agregarCheckList = async (req, res) => {
     usuario,
     extintorId,
     codigo,
-    fechaCheckList,
+    
   } = req.body;
   function formatFecha(fecha) {
     const date = new Date(fecha);
@@ -31,15 +31,12 @@ const agregarCheckList = async (req, res) => {
     const formattedDate = `${year}-${month}-${day} 00:00:00`;
     return formattedDate;
   }
-  fechaCheckList = formatFecha(fechaCheckList);
   fechaUltimaHidrostatica = formatFecha(fechaUltimaHidrostatica);
   fechaProximaHidrostatica = formatFecha(fechaProximaHidrostatica);
   fechaUltimaRecarga = formatFecha(fechaUltimaRecarga);
   fechaProximaRecarga = formatFecha(fechaProximaRecarga);
 
   console.log(
-    "fechaCheckList",
-    fechaCheckList,
     fechaProximaHidrostatica,
     fechaProximaRecarga,
     fechaUltimaHidrostatica,
@@ -79,10 +76,9 @@ const agregarCheckList = async (req, res) => {
       .input("fechaUltimaHidrostatica", sql.DateTime, fechaUltimaHidrostatica)
       .input("fechaProximaHidrostatica", sql.DateTime, fechaProximaHidrostatica)
       .input("fechaUltimaRecarga", sql.DateTime, fechaUltimaRecarga)
-      .input("fechaCheckList", sql.DateTime, fechaCheckList)
       .input("fechaProximaRecarga", sql.DateTime, fechaProximaRecarga).query(`
-  INSERT INTO checkList (codigo, obstruido,fechaCheckList ,instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, fechaUltimaHidrostatica, fechaProximaHidrostatica, fechaUltimaRecarga, fechaProximaRecarga, prioridad, estado, usuario, extintorId)
-  VALUES (@codigo, @obstruido, @instrucciones,@fechaCheckList, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @fechaUltimaHidrostatica, @fechaProximaHidrostatica, @fechaUltimaRecarga, @fechaProximaRecarga, @prioridad, @estado, @usuario, @extintorId)
+      INSERT INTO checkList (codigo, obstruido,  instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, fechaUltimaHidrostatica, fechaProximaHidrostatica, fechaUltimaRecarga, fechaProximaRecarga, prioridad, estado, usuario, extintorId)
+      VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @fechaUltimaHidrostatica, @fechaProximaHidrostatica, @fechaUltimaRecarga, @fechaProximaRecarga, @prioridad, @estado, @usuario, @extintorId)
   `);
     const result = await pool.request().input("extintorId", sql.Int, extintorId)
       .query(`
@@ -171,7 +167,11 @@ const actualizarCheckList = async (req, res) => {
         etiqueta = @etiqueta,
         prioridad = @prioridad,
         usuario = @usuario,
-        estado = @estado
+        estado = @estado,
+        fechaUltimaHidrostatica=@fechaUltimaHidrostatica,
+         fechaProximaHidrostatica=@ffechaProximaHidrostatica, 
+         fechaUltimaRecarga=@fechaUltimaRecarga,
+          fechaProximaRecarga=@fechaUltimaRecarga,
       WHERE id = @id
     `;
 
@@ -190,6 +190,11 @@ const actualizarCheckList = async (req, res) => {
       .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
       .input("estado", sql.Bit, updatedCheckList.estado)
+      .input("fechaUltimaHidrostatica", sql.DateTime, fechaUltimaHidrostatica)
+      .input("fechaProximaHidrostatica", sql.DateTime, fechaProximaHidrostatica)
+      .input("fechaUltimaRecarga", sql.DateTime, fechaUltimaRecarga)
+      .input("fechaCheckList", sql.DateTime, fechaCheckList)
+      .input("fechaProximaRecarga", sql.DateTime, fechaProximaRecarga)
       .query(updateQuery);
 
     res.json(updatedCheckList);
