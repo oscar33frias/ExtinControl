@@ -143,6 +143,7 @@ const ModalFormularioCheckList = () => {
         }
       }
     }
+
     await submitCheckList({
       id,
       codigo,

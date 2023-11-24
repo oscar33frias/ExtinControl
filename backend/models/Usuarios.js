@@ -3,10 +3,10 @@ import sql from "mssql";
 const createUsuarioTableQuery = `
 CREATE TABLE Usuario (
   id INT PRIMARY KEY IDENTITY(1,1),
-  nombre NVARCHAR(50) NOT NULL,
-  password NVARCHAR(200) NOT NULL,
-  email NVARCHAR(50) NOT NULL UNIQUE,
-  token NVARCHAR(200) NOT NULL,
+  nombre NVARCHAR(50),
+  password NVARCHAR(200),
+  email NVARCHAR(50) UNIQUE,
+  token NVARCHAR(200),
   confirmado BIT DEFAULT 0,
   createdAt DATETIME DEFAULT GETDATE(),
   updatedAt DATETIME DEFAULT GETDATE()

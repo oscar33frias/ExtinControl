@@ -3,8 +3,8 @@ import sql from "mssql";
 const createPosicionTableQuery = `
 CREATE TABLE Posicion (
     [id] [int] primary key,
-    [x] [int] NOT NULL,
-    [y] [int] NOT NULL
+    [x] [int],
+    [y] [int]
 )
 `;
 

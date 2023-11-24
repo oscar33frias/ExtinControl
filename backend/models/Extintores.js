@@ -3,11 +3,11 @@ import sql from "mssql";
 const createExtintoresTableQuery = `
 CREATE TABLE Extintores (
   id INT PRIMARY KEY IDENTITY(1,1),
-  codigo NVARCHAR(50) NOT NULL,
-  marca NVARCHAR(200) NOT NULL,
+  codigo NVARCHAR(50) ,
+  marca NVARCHAR(200) ,
   capacidad FLOAT,
   fecha_creacion DATETIME DEFAULT GETDATE(),
-  usuario_id INT NOT NULL,
+  usuario_id INT ,
   colaboradores_id INT ,
   posicion INT,
   ubicacion NVARCHAR(200),

@@ -2,9 +2,9 @@ import sql from "mssql";
 
 const createExtintorColaboradorTableQuery = `
 CREATE TABLE ExtintorColaborador (
-    [id] [int] IDENTITY(1,1) NOT NULL primary key,
-    [extintor_id] [int] NOT NULL,
-    [colaborador_id] [int] NOT NULL
+    [id] [int] IDENTITY(1,1)  primary key,
+    [extintor_id] [int] ,
+    [colaborador_id] [int] 
 )
 `;
 

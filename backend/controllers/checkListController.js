@@ -21,23 +21,30 @@ const agregarCheckList = async (req, res) => {
     usuario,
     extintorId,
     codigo,
-    fechaCheckList
+    fechaCheckList,
   } = req.body;
-// Función para formatear una fecha en el formato 'YYYY-MM-DD HH:MM:SS'
-function formatFecha(fecha) {
-  const date = new Date(fecha);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day} 00:00:00`;
-}
+  function formatFecha(fecha) {
+    const date = new Date(fecha);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // los meses en JavaScript empiezan en 0
+    const day = date.getDate().toString().padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day} 00:00:00`;
+    return formattedDate;
+  }
+  fechaCheckList = formatFecha(fechaCheckList);
+  fechaUltimaHidrostatica = formatFecha(fechaUltimaHidrostatica);
+  fechaProximaHidrostatica = formatFecha(fechaProximaHidrostatica);
+  fechaUltimaRecarga = formatFecha(fechaUltimaRecarga);
+  fechaProximaRecarga = formatFecha(fechaProximaRecarga);
 
-// Formatea las fechas
-fechaCheckList = formatFecha(fechaCheckList);
-fechaUltimaHidrostatica = formatFecha(fechaUltimaHidrostatica);
-fechaProximaHidrostatica = formatFecha(fechaProximaHidrostatica);
-fechaUltimaRecarga = formatFecha(fechaUltimaRecarga);
-fechaProximaRecarga = formatFecha(fechaProximaRecarga);
+  console.log(
+    "fechaCheckList",
+    fechaCheckList,
+    fechaProximaHidrostatica,
+    fechaProximaRecarga,
+    fechaUltimaHidrostatica,
+    fechaUltimaRecarga
+  );
   try {
     const pool = await sql.connect();
 
