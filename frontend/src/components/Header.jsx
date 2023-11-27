@@ -36,6 +36,12 @@ const Header = () => {
             Extintores
           </Link>
           <Link
+            to="/extintores/tableCheckList"
+            className="font-bold uppercase text-red-400 hover:text-red-500"
+          >
+            CheckLists
+          </Link>
+          <Link
             to="/extintores/agregar-puntos-mapa"
             className="font-bold uppercase text-red-400 hover:text-red-500"
           >

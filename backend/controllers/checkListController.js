@@ -70,7 +70,7 @@ const agregarCheckList = async (req, res) => {
       .input("boquilla", sql.NVarChar(200), boquilla)
       .input("etiqueta", sql.NVarChar(200), etiqueta)
       .input("prioridad", sql.VarChar(255), prioridad)
-      .input("estado", sql.Int, estado)
+      .input("estado", sql.VarChar(20), estado)
       .input("usuario", sql.VarChar(255), usuario) // Agrega usuario aquí
       .input("extintorId", sql.Int, extintorId)
       .input("fechaUltimaHidrostatica", sql.DateTime, fechaUltimaHidrostatica)
@@ -94,35 +94,7 @@ const agregarCheckList = async (req, res) => {
   }
 };
 
-const obtenerCheckList = async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    const pool = await sql.connect();
-
-    const query = `
-      SELECT *
-      FROM checkList
-      INNER JOIN Extintores ON checkList.extintorId = Extintores.id
-      WHERE checkList.id = @id
-    `;
-
-    const result = await pool.request().input("id", sql.Int, id).query(query);
-
-    if (result.recordset.length === 0) {
-      return res.status(404).json({
-        msg: "Checklist no encontrado",
-      });
-    }
-
-    const [checkList] = result.recordset;
-
-    res.json(checkList);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Error en el servidor" });
-  }
-};
 const actualizarCheckList = async (req, res) => {
   const { id } = req.params;
 
@@ -169,9 +141,9 @@ const actualizarCheckList = async (req, res) => {
         usuario = @usuario,
         estado = @estado,
         fechaUltimaHidrostatica=@fechaUltimaHidrostatica,
-         fechaProximaHidrostatica=@ffechaProximaHidrostatica, 
+         fechaProximaHidrostatica=@fechaProximaHidrostatica, 
          fechaUltimaRecarga=@fechaUltimaRecarga,
-          fechaProximaRecarga=@fechaUltimaRecarga,
+          fechaProximaRecarga=@fechaUltimaRecarga
       WHERE id = @id
     `;
 
@@ -189,14 +161,15 @@ const actualizarCheckList = async (req, res) => {
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
       .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
-      .input("estado", sql.Bit, updatedCheckList.estado)
-      .input("fechaUltimaHidrostatica", sql.DateTime, fechaUltimaHidrostatica)
-      .input("fechaProximaHidrostatica", sql.DateTime, fechaProximaHidrostatica)
-      .input("fechaUltimaRecarga", sql.DateTime, fechaUltimaRecarga)
-      .input("fechaCheckList", sql.DateTime, fechaCheckList)
-      .input("fechaProximaRecarga", sql.DateTime, fechaProximaRecarga)
+      .input("estado", sql.VarChar(30), updatedCheckList.estado)
+      .input("fechaUltimaHidrostatica", sql.DateTime, updatedCheckList.fechaUltimaHidrostatica)
+      .input("fechaProximaHidrostatica", sql.DateTime, updatedCheckList.fechaProximaHidrostatica)
+      .input("fechaUltimaRecarga", sql.DateTime, updatedCheckList.fechaUltimaRecarga)
+      .input("fechaCheckList", sql.DateTime, updatedCheckList.fechaCheckList)
+      .input("fechaProximaRecarga", sql.DateTime, updatedCheckList.fechaProximaRecarga)
       .query(updateQuery);
 
+      
     res.json(updatedCheckList);
   } catch (error) {
     console.error(error);
@@ -205,7 +178,6 @@ const actualizarCheckList = async (req, res) => {
 };
 const actualizarCheckListMovil = async (req, res) => {
   const { id } = req.params;
-  console.log("entro al backend");
 
   try {
     const pool = await sql.connect();
@@ -266,7 +238,7 @@ const actualizarCheckListMovil = async (req, res) => {
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
       .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
-      .input("estado", sql.Bit, updatedCheckList.estado)
+      .input("estado", sql.NVarChar(29), updatedCheckList.estado)
       .query(updateQuery);
 
     res.json(updatedCheckList);
@@ -316,38 +288,46 @@ const eliminarCheckList = async (req, res) => {
   }
 };
 
-const cambiarEstado = async (req, res) => {};
 
-const obtenerCheckLists = async (req, res) => {
+const obtenerCheckListsforTable = async (req, res) => {
   const { id } = req.params;
 
   try {
     const pool = await sql.connect();
 
     const query = `
-      SELECT * FROM checkList
-      WHERE extintorId = @extintorId
+      SELECT Extintores.codigo, Extintores.marca, Extintores.capacidad, Extintores.fecha_creacion,
+      Extintores.posicion, Extintores.ubicacion, Extintores.tipo, Checklist.codigo, Checklist.obstruido,
+      Checklist.instrucciones, Checklist.senalamiento, Checklist.manometro, Checklist.sello, Checklist.condFisica,
+      Checklist.manguera, Checklist.boquilla, Checklist.etiqueta, Checklist.fechaUltimaHidrostatica, Checklist.fechaProximaHidrostatica, 
+      Checklist.fechaUltimaRecarga, Checklist.fechaProximaRecarga, Checklist.fechaCheckList, Checklist.estado, Checklist.usuario
+      FROM Extintores
+      INNER JOIN Checklist
+      ON Extintores.id = Checklist.extintorId
+      WHERE Checklist.id = @id
     `;
 
-    const result = await pool
-      .request()
-      .input("extintorId", sql.Int, id)
-      .query(query);
+    const result = await pool.request().input("id", sql.Int, id).query(query);
 
-    const checkLists = result.recordset;
+    if (result.recordset.length === 0) {
+      return res.status(404).json({
+        msg: "Checklist no encontrado",
+      });
+    }
 
-    res.json(checkLists);
+    const [checkList] = result.recordset;
+
+    res.json(checkList);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Error al obtener los checklists" });
+    res.status(500).json({ msg: "Error en el servidor" });
   }
 };
 
 export {
   agregarCheckList,
-  obtenerCheckLists,
   actualizarCheckList,
   eliminarCheckList,
-  cambiarEstado,
   actualizarCheckListMovil,
+  obtenerCheckListsforTable
 };

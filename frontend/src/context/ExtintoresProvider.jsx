@@ -23,6 +23,7 @@ const ExtintoresProvider = ({ children }) => {
   const [haymarkers, setHaymarkers] = useState(false);
   const [buscador, setBuscador] = useState(false);
   const { auth } = useAuth();
+  const [checklistCompleto, setChecklistCompleto] = useState({});
 
   useEffect(() => {
     const obtenerExtintores = async () => {
@@ -206,7 +207,6 @@ const ExtintoresProvider = ({ children }) => {
         },
       };
       checklist.usuario = auth.nombre;
-      console.log("🚀 ~ file: ExtintoresProvider.jsx:209 ~ crearCheckList ~ checklist:", checklist)
 
       const { data } = await clienteAxios.post("/checklist", checklist, config);
 
@@ -436,6 +436,30 @@ const ExtintoresProvider = ({ children }) => {
       });
     }
   };
+
+  const obtenerChecklistTabla = async (fechaInicio, fechaFin) => {
+    setCargando(true);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      const { data } = await clienteAxios.get(`/checklists?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, config);
+      setChecklistCompleto(data);
+      return checklistCompleto
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCargando(false);
+    }
+  };
+  
   const obtenerPosiciones = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -545,6 +569,7 @@ const ExtintoresProvider = ({ children }) => {
         handleBuscador,
         buscador,
         cerrarSesionExtintores,
+        obtenerChecklistTabla
       }}
     >
       {children}

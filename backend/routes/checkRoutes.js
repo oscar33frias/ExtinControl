@@ -3,20 +3,20 @@ import checkAuth from "../middleware/checkAuth.js";
 
 import {
   agregarCheckList,
-  obtenerCheckLists,
   actualizarCheckList,
   eliminarCheckList,
-  cambiarEstado,
-  actualizarCheckListMovil
+  actualizarCheckListMovil,
+  obtenerCheckListsforTable
 } from "../controllers/checkListController.js";
 
 const router = express.Router();
 router.post("/", checkAuth, agregarCheckList);
 router
   .route("/:id")
-  .get(checkAuth, obtenerCheckLists)
   .put(checkAuth, actualizarCheckList)
   .delete(checkAuth, eliminarCheckList);
 
 router.put("/actualizar/:id", checkAuth, actualizarCheckListMovil);
+router.get("/table", checkAuth, obtenerCheckListsforTable);
+r
 export default router;

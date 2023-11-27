@@ -2,6 +2,7 @@ import formatearFecha from "../helpers/formatearFecha";
 import imagenExtinto from "../img/extintor-preview.png";
 import useExtintores from "../hooks/useExtintores";
 import useAdmin from "../hooks/useAdmin";
+import { useEffect } from "react";
 
 const CheckList = ({ checklist }) => {
   const { handleModalEditarCheckList, handleModalEliminarCheckList } =
@@ -28,6 +29,7 @@ const CheckList = ({ checklist }) => {
     usuario,
   } = checklist;
 
+  
   const admin = useAdmin();
   return (
     <div className="border p-6 bg-white shadow-lg rounded-xl mb-4">
@@ -124,7 +126,7 @@ const CheckList = ({ checklist }) => {
               >
                 Editar
               </button>
-              {estado ? (
+              {estado==="Completo" ? (
                 <button className="bg-sky-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-sky-700 transition-colors duration-300">
                   Completa
                 </button>

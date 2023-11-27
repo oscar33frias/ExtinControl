@@ -7,10 +7,7 @@ import { useParams } from "react-router-dom";
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
-const ESTADO = [
-  { value: 1, label: "Completo" },
-  { value: 0, label: "Incompleto" },
-];
+const ESTADO = ["Pendiente", "Completo"];
 const ModalFormularioCheckList = () => {
   const [codigo, setCodigo] = useState("");
   const [obstruido, setObstruido] = useState("");
@@ -40,7 +37,10 @@ const ModalFormularioCheckList = () => {
     submitCheckList,
     checkList,
   } = useExtintores();
-    console.log("🚀 ~ file: ModalFormularioExtintor.jsx:44 ~ ModalFormularioCheckList ~ checkList:", checkList)
+  console.log(
+    "🚀 ~ file: ModalFormularioExtintor.jsx:44 ~ ModalFormularioCheckList ~ checkList:",
+    checkList
+  );
 
   useEffect(() => {
     if (checkList.id) {
@@ -106,11 +106,10 @@ const ModalFormularioCheckList = () => {
         fechaUltimaRecarga,
         fechaProximaRecarga,
         prioridad,
-   
+
         estado,
       ].includes("")
     ) {
-      
       const campos = {
         codigo,
         obstruido,
@@ -126,7 +125,7 @@ const ModalFormularioCheckList = () => {
         fechaProximaHidrostatica,
         fechaUltimaRecarga,
         fechaProximaRecarga,
-       
+
         prioridad,
         estado,
       };
@@ -153,7 +152,7 @@ const ModalFormularioCheckList = () => {
       manguera,
       boquilla,
       etiqueta,
-    
+
       prioridad,
       fechaUltimaHidrostatica,
       fechaProximaHidrostatica,
@@ -174,7 +173,7 @@ const ModalFormularioCheckList = () => {
     setMangera("");
     setBoquilla("");
     setEtiqueta("");
-  
+
     setPrioridad("");
     setFechaUltimaHidrostatica("");
     setFechaProximaHidrostatica("");
@@ -476,7 +475,6 @@ const ModalFormularioCheckList = () => {
                         onChange={(e) =>
                           setFechaUltimaHidrostatica(e.target.value)
                         }
-                        
                       />
                     </div>
 
@@ -495,7 +493,6 @@ const ModalFormularioCheckList = () => {
                         onChange={(e) =>
                           setFechaProximaHidrostatica(e.target.value)
                         }
-                      
                       />
                     </div>
 
@@ -530,8 +527,6 @@ const ModalFormularioCheckList = () => {
                         onChange={(e) => setFechaProximaRecarga(e.target.value)}
                       />
                     </div>
-
-                 
 
                     <div>
                       <label
@@ -572,9 +567,7 @@ const ModalFormularioCheckList = () => {
                         <option value="">Selecionar</option>
 
                         {ESTADO.map((opcion) => (
-                          <option key={opcion.value} value={opcion.value}>
-                            {opcion.label}
-                          </option>
+                          <option key={opcion}>{opcion}</option>
                         ))}
                       </select>
                     </div>

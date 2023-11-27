@@ -15,6 +15,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import { ExtintoresProvider } from "./context/ExtintoresProvider";
 import MapaPlanta from "./paginas/MapaPlanta";
 import MapaPlantaVisual from "./paginas/MapaPlantaVisual";
+import TableCheckList from "./paginas/TableCheckList";
 function App() {
   return (
     <BrowserRouter>
@@ -59,6 +60,8 @@ function App() {
               <Route path="agregar-puntos-mapa" element={<MapaPlanta></MapaPlanta>} />
              
               <Route path="ver-mapa" element={<MapaPlantaVisual></MapaPlantaVisual>} />
+
+              <Route path="tableCheckList" element={<TableCheckList></TableCheckList>} />
 
             </Route>
           </Routes>
