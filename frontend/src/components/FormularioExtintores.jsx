@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
-import Alerta from "./Alerta";
+import { ToastContainer, toast } from "react-toastify";
 
 export const FormularioExtintores = () => {
   const [id, setId] = useState(null); 
@@ -15,7 +15,7 @@ export const FormularioExtintores = () => {
 
   const params = useParams();
 
-  const { mostrarAlerta, alerta, submitExtintor, extintor } = useExtintores();
+  const { submitExtintor, extintor } = useExtintores();
 
 
   useEffect(() => {
@@ -34,9 +34,9 @@ export const FormularioExtintores = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if ([codigo, marca, capacidad, fechaCreacion, posicion,ubicacion,tipo].includes("")) {
-      mostrarAlerta({
-        msg: "Todos los campos son obligatorios",
-        error: true,
+     
+      toast.warning("Todos los campos son obligatorios", {
+        position: toast.POSITION.TOP_CENTER,
       });
       return;
     }
@@ -62,13 +62,12 @@ export const FormularioExtintores = () => {
     setTipo("");
   };
 
-  const { msg } = alerta;
   return (
     <form
       className="bg-gray-800 py-20 px-5 md:w-1/2 rounded-lg shadow mx-auto"
       onSubmit={handleSubmit}
     >
-      {msg && <Alerta alerta={alerta} />}
+   <ToastContainer></ToastContainer>
       
       <div className="mb-5">
         <label

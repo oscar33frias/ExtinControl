@@ -89,15 +89,11 @@ const ExtintoresProvider = ({ children }) => {
       );
       setExtintores(extintoresActualizados);
 
-      setAlerta({
-        msg: "Extintor editado correctamente",
-        error: false,
-      });
+      toast.success("Extintor editado Correctamente", { position: toast.POSITION.TOP_CENTER });
 
       setTimeout(() => {
-        setAlerta({});
         navigate("/extintores");
-      }, 300);
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -117,12 +113,11 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.post("/extintores", extintor, config);
       setExtintores([...extintores, data]);
 
-      setAlerta({
-        msg: "Extintor creado correctamente",
-        error: false,
-      });
+     
+
+      toast.success("Extintor creado Correctamente", { position: toast.POSITION.TOP_CENTER });
       setTimeout(() => {
-        setAlerta({});
+
         navigate("/extintores");
       }, 3000);
     } catch (error) {
@@ -275,10 +270,7 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
 
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
       setModalEliminarCheckList(false);
 
       setCheckLists(checkLists.filter((check) => check.id !== checklist.id));
@@ -288,7 +280,9 @@ const ExtintoresProvider = ({ children }) => {
         setAlerta({});
       }, 3000);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -310,11 +304,9 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
       setColaborador(data);
-      setAlerta({});
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
     setCargando(false);
@@ -336,18 +328,16 @@ const ExtintoresProvider = ({ children }) => {
         datos,
         config
       );
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+
+      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
       setColaborador({});
-      setTimeout(() => {
-        setAlerta({});
-      }, 3000);
     } catch (error) {
       setAlerta({
         msg: error.response.data.msg,
         error: true,
+      });
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   };
@@ -463,7 +453,9 @@ const ExtintoresProvider = ({ children }) => {
 
       setChecklistCompleto(data);
     } catch (error) {
-      toast.error(error.response.data.msg,{position: toast.POSITION.TOP_CENTER});
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 

@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
 import Alerta from "./Alerta";
 import { useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
@@ -131,10 +132,12 @@ const ModalFormularioCheckList = () => {
       };
       for (let campo in campos) {
         if (campos[campo] === "") {
-          mostrarAlerta({
-            msg: `El campo ${campo} es obligatorio`,
-            error: true,
+         
+
+          toast.error(`El campo ${campo} es obligatorio`, {
+            position: toast.POSITION.BOTTOM_CENTER,
           });
+
           return;
         }
       }
@@ -182,7 +185,6 @@ const ModalFormularioCheckList = () => {
     setEstado("");
   };
 
-  const { msg } = alerta;
   return (
     <Transition.Root show={modalFormularioExtintor} as={Fragment}>
       <Dialog
@@ -252,7 +254,6 @@ const ModalFormularioCheckList = () => {
                     {id ? "Editar CheckList" : "Crear CheckList"}
                     Crear CheckList
                   </Dialog.Title>
-                  {msg && <Alerta alerta={alerta} />}
                   <form className=" m-10 " onSubmit={handleSubmit}>
                     <div>
                       <label

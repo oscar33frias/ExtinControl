@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import useExtintores from "../hooks/useExtintores";
 const ModalEliminarCheckList = () => {
-  const { handleModalEliminarCheckList, modalEliminarCheckList,eliminarCheckList,checkList ,} =
+  const { handleModalEliminarCheckList, modalEliminarCheckList,eliminarCheckList,checkList } =
     useExtintores();
 
   return (

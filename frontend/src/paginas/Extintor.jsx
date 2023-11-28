@@ -7,6 +7,7 @@ import Alerta from "../components/Alerta";
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import QrCodeGenerator from "../components/QRcodeGenerator";
+import { ToastContainer, toast } from "react-toastify";
 
 const Extintor = () => {
   const params = useParams();
@@ -47,6 +48,7 @@ const Extintor = () => {
   ) : (
     <>
       <div className=" flex justify-between">
+        <ToastContainer></ToastContainer>
       <h1 className="font-black text-4xl">{codigo}</h1>
         <div ref={qrCodeRef}>
         <QrCodeGenerator codigo={"http://172.30.71.71:3000/extintorescheck/editar/"+id} />
