@@ -1,15 +1,14 @@
 import { Link ,useNavigate,} from "react-router-dom";
 import Image from "../img/extintores-login2.jpeg"; // Reemplaza "tu_imagen.jpg" con la ruta de tu imagen
 import { useState } from "react";
-import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
 import useAuth from "../hooks/useAuth";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alerta, setAlerta] = useState({});
  
   const {setAuth} = useAuth();
 
@@ -20,10 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     if([email,password].includes('')){
-      setAlerta({
-        msg: "Todos los campos son obligatorios",
-        error: true,
-      });
+    toast.warning("Todos los campos son obligatorios", {position: toast.POSITION.TOP_CENTER})
       return;
     }
     try {
@@ -32,17 +28,16 @@ const Login = () => {
       setAuth(data);
      navigate('/extintores');
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
-      }); 
+    
+
+      toast.error(error.response.data.msg, {position: toast.POSITION.TOP_CENTER})
       }
     }
   
-const {msg} = alerta;
 
   return (
     <div className="flex">
+      <ToastContainer></ToastContainer>
       {/* Sección de la izquierda con la imagen */}
       <div className="w-2/3">
         <img src={Image} alt="Imagen de extintores" className="h-full w-full" />
@@ -50,7 +45,6 @@ const {msg} = alerta;
 
       {/* Sección de la derecha con el formulario */}
       <div className="w-1/3  p-10">
-        {msg && <Alerta alerta={alerta} />}
         <h1 className="text-red-600 font-black text-6xl capitalize">
           Inicia sesión y administra tus
           <span className="text-yellow-700"> extintores</span>

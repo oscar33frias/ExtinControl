@@ -17,6 +17,6 @@ router
   .delete(checkAuth, eliminarCheckList);
 
 router.put("/actualizar/:id", checkAuth, actualizarCheckListMovil);
-router.get("/table", checkAuth, obtenerCheckListsforTable);
-r
+router.get("/tabla/check", checkAuth, obtenerCheckListsforTable);
+
 export default router;

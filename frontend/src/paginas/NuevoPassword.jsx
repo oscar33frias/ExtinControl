@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
+import { ToastContainer, toast } from "react-toastify";
 
 const NuevoPassword = () => {
   const [password, setPassword] = useState("");
   const [tokenValido, setTokenValido] = useState(false);
-  const [alerta, setAlerta] = useState({});
   const [passwordModificado, setPasswordModificado] = useState(false);
 
   const params = useParams();
@@ -18,9 +18,8 @@ const NuevoPassword = () => {
         await clienteAxios.get(`/usuarios/olvide-password/${token}`);
         setTokenValido(true);
       } catch (error) {
-        setAlerta({
-          msg: error.response.data.msg,
-          error: true,
+        toast.error(error.response.data.msg, {
+          position: toast.POSITION.TOP_CENTER,
         });
       }
     };
@@ -30,9 +29,8 @@ const NuevoPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
-      setAlerta({
-        msg: "El password debe tener al menos 6 caracteres",
-        error: true,
+      toast.warning("El password debe tener al menos 6 caracteres", {
+        position: toast.POSITION.TOP_CENTER,
       });
       return;
     }
@@ -40,27 +38,23 @@ const NuevoPassword = () => {
       const url = `/usuarios/olvide-password/${token}`;
       const { data } = await clienteAxios.post(url, { password });
 
-
-      setAlerta({
-        msg: data.msg,
-        error: false,
+      toast.success(data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
       setPasswordModificado(true);
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   };
-  const { msg } = alerta;
   return (
     <div className="flex flex-col items-center justify-center">
+      <ToastContainer></ToastContainer>
       <h1 className="text-red-600 font-black text-6xl capitalize">
         Restablece tu password para acceder a tus
         <span className="text-yellow-700"> extintores</span>
       </h1>
-      {msg && <Alerta alerta={alerta} />}
       {tokenValido && (
         <form
           className="my-10 bg-white shadow rounded-lg p-10"

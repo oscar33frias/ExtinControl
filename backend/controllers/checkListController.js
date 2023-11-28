@@ -1,7 +1,6 @@
 import sql from "mssql";
 
 const agregarCheckList = async (req, res) => {
-  console.log("dentro de agregar checklist");
   var {
     boquilla,
     condFisica,
@@ -290,7 +289,7 @@ const eliminarCheckList = async (req, res) => {
 
 
 const obtenerCheckListsforTable = async (req, res) => {
-  const { id } = req.params;
+  const { fechaInicio, fechaFin } = req.query;
 
   try {
     const pool = await sql.connect();
@@ -301,13 +300,16 @@ const obtenerCheckListsforTable = async (req, res) => {
       Checklist.instrucciones, Checklist.senalamiento, Checklist.manometro, Checklist.sello, Checklist.condFisica,
       Checklist.manguera, Checklist.boquilla, Checklist.etiqueta, Checklist.fechaUltimaHidrostatica, Checklist.fechaProximaHidrostatica, 
       Checklist.fechaUltimaRecarga, Checklist.fechaProximaRecarga, Checklist.fechaCheckList, Checklist.estado, Checklist.usuario
-      FROM Extintores
-      INNER JOIN Checklist
-      ON Extintores.id = Checklist.extintorId
-      WHERE Checklist.id = @id
+    FROM Extintores
+    INNER JOIN Checklist
+    ON Extintores.id = Checklist.extintorId
+    WHERE Checklist.fechaCheckList BETWEEN @fechaInicio AND @fechaFin
     `;
 
-    const result = await pool.request().input("id", sql.Int, id).query(query);
+    const result = await pool.request()
+      .input("fechaInicio", sql.DateTime, fechaInicio)
+      .input("fechaFin", sql.DateTime, fechaFin)
+      .query(query);
 
     if (result.recordset.length === 0) {
       return res.status(404).json({
@@ -315,9 +317,9 @@ const obtenerCheckListsforTable = async (req, res) => {
       });
     }
 
-    const [checkList] = result.recordset;
-
-    res.json(checkList);
+    const checkLists = result.recordset;
+    console.log(checkLists);
+    res.json(checkLists);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error en el servidor" });

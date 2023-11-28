@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
+import { ToastContainer, toast } from "react-toastify";
 
 const ConfirmarCuenta = () => {
   const params = useParams();
@@ -14,9 +15,9 @@ const ConfirmarCuenta = () => {
       try {
         const url = `/usuarios/confirmar/${id}`;
         const { data } = await clienteAxios.get(url);
-        setAlerta({
-          msg: data.msg,
-          error: false,
+       
+        toast.success(data.msg, {
+          position: toast.POSITION.TOP_CENTER,
         });
         setCuentaConfirmada(true);
       } catch (error) {
@@ -24,6 +25,10 @@ const ConfirmarCuenta = () => {
           msg: error.response.data.msg,
           error: true,
         });
+
+        toast.error(error.response.data.msg, {
+          position: toast.POSITION.TOP_CENTER,
+        }); 
       }
     };
     confirmarCuenta();
@@ -33,6 +38,7 @@ const ConfirmarCuenta = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
+      <ToastContainer></ToastContainer>
       <h1 className="text-red-600 font-black text-6xl capitalize">
         Confirma tu cuenta y administra tus
         <span className="text-yellow-700"> Extintores</span>

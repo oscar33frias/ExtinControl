@@ -2,6 +2,7 @@ import { useState, createContext, useEffect } from "react";
 import clienteAxios from "../../config/clienteAxios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const ExtintoresContext = createContext();
 
@@ -442,24 +443,30 @@ const ExtintoresProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-  
+
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        params: {
+          fechaInicio,
+          fechaFin,
+        },
       };
-  
-      const { data } = await clienteAxios.get(`/checklists?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, config);
+
+      const { data } = await clienteAxios.get("checklist/tabla/check", config);
+      console.log(
+        "🚀 ~ file: ExtintoresProvider.jsx:459 ~ obtenerChecklistTabla ~ checklistCompleto:",
+        checklistCompleto
+      );
+
       setChecklistCompleto(data);
-      return checklistCompleto
     } catch (error) {
-      console.log(error);
-    } finally {
-      setCargando(false);
+      toast.error(error.response.data.msg,{position: toast.POSITION.TOP_CENTER});
     }
   };
-  
+
   const obtenerPosiciones = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -569,7 +576,8 @@ const ExtintoresProvider = ({ children }) => {
         handleBuscador,
         buscador,
         cerrarSesionExtintores,
-        obtenerChecklistTabla
+        obtenerChecklistTabla,
+        checklistCompleto,
       }}
     >
       {children}

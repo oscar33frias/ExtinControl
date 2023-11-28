@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
-
+import { ToastContainer,toast } from "react-toastify";
 const OlvidePassword = () => {
   const [email, setEmail] = useState("");
   const [alerta, setAlerta] = useState({});
@@ -10,28 +10,23 @@ const OlvidePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(email==="" || email.length<6){
-      setAlerta({
-        msg: "El email es obligatorio y debe tener al menos 6 caracteres",
-        error: true,
-      });
+    
+      toast.warning("El email es obligatorio y debe tener al menos 6 caracteres", {position: toast.POSITION.TOP_CENTER})
+
       return;
     }
     try {
       const {data}=await clienteAxios.post("/usuarios/olvide-password",{email});
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+      toast.success(data.msg, {position: toast.POSITION.TOP_CENTER})
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
-      });
+     
+      toast.error(error.response.data.msg, {position: toast.POSITION.TOP_CENTER})
     }
   };
   const { msg } = alerta;
   return (
     <div className="flex items-center justify-center ">
+      <ToastContainer></ToastContainer>
       <div className="w-2/3">
         <h1 className="text-red-600 font-black text-6xl capitalize">
           Recupera tu acceso y accede a tu
