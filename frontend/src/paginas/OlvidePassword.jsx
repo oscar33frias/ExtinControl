@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
 import { ToastContainer,toast } from "react-toastify";
 const OlvidePassword = () => {
   const [email, setEmail] = useState("");
-  const [alerta, setAlerta] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,16 +21,14 @@ const OlvidePassword = () => {
       toast.error(error.response.data.msg, {position: toast.POSITION.TOP_CENTER})
     }
   };
-  const { msg } = alerta;
   return (
-    <div className="flex items-center justify-center ">
-      <ToastContainer></ToastContainer>
-      <div className="w-2/3">
-        <h1 className="text-red-600 font-black text-6xl capitalize">
+    <div className="flex flex-col items-center justify-center md:flex-row">
+    <ToastContainer></ToastContainer>
+    <div className="w-full md:w-2/3">
+    <h1 className="text-red-600 font-black text-3xl md:text-6xl capitalize">
           Recupera tu acceso y accede a tu
           <span className="text-yellow-700"> extintores</span>
         </h1>
-        {msg && <Alerta alerta={alerta} />}
         <form className="my-10 bg-white shadow rounded-lg p-10" onSubmit={handleSubmit}>
           <div className="my-5">
             <label

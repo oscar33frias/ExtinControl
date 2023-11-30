@@ -50,10 +50,10 @@ const Registrar = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center">
-      <ToastContainer></ToastContainer>
-      <div className="w-2/3">
-        <h1 className="text-red-600 font-black text-6xl capitalize">
+    <div className="flex flex-col items-center justify-center md:flex-row">
+    <ToastContainer></ToastContainer>
+    <div className="w-full md:w-2/3">
+    <h1 className="text-red-600 font-black text-3xl md:text-6xl capitalize">
           Crea tu cuenta y administra tus
           <span className="text-yellow-700"> extintores</span>
         </h1>

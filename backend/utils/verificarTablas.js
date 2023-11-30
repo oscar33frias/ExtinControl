@@ -5,6 +5,8 @@ import { crearTablaExtintores } from "../models/Extintores.js";
 import { createTablaCheckList } from "../models/checkList.js";
 import { crearTablaExtintorColaborador } from "../models/extintorColaborador.js";
 import { crearTablaPosicion } from "../models/posicion.js";
+import { crearTablaPlanta } from "../models/Planta.js";
+ 
 
 
 export const verificarTablasYCrearUsuario = async (tabla) => {
@@ -125,6 +127,31 @@ export const verificarTablasYCrearPosicion = async (tabla) => {
       console.log("Tabla Posicion creada");
     } else {
       console.log("La tabla Posicion ya está creada");
+    }
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
+
+
+export const verificarTablasYCrearPlanta = async (tabla) => {
+  try {
+    await conectarDB();
+
+    const pool = await sql.connect();
+    const tablaCheckExiste = await pool
+      .request()
+      .query(
+        `SELECT COUNT(*) AS existe FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '${tabla}'`
+      );
+
+    if (tablaCheckExiste.recordset[0].existe === 0) {
+      // La tabla Planta no existe, la creamos
+      await crearTablaPlanta();
+      console.log("Tabla Planta creada");
+    } else {
+      console.log("La tabla Planta ya está creada");
     }
   } catch (error) {
     console.error(`Error: ${error.message}`);

@@ -6,6 +6,7 @@ import {
   verificarTablasYCrearCheckList,
   verificarTablasYCrearExtintorColaborador,
   verificarTablasYCrearPosicion,
+  verificarTablasYCrearPlanta
 } from "./utils/verificarTablas.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import extintorRoutes from "./routes/extintorRoutes.js";
@@ -37,6 +38,7 @@ const main = async () => {
     await verificarTablasYCrearCheckList("checkList");
     await verificarTablasYCrearExtintorColaborador("ExtintorColaborador");
     await verificarTablasYCrearPosicion("Posicion");
+    await verificarTablasYCrearPlanta("Planta");
     app.use("/api/usuarios", usuarioRoutes);
     app.use("/api/extintores", extintorRoutes);
     app.use("/api/checkList", checkListRoutes);

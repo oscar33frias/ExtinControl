@@ -1,7 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
-import Alerta from "./Alerta";
 import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -33,8 +32,7 @@ const ModalFormularioCheckList = () => {
   const {
     modalFormularioExtintor,
     handleModalExtintor,
-    mostrarAlerta,
-    alerta,
+
     submitCheckList,
     checkList,
   } = useExtintores();

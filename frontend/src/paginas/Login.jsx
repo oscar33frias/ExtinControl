@@ -36,16 +36,16 @@ const Login = () => {
   
 
   return (
-    <div className="flex">
-      <ToastContainer></ToastContainer>
+    <div className="flex flex-col md:flex-row">
+    <ToastContainer></ToastContainer>
       {/* Sección de la izquierda con la imagen */}
-      <div className="w-2/3">
+      <div className="w-full md:w-2/3">
         <img src={Image} alt="Imagen de extintores" className="h-full w-full" />
       </div>
 
       {/* Sección de la derecha con el formulario */}
-      <div className="w-1/3  p-10">
-        <h1 className="text-red-600 font-black text-6xl capitalize">
+      <div className="w-full md:w-1/3 p-10">
+      <h1 className="text-red-600 font-black text-3xl md:text-6xl capitalize">
           Inicia sesión y administra tus
           <span className="text-yellow-700"> extintores</span>
         </h1>

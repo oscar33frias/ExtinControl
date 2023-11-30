@@ -1,12 +1,11 @@
 import LAY_OUT_EXTINTORES_PLANTA_1_2023 from "../img/LAY_OUT_EXTINTORES_PLANTA_1_2023.jpg";
 import useExtintores from "../hooks/useExtintores";
-import Alerta from "./Alerta";
 import { useEffect } from "react";
+import { ToastContainer,toast } from "react-toastify";
 
 const Mapa = () => {
   const {
     agregarPosicion,
-    alerta,
     markers,
     setMarkers,
     obtenerPosiciones,
@@ -34,23 +33,20 @@ const Mapa = () => {
 
     agregarPosicion({ posiciones }).catch((error) => {
       console.error("Error al guardar posiciones:", error.message);
+
+      toast.error("Error al guardar posiciones");
     });
   };
 
-  const { msg } = alerta;
   return (
     <div
       style={{ position: "relative", width: "1150px", height: "1000px" }}
       onClick={handleMapClick}
     >
+      <ToastContainer />
       {haymarkers === false ? (
         <>
-             {msg && (
-            <Alerta
-              alerta={alerta}
-              className="bg-indigo-100 text-indigo-600 mt-4 p-4 rounded-lg"
-            />
-          )}
+           
           <h1 className="text-4xl font-bold text-center text-gray-800 mt-8">
             Aquí puedes registrar las posiciones de tus extintores
           </h1>

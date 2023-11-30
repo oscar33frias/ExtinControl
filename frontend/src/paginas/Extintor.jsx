@@ -1,13 +1,12 @@
 import useAdmin from "../hooks/useAdmin";
-import { useEffect ,useRef} from "react";
+import { useEffect, useRef } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
 import CheckList from "../components/CheckList";
-import Alerta from "../components/Alerta";
 import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import QrCodeGenerator from "../components/QRcodeGenerator";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const Extintor = () => {
   const params = useParams();
@@ -18,7 +17,6 @@ const Extintor = () => {
     cargando,
     handleModalExtintor,
     checkLists,
-    alerta,
   } = useExtintores();
 
   const admin = useAdmin();
@@ -40,21 +38,26 @@ const Extintor = () => {
       link.click();
     }
   };
-  const { codigo ,id} = extintor;
-  const { msg } = alerta;
+  const { codigo, id } = extintor;
 
   return cargando ? (
     "..."
   ) : (
     <>
-      <div className=" flex justify-between">
+      <div className="flex flex-col md:flex-row justify-between items-center">
         <ToastContainer></ToastContainer>
-      <h1 className="font-black text-4xl">{codigo}</h1>
+        <h1 className="font-black text-2xl md:text-4xl">{codigo}</h1>
         <div ref={qrCodeRef}>
-        <QrCodeGenerator codigo={"http://172.30.71.71:3000/extintorescheck/editar/"+id} />
-      </div>
-      <button onClick={exportImage}>Exportar Código QR</button>
-        <h1 className=" font-black text-4xl">{codigo}</h1>
+          <QrCodeGenerator
+            codigo={"http://172.30.71.71:3000/extintorescheck/editar/" + id}
+          />
+        </div>
+        <button onClick={exportImage} className="mt-4 md:mt-0">
+          Exportar Código QR
+        </button>
+        <h1 className="font-black text-2xl md:text-4xl mt-4 md:mt-0">
+          {codigo}
+        </h1>
         {admin && (
           <div className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-transform duration-300 transform hover:scale-110">
             <svg
@@ -106,7 +109,6 @@ const Extintor = () => {
       )}
 
       <p className=" font-bold text-xl mt-10"> CheckList del Extintor</p>
-      {msg && <Alerta alerta={alerta} />}
       <div className=" bg-white shadow mt-10 rounded-lg">
         {checkLists?.length ? (
           checkLists

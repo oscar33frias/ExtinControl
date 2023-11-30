@@ -8,7 +8,6 @@ const ExtintoresContext = createContext();
 
 const ExtintoresProvider = ({ children }) => {
   const [extintores, setExtintores] = useState([]);
-  const [alerta, setAlerta] = useState({});
   const [extintor, setExtintor] = useState({});
   const [cargando, setCargando] = useState(false);
   const [modalFormularioExtintor, setModalFormularioExtintor] = useState(false);
@@ -44,6 +43,9 @@ const ExtintoresProvider = ({ children }) => {
         setColaboradores(data.colaboradores);
       } catch (error) {
         console.log(error);
+        toast.error(error.response.data.msg, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     };
     obtenerExtintores();
@@ -51,13 +53,6 @@ const ExtintoresProvider = ({ children }) => {
 
   useEffect(() => {}, [markers, haymarkers]);
 
-  const mostrarAlerta = (alerta) => {
-    setAlerta(alerta);
-
-    setTimeout(() => {
-      setAlerta({});
-    }, 3000);
-  };
   const submitExtintor = async (extintor) => {
     if (extintor.id) {
       await editarExtintor(extintor);
@@ -89,7 +84,9 @@ const ExtintoresProvider = ({ children }) => {
       );
       setExtintores(extintoresActualizados);
 
-      toast.success("Extintor editado Correctamente", { position: toast.POSITION.TOP_CENTER });
+      toast.success("Extintor editado Correctamente", {
+        position: toast.POSITION.TOP_CENTER,
+      });
 
       setTimeout(() => {
         navigate("/extintores");
@@ -113,11 +110,10 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.post("/extintores", extintor, config);
       setExtintores([...extintores, data]);
 
-     
-
-      toast.success("Extintor creado Correctamente", { position: toast.POSITION.TOP_CENTER });
+      toast.success("Extintor creado Correctamente", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       setTimeout(() => {
-
         navigate("/extintores");
       }, 3000);
     } catch (error) {
@@ -166,13 +162,10 @@ const ExtintoresProvider = ({ children }) => {
 
       setExtintores(extintoresFiltrados);
 
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
 
       setTimeout(() => {
-        setAlerta({}), navigate("/extintores");
+        navigate("/extintores");
       }, 3000);
     } catch (error) {
       console.log(error);
@@ -208,7 +201,6 @@ const ExtintoresProvider = ({ children }) => {
 
       setCheckLists([...checkLists, data]);
 
-      setAlerta({});
       setModalFormularioExtintor(false);
     } catch (error) {
       console.log(error);
@@ -233,7 +225,6 @@ const ExtintoresProvider = ({ children }) => {
       );
 
       //TODO ACTUALIZAR EL DOM
-      setAlerta({});
       setModalFormularioExtintor(false);
 
       setCheckLists(
@@ -276,9 +267,7 @@ const ExtintoresProvider = ({ children }) => {
       setCheckLists(checkLists.filter((check) => check.id !== checklist.id));
 
       setCheckList({});
-      setTimeout(() => {
-        setAlerta({});
-      }, 3000);
+      setTimeout(() => {}, 3000);
     } catch (error) {
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,
@@ -332,10 +321,6 @@ const ExtintoresProvider = ({ children }) => {
       toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
       setColaborador({});
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
-      });
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -364,24 +349,17 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
 
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
 
       setColaboradores(colaboradores.filter((c) => c.id !== colaborador.id));
       setModalEliminarCheckList(false);
 
       setColaborador({});
 
-      setTimeout(() => {
-        setAlerta({});
-      }, 3000);
+      setTimeout(() => {}, 3000);
     } catch (error) {
-      console.log(error);
-      setAlerta({
-        msg: "Error al eliminar el colaborador",
-        error: true,
+      toast.error("Error al eliminar el colaborador", {
+        position: toast.POSITION.TOP_CENTER,
       });
     } finally {
       setModalEliminarColaborador(false);
@@ -410,20 +388,14 @@ const ExtintoresProvider = ({ children }) => {
           config
         );
 
-        setAlerta({
-          msg: data.msg,
-          error: false,
-        });
+        toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
 
         setMarkers([posiciones]);
-        setTimeout(() => {
-          setAlerta({});
-        }, 3000);
+        setTimeout(() => {}, 3000);
       }
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   };
@@ -484,7 +456,10 @@ const ExtintoresProvider = ({ children }) => {
       return data;
     } catch (error) {
       console.log(error);
-      throw new Error("Error al obtener posiciones");
+
+      toast.error("error al obtener posiciones", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
   const eliminarPosiciones = async () => {
@@ -506,21 +481,16 @@ const ExtintoresProvider = ({ children }) => {
       );
 
       setHaymarkers(false);
-      setAlerta({
-        msg: data.msg,
-        error: false,
-      });
+
+      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
 
       // Limpiar la lista de marcadores (posiciones)
       setMarkers([]);
 
-      setTimeout(() => {
-        setAlerta({});
-      }, 3000);
+      setTimeout(() => {}, 3000);
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true,
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   };
@@ -530,14 +500,12 @@ const ExtintoresProvider = ({ children }) => {
   const cerrarSesionExtintores = () => {
     setExtintor({});
     setExtintores([]);
-    setAlerta({});
   };
   return (
     <ExtintoresContext.Provider
       value={{
         extintores,
-        mostrarAlerta,
-        alerta,
+
         submitExtintor,
         obtenerExtintor,
         extintor,

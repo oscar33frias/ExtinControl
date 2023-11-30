@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Alerta from "../components/Alerta";
 import clienteAxios from "../../config/clienteAxios";
 import { ToastContainer, toast } from "react-toastify";
 
