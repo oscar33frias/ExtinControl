@@ -26,7 +26,7 @@ const Login = () => {
       const {data} = await clienteAxios.post('/usuarios/login', {email, password});
       localStorage.setItem("token", data.token);
       setAuth(data);
-     navigate('/extintores');
+     navigate('/planta');
     } catch (error) {
     
 

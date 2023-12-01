@@ -16,6 +16,8 @@ import { ExtintoresProvider } from "./context/ExtintoresProvider";
 import MapaPlanta from "./paginas/MapaPlanta";
 import MapaPlantaVisual from "./paginas/MapaPlantaVisual";
 import TableCheckList from "./paginas/TableCheckList";
+import Plantas from "./paginas/Plantas";
+
 function App() {
   return (
     <BrowserRouter>
@@ -39,7 +41,15 @@ function App() {
               />
             </Route>
 
-            <Route path="/extintores" element={<RutaProtegida></RutaProtegida>}>
+            <Route
+              path="/planta"
+              element={<Plantas></Plantas>}
+            ></Route>
+
+            <Route
+              path="/planta/:planta/extintores"
+              element={<RutaProtegida></RutaProtegida>}
+            >
               <Route index element={<Extintores></Extintores>} />
               <Route
                 path="crear-extintor"
@@ -49,20 +59,23 @@ function App() {
                 path="nuevo-colaborador/"
                 element={<NuevoColaborador></NuevoColaborador>}
               />
-
               <Route path=":id" element={<Extintor></Extintor>} />
-
               <Route
                 path="editar/:id"
                 element={<EditarExtintor></EditarExtintor>}
               />
-
-              <Route path="agregar-puntos-mapa" element={<MapaPlanta></MapaPlanta>} />
-             
-              <Route path="ver-mapa" element={<MapaPlantaVisual></MapaPlantaVisual>} />
-
-              <Route path="tableCheckList" element={<TableCheckList></TableCheckList>} />
-
+              <Route
+                path="agregar-puntos-mapa"
+                element={<MapaPlanta></MapaPlanta>}
+              />
+              <Route
+                path="ver-mapa"
+                element={<MapaPlantaVisual></MapaPlantaVisual>}
+              />
+              <Route
+                path="tableCheckList"
+                element={<TableCheckList></TableCheckList>}
+              />
             </Route>
           </Routes>
         </ExtintoresProvider>
