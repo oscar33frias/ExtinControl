@@ -2,8 +2,10 @@ import sql from "mssql";
 
 import fs from "fs/promises"; // Módulo para operaciones de sistema de archivos
 import path from "path";
-const directorioImagenes =
+const directorioImagenesCasa =
   "/Users/oscarfriaszavalza/Desktop/EXTINTORES_PROGRAMAS /ExtinControl/backend/upload";
+const directorioImagenesTrabajo =
+  "C:/Users/oscar.frias/Documents/Extintores/ExtinControl/backend/upload"; // Configuración para servir archivos estáticos desde el directorio de imágenes
 
 const obtenerPlantas = async (req, res) => {
   try {
@@ -18,7 +20,7 @@ const obtenerPlantas = async (req, res) => {
 
     const plantas = plantasResult.recordset;
 
-    res.json(plantas );
+    res.json(plantas);
 
     console.log("plantas", plantas);
   } catch (error) {
@@ -34,7 +36,7 @@ const nuevaPlanta = async (req, res) => {
     console.log("Datos recibidos en el backend:", req.body, req.file);
 
     const nombreArchivo = `imagen_${Date.now()}.png`;
-    const rutaArchivo = path.join(directorioImagenes, nombreArchivo);
+    const rutaArchivo = path.join(directorioImagenesTrabajo, nombreArchivo);
 
     await fs.writeFile(rutaArchivo, imagen.buffer);
 

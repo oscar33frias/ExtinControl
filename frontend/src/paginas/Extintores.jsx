@@ -3,7 +3,7 @@ import PreviewExtintor from "../components/PreviewExtintor";
 
 const Extintores = () => {
   const { extintores } = useExtintores();
-
+  
   return (
     <>
       <h1 className="text-2xl md:text-4xl font-black">Extintores</h1>

@@ -5,7 +5,6 @@ import CardPlanta from "../components/CardPlanta";
 
 const Plantas = () => {
   const { handleModalPlanta, plantas } = useExtintores();
-  console.log("🚀 ~ file: Plantas.jsx:7 ~ Plantas ~ plantas:", plantas);
 
   return (
     <>

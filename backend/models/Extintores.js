@@ -12,6 +12,7 @@ CREATE TABLE Extintores (
   posicion INT,
   ubicacion NVARCHAR(200),
   tipo NVARCHAR(200),
+  plantaId INT,
 )
 `;
 

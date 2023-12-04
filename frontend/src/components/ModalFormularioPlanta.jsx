@@ -14,7 +14,6 @@ const ModalFormularioPlanta = () => {
     const handleImagenChange = (e) => {
       const file = e.target.files[0];
       setImagenPlanta(file);
-      console.log("Imagen del estado:", file);  // Usa 'file' directamente para el valor actualizado
     };
     
     

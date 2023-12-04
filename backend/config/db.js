@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const config1 = {
+const config_trabajo = {
   user: process.env.USER,
   password: process.env.PASSWORD,
   server: process.env.SERVER,
@@ -13,7 +13,7 @@ const config1 = {
   },
 };
 
-const config2 = {
+const config_casa = {
   user: process.env.USER2,
   password: process.env.PASSWORD2,
   server: process.env.SERVER2,
@@ -25,7 +25,7 @@ const config2 = {
 
 export const conectarDB = async () => {
   try {
-    await sql.connect(config2);
+    await sql.connect(config_trabajo);
     console.log("Conexión exitosa a SQL Server");
   } catch (error) {
     console.error(`Error: ${error.message}`);

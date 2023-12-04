@@ -2,11 +2,15 @@ import { useEffect } from "react";
 import LAY_OUT_EXTINTORES_PLANTA_1_2023 from "../img/LAY_OUT_EXTINTORES_PLANTA_1_2023.jpg";
 import useExtintores from "../hooks/useExtintores";
 
+
 const MapaVisual = () => {
-  const { markers, obtenerPosiciones ,extintores} = useExtintores();
+  const { markers, obtenerPosiciones ,extintores,planta} = useExtintores();
   useEffect(() => {
     obtenerPosiciones();
   }, []);
+  const baseURL = import.meta.env.VITE_BACKEND_URL_TRABAJO;
+
+  const rutaImagen = `${baseURL}/backend/upload/${planta.nombreArchivo}`;
 
   const handleMarkerClick = (id) => {
     const extintorClickeado = extintores.find((extintor) => extintor.posicion === id);
@@ -24,7 +28,7 @@ const MapaVisual = () => {
       </h1>{" "}
       <div style={{ width: "100%", height: "100%" }}>
         <img
-          src={LAY_OUT_EXTINTORES_PLANTA_1_2023}
+          src={rutaImagen}
           alt="Mapa de la planta"
           style={{ width: "100%", height: "100%" }}
         />

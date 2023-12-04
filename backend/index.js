@@ -19,16 +19,16 @@ const app = express();
 app.use(express.json());
 dotenv.config();
 
-const directorioImagenes = "/Users/oscarfriaszavalza/Desktop/EXTINTORES_PROGRAMAS /ExtinControl/backend/upload";
+const directorioImagenesCasa = "/Users/oscarfriaszavalza/Desktop/EXTINTORES_PROGRAMAS /ExtinControl/backend/upload";
+const directorioImagenesTrabajo = "C:/Users/oscar.frias/Documents/Extintores/ExtinControl/backend/upload";// Configuración para servir archivos estáticos desde el directorio de imágenes
+app.use("/backend/upload", express.static(directorioImagenesTrabajo));
 
-// Configuración para servir archivos estáticos desde el directorio de imágenes
-app.use("/backend/upload", express.static(directorioImagenes));
-
-
+/*
 const whitelist = [
   process.env.FRONTEND_URL_CASA,
   process.env.FRONTEND_URL2_CASA,
 ];
+*/
 
 const corsOptions = {
   origin: function (origin, callback) {

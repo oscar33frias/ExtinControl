@@ -20,7 +20,7 @@ export const emailRegistro = async (datos) => {
    html: `
     <h1>Hola ${nombre}</h1>
     <p>Confirma tu cuenta</p>
-    <a href="${process.env.FRONTEND_URL_CASA}/confirmar/${token}">Confirmar cuenta</a>
+    <a href="${process.env.FRONTEND_URL}/confirmar/${token}">Confirmar cuenta</a>
     `,
 
   });
@@ -46,7 +46,7 @@ export const emailOlvidePassword = async (datos) => {
    html: `
     <h1>Hola ${nombre}</h1>
     <p>Restablece tu cuenta</p>
-    <a href="${process.env.FRONTEND_URL_CASA}/olvide-password/${token}">Confirmar cuenta</a>
+    <a href="${process.env.FRONTEND_URL}/olvide-password/${token}">Confirmar cuenta</a>
     `,
 
   });

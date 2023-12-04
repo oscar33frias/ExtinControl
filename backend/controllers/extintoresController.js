@@ -46,7 +46,7 @@ const EXTN = "EXTN";
 
 const nuevoExtintor = async (req, res) => {
   try {
-    const { codigo, marca, capacidad, posicion } = req.body;
+    const { codigo, marca, capacidad, posicion, plantaId } = req.body;
     const { id: usuarioId } = req.usuario;
     const pool = await sql.connect();
 
@@ -56,10 +56,12 @@ const nuevoExtintor = async (req, res) => {
       .input("marca", sql.NVarChar(200), marca)
       .input("capacidad", sql.Float, capacidad)
       .input("posicion", sql.Int, posicion)
-      .input("usuarioId", sql.Int, usuarioId).query(`
-        INSERT INTO Extintores (codigo, marca, capacidad,posicion, usuario_id)
+      .input("usuarioId", sql.Int, usuarioId)
+      .input("plantaId", sql.Int, plantaId)
+      .query(`
+        INSERT INTO Extintores (codigo, marca, capacidad, posicion, usuario_id, plantaId)
         OUTPUT INSERTED.*
-        VALUES (@codigo, @marca, @capacidad,@posicion, @usuarioId)
+        VALUES (@codigo, @marca, @capacidad, @posicion, @usuarioId, @plantaId)
       `);
 
     res.json(result.recordset[0]);

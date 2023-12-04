@@ -15,8 +15,10 @@ export const FormularioExtintores = () => {
 
   const params = useParams();
 
-  const { submitExtintor, extintor } = useExtintores();
+  const { submitExtintor, extintor,planta } = useExtintores();
 
+  useEffect(() => {
+  }, [planta]);
 
   useEffect(() => {
     if (params.id && extintor.codigo) {
