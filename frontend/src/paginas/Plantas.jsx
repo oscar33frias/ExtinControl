@@ -1,9 +1,15 @@
+import { ToastContainer } from "react-toastify";
+import ModalFormularioPlanta from "../components/ModalFormularioPlanta";
+import useExtintores from "../hooks/useExtintores";
 import CardPlanta from "../components/CardPlanta";
 
 const Plantas = () => {
+  const { handleModalPlanta, plantas } = useExtintores();
+  console.log("🚀 ~ file: Plantas.jsx:7 ~ Plantas ~ plantas:", plantas);
 
   return (
     <>
+      <ToastContainer />
       <header className="px-4 py-5 bg-gray-900 border-b border-red-600">
         <div className="flex flex-col md:flex-row md:justify-between">
           <h2 className="text-2xl md:text-4xl text-red-500 font-black text-center">
@@ -13,6 +19,7 @@ const Plantas = () => {
             className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase 
           font-bold bg-green-400 text-white text-center mt-5 flex gap-2
           items-center justify-center hover:bg-green-500 transition-colors"
+            onClick={handleModalPlanta}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,13 +39,16 @@ const Plantas = () => {
           </button>
         </div>
       </header>
-  
-      <div className="flex m-40 p-10 justify-center mt-10 flex-wrap">
-  <CardPlanta></CardPlanta>
-  <CardPlanta></CardPlanta>
-  <CardPlanta></CardPlanta>
-</div>
-      
+
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {plantas.map((planta) => (
+          <CardPlanta key={planta.id} planta={planta} />
+        ))}
+      </div>
+   
+
+      <ModalFormularioPlanta />
     </>
   );
 };

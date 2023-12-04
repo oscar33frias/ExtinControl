@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
 import { useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const PRIORIDAD = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
@@ -36,10 +36,6 @@ const ModalFormularioCheckList = () => {
     submitCheckList,
     checkList,
   } = useExtintores();
-  console.log(
-    "🚀 ~ file: ModalFormularioExtintor.jsx:44 ~ ModalFormularioCheckList ~ checkList:",
-    checkList
-  );
 
   useEffect(() => {
     if (checkList.id) {
@@ -130,8 +126,6 @@ const ModalFormularioCheckList = () => {
       };
       for (let campo in campos) {
         if (campos[campo] === "") {
-         
-
           toast.error(`El campo ${campo} es obligatorio`, {
             position: toast.POSITION.BOTTOM_CENTER,
           });

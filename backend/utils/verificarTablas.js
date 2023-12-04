@@ -5,7 +5,7 @@ import { crearTablaExtintores } from "../models/Extintores.js";
 import { createTablaCheckList } from "../models/checkList.js";
 import { crearTablaExtintorColaborador } from "../models/extintorColaborador.js";
 import { crearTablaPosicion } from "../models/posicion.js";
-import { crearTablaPlanta } from "../models/Planta.js";
+import { crearTablaPlantas } from "../models/Plantas.js";
  
 
 
@@ -140,18 +140,18 @@ export const verificarTablasYCrearPlanta = async (tabla) => {
     await conectarDB();
 
     const pool = await sql.connect();
-    const tablaCheckExiste = await pool
+    const tablaPlantasExiste = await pool
       .request()
       .query(
         `SELECT COUNT(*) AS existe FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '${tabla}'`
       );
 
-    if (tablaCheckExiste.recordset[0].existe === 0) {
+    if (tablaPlantasExiste.recordset[0].existe === 0) {
       // La tabla Planta no existe, la creamos
-      await crearTablaPlanta();
-      console.log("Tabla Planta creada");
+      await crearTablaPlantas();
+      console.log("Tabla Plantas creada");
     } else {
-      console.log("La tabla Planta ya está creada");
+      console.log("La tabla Plantas ya está creada");
     }
   } catch (error) {
     console.error(`Error: ${error.message}`);

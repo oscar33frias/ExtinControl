@@ -47,7 +47,7 @@ function App() {
             ></Route>
 
             <Route
-              path="/planta/:planta/extintores"
+              path="/extintores"
               element={<RutaProtegida></RutaProtegida>}
             >
               <Route index element={<Extintores></Extintores>} />
