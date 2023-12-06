@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import LAY_OUT_EXTINTORES_PLANTA_1_2023 from "../img/LAY_OUT_EXTINTORES_PLANTA_1_2023.jpg";
 import useExtintores from "../hooks/useExtintores";
 
 

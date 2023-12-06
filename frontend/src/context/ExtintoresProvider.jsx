@@ -82,7 +82,7 @@ const ExtintoresProvider = ({ children }) => {
 
   useEffect(() => {
     obtenerPlantas();
-  }, [plantas]); 
+  }, []); 
   
   useEffect(() => {
     console.log("plantas en el useEffect",planta);
