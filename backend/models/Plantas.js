@@ -5,8 +5,7 @@ CREATE TABLE Plantas (
   id INT PRIMARY KEY IDENTITY(1,1),
   nombrePlanta NVARCHAR(50) ,
   ubicacion NVARCHAR(200) ,
-  nombreArchivo NVARCHAR(200)
- 
+  nombreArchivo NVARCHAR(200),
 )
 `;
 

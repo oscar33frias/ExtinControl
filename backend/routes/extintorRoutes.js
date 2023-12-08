@@ -36,7 +36,7 @@ router
 
 router.get("/obtener/posiciones", checkAuth, obtenerPosiciones);
 
-router.delete("/posiciones/eliminar", checkAuth,   eliminarTodasPosiciones
+router.delete("/posiciones/eliminar/:id", checkAuth,   eliminarTodasPosiciones
 );
 
 //router.get("/tareas/:id", checkAuth, obtenerCheckList);

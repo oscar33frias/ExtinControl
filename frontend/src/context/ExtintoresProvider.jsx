@@ -26,26 +26,30 @@ const ExtintoresProvider = ({ children }) => {
   const { auth } = useAuth();
   const [checklistCompleto, setChecklistCompleto] = useState({});
   const [plantas, setPlantas] = useState([]);
-  const [planta,setPlanta] = useState({});
+  const [planta, setPlanta] = useState({});
 
   useEffect(() => {
     const obtenerExtintores = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
-  
+
         const config = {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         };
-  
+
         const { data } = await clienteAxios.get("/extintores", config);
-  
-        // Filtrar los extintores por planta.id
-        const extintoresPorPlanta = data.extintores.filter(extintor => extintor.plantaId === planta.id);
-  
+
+        const plantaLocal = JSON.parse(localStorage.getItem("plantaLocal"));
+        
+
+        const extintoresPorPlanta = data.extintores.filter(
+          (extintor) => extintor.plantaId == plantaLocal.id
+        );
+
         setExtintores(extintoresPorPlanta);
         setColaboradores(data.colaboradores);
       } catch (error) {
@@ -56,37 +60,33 @@ const ExtintoresProvider = ({ children }) => {
       }
     };
     obtenerExtintores();
-  }, [colaborador, auth, planta.id]); // Agregar planta.id a la lista de dependencias
-
+  }, [colaborador, auth, planta]);
 
   const obtenerPlantas = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) return;
 
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
 
-      const { data } = await clienteAxios.get('/plantas', config);
-      
+      const { data } = await clienteAxios.get("/plantas", config);
+
       setPlantas(data); // Asumo que los datos devueltos son un array de plantas, ajusta según tu API
     } catch (error) {
-      console.error('Error al obtener plantas:', error);
+      console.error("Error al obtener plantas:", error);
       // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
     }
   };
 
   useEffect(() => {
     obtenerPlantas();
-  }, []); 
-  
-  useEffect(() => {
-    console.log("plantas en el useEffect",planta);
-  }, [planta]); // Dependencia en 'planta'
+  }, []);
+
   useEffect(() => {}, [markers, haymarkers]);
 
   const submitExtintor = async (extintor) => {
@@ -135,20 +135,20 @@ const ExtintoresProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-  
+
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
-  
-      // Agregar el valor de planta.id al objeto extintor
-      extintor.plantaId = planta.id;
-  
+
+      const plantaLocal = JSON.parse(localStorage.getItem("plantaLocal"));
+      extintor.plantaId = plantaLocal.id;
+
       const { data } = await clienteAxios.post("/extintores", extintor, config);
       setExtintores([...extintores, data]);
-  
+
       toast.success("Extintor creado Correctamente", {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -405,10 +405,14 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const agregarPosicion = async (datos) => {
-    const posiciones = datos.posiciones;
-
     try {
       const token = localStorage.getItem("token");
+      const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
+      console.log("🚀 ~ file: ExtintoresProvider.jsx:411 ~ agregarPosicion ~ id:", plantaId)
+
+      let posiciones = datos.posiciones;
+
+      posiciones = posiciones.map((posicion) => ({ ...posicion, plantaId }));
 
       if (!token) return;
 
@@ -473,6 +477,7 @@ const ExtintoresProvider = ({ children }) => {
   const obtenerPosiciones = async () => {
     try {
       const token = localStorage.getItem("token");
+      const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
       if (!token) return;
 
       const config = {
@@ -481,14 +486,15 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-
+      
       const { data } = await clienteAxios.get(
         "/extintores/obtener/posiciones",
         config
       );
-      const posiciones = data.posiciones;
+      const posiciones = data.posiciones.filter((posicion) => posicion.plantaId == plantaId);
+      console.log("🚀 ~ file: ExtintoresProvider.jsx:495 ~ obtenerPosiciones ~ posiciones:", posiciones)
 
-      setHaymarkers(true);
+      setHaymarkers(posiciones.length > 0);
 
       setMarkers(posiciones);
 
@@ -504,7 +510,7 @@ const ExtintoresProvider = ({ children }) => {
   const eliminarPosiciones = async () => {
     try {
       const token = localStorage.getItem("token");
-
+      const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
       if (!token) return;
 
       const config = {
@@ -515,7 +521,7 @@ const ExtintoresProvider = ({ children }) => {
       };
 
       const { data } = await clienteAxios.delete(
-        "/extintores/posiciones/eliminar",
+        `/extintores/posiciones/eliminar/${plantaId}`,
         config
       );
 
@@ -545,25 +551,23 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const crearPlanta = async (planta) => {
-  
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-  
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-  
+
       const { data } = await clienteAxios.post("/plantas", planta, config);
 
-  
       setPlantas((prevPlantas) => [...prevPlantas, data]);
       toast.success("Planta Agregada con Éxito", {
         position: toast.POSITION.TOP_CENTER,
       });
-  
+
       setModalFormularioPlanta(false);
     } catch (error) {
       console.error("Error al crear planta:", error);
@@ -572,7 +576,7 @@ const ExtintoresProvider = ({ children }) => {
       });
     }
   };
-  
+
   return (
     <ExtintoresContext.Provider
       value={{
@@ -615,7 +619,7 @@ const ExtintoresProvider = ({ children }) => {
         crearPlanta,
         plantas,
         setPlanta,
-        planta
+        planta,
       }}
     >
       {children}

@@ -5,6 +5,8 @@ const useAdmin = () => {
 const {extintores}=useExtintores();
 const { auth } = useAuth();
 
+
+
 let todosIguales = true;
 for (let i = 0; i < extintores.length; i++) {
   if (extintores[i].usuario_id !== auth.id) {

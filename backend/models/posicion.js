@@ -2,9 +2,11 @@ import sql from "mssql";
 
 const createPosicionTableQuery = `
 CREATE TABLE Posicion (
-    [id] [int] primary key,
+    [id] [int] ,
     [x] [int],
-    [y] [int]
+    [y] [int],
+    plantaId Int,
+    pk int primary key identity(1,1),
 )
 `;
 

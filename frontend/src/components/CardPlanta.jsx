@@ -6,9 +6,12 @@ const CardPlanta = ({ planta }) => {
   const baseURL = import.meta.env.VITE_BACKEND_URL_TRABAJO;
   const rutaImagen = `${baseURL}/backend/upload/${nombreArchivo}`;
   const { setPlanta } = useExtintores();
+  
   const handleClick = () => {
     setPlanta(planta);
-     console.log("planta",planta);
+
+    // Guardar planta.id en el almacenamiento local
+    localStorage.setItem("plantaLocal",JSON.stringify(planta));
   };
 
 

@@ -327,15 +327,15 @@ const eliminarColaborador = async (req, res) => {
 };
 
 const agregarPosicion = async (req, res) => {
-  const { x, y, id } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
+  const { x, y, id,plantaId } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
   try {
     const pool = await sql.connect();
 
     // Agregar la nueva posición a la base de datos
     const agregarQuery = `
-      INSERT INTO Posicion (x, y,id)
+      INSERT INTO Posicion (x, y,id,plantaId)
       OUTPUT INSERTED.*
-      VALUES (@x, @y,@id)
+      VALUES (@x, @y,@id,@plantaId)
     `;
 
     const agregarResult = await pool
@@ -343,7 +343,7 @@ const agregarPosicion = async (req, res) => {
       .input("x", sql.Float, x)
       .input("y", sql.Float, y)
       .input("id", sql.Int, id)
-
+      .input("plantaId", sql.Int, plantaId)
       .query(agregarQuery);
 
     res.json({
@@ -374,15 +374,21 @@ const obtenerPosiciones = async (req, res) => {
   }
 };
 const eliminarTodasPosiciones = async (req, res) => {
+  const plantaId = (req.params.id);
+  console.log("🚀 ~ file: extintoresController.js:378 ~ eliminarTodasPosiciones ~ plantaId:", plantaId)
+  
   try {
     const pool = await sql.connect();
 
     // Consulta para eliminar todas las posiciones
     const eliminarQuery = `
-      DELETE FROM Posicion
+      DELETE FROM Posicion where plantaId=@plantaId
     `;
 
-    await pool.request().query(eliminarQuery);
+    await pool
+    .request()
+    .input("plantaId", sql.Int, plantaId)
+    .query(eliminarQuery);
 
     res.json({ msg: "Todas las posiciones han sido eliminadas con éxito" });
   } catch (error) {
