@@ -15,7 +15,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import { ExtintoresProvider } from "./context/ExtintoresProvider";
 import MapaPlanta from "./paginas/MapaPlanta";
 import MapaPlantaVisual from "./paginas/MapaPlantaVisual";
-import TableCheckList from "./paginas/TableCheckList";
+import TablaConsultas from "./paginas/TablaConsultas";
 import Plantas from "./paginas/Plantas";
 
 function App() {
@@ -74,7 +74,7 @@ function App() {
               />
               <Route
                 path="tableCheckList"
-                element={<TableCheckList></TableCheckList>}
+                element={<TablaConsultas></TablaConsultas>}
               />
             </Route>
           </Routes>

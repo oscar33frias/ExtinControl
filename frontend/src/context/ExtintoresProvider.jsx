@@ -24,7 +24,7 @@ const ExtintoresProvider = ({ children }) => {
   const [haymarkers, setHaymarkers] = useState(false);
   const [buscador, setBuscador] = useState(false);
   const { auth } = useAuth();
-  const [checklistCompleto, setChecklistCompleto] = useState({});
+  const [listaChecklist, setListaChecklist] = useState({});
   const [plantas, setPlantas] = useState([]);
   const [planta, setPlanta] = useState({});
 
@@ -44,7 +44,6 @@ const ExtintoresProvider = ({ children }) => {
         const { data } = await clienteAxios.get("/extintores", config);
 
         const plantaLocal = JSON.parse(localStorage.getItem("plantaLocal"));
-        
 
         const extintoresPorPlanta = data.extintores.filter(
           (extintor) => extintor.plantaId == plantaLocal.id
@@ -60,6 +59,7 @@ const ExtintoresProvider = ({ children }) => {
       }
     };
     obtenerExtintores();
+    obtenerChecklistTabla();
   }, [colaborador, auth, planta]);
 
   const obtenerPlantas = async () => {
@@ -408,7 +408,10 @@ const ExtintoresProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
-      console.log("🚀 ~ file: ExtintoresProvider.jsx:411 ~ agregarPosicion ~ id:", plantaId)
+      console.log(
+        "🚀 ~ file: ExtintoresProvider.jsx:411 ~ agregarPosicion ~ id:",
+        plantaId
+      );
 
       let posiciones = datos.posiciones;
 
@@ -443,7 +446,7 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
 
-  const obtenerChecklistTabla = async (fechaInicio, fechaFin) => {
+  const obtenerChecklistTabla = async () => {
     setCargando(true);
     try {
       const token = localStorage.getItem("token");
@@ -454,19 +457,16 @@ const ExtintoresProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        params: {
-          fechaInicio,
-          fechaFin,
-        },
       };
 
-      const { data } = await clienteAxios.get("checklist/tabla/check", config);
-      console.log(
-        "🚀 ~ file: ExtintoresProvider.jsx:459 ~ obtenerChecklistTabla ~ checklistCompleto:",
-        checklistCompleto
+      const { data } = await clienteAxios.get("/checklist/tabla/check", config);
+      const plantaLocal = JSON.parse(localStorage.getItem("plantaLocal")).id;
+      const checkListPorPlanta = data.filter(
+        (check) => check.plantaId === plantaLocal
       );
+      setListaChecklist(checkListPorPlanta);
 
-      setChecklistCompleto(data);
+      console.log(checkListPorPlanta);
     } catch (error) {
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,
@@ -486,13 +486,18 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      
+
       const { data } = await clienteAxios.get(
         "/extintores/obtener/posiciones",
         config
       );
-      const posiciones = data.posiciones.filter((posicion) => posicion.plantaId == plantaId);
-      console.log("🚀 ~ file: ExtintoresProvider.jsx:495 ~ obtenerPosiciones ~ posiciones:", posiciones)
+      const posiciones = data.posiciones.filter(
+        (posicion) => posicion.plantaId == plantaId
+      );
+      console.log(
+        "🚀 ~ file: ExtintoresProvider.jsx:495 ~ obtenerPosiciones ~ posiciones:",
+        posiciones
+      );
 
       setHaymarkers(posiciones.length > 0);
 
@@ -613,7 +618,7 @@ const ExtintoresProvider = ({ children }) => {
         buscador,
         cerrarSesionExtintores,
         obtenerChecklistTabla,
-        checklistCompleto,
+        listaChecklist,
         handleModalPlanta,
         modalFormularioPlanta,
         crearPlanta,

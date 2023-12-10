@@ -289,31 +289,45 @@ const eliminarCheckList = async (req, res) => {
 
 
 const obtenerCheckListsforTable = async (req, res) => {
-  const { fechaInicio, fechaFin } = req.query;
-
   try {
     const pool = await sql.connect();
 
     const query = `
-      SELECT Extintores.codigo, Extintores.marca, Extintores.capacidad, Extintores.fecha_creacion,
-      Extintores.posicion, Extintores.ubicacion, Extintores.tipo, Checklist.codigo, Checklist.obstruido,
-      Checklist.instrucciones, Checklist.senalamiento, Checklist.manometro, Checklist.sello, Checklist.condFisica,
-      Checklist.manguera, Checklist.boquilla, Checklist.etiqueta, Checklist.fechaUltimaHidrostatica, Checklist.fechaProximaHidrostatica, 
-      Checklist.fechaUltimaRecarga, Checklist.fechaProximaRecarga, Checklist.fechaCheckList, Checklist.estado, Checklist.usuario
-    FROM Extintores
-    INNER JOIN Checklist
-    ON Extintores.id = Checklist.extintorId
-    WHERE Checklist.fechaCheckList BETWEEN @fechaInicio AND @fechaFin
+      SELECT TOP 100
+        Extintores.codigo, 
+        Extintores.marca, 
+        Extintores.capacidad, 
+        Extintores.fecha_creacion ,
+        Extintores.posicion, 
+        Extintores.ubicacion, 
+        Extintores.tipo, 
+        Extintores.plantaId,
+        Checklist.obstruido, 
+        Checklist.instrucciones, 
+        Checklist.senalamiento, 
+        Checklist.manometro, 
+        Checklist.sello, 
+        Checklist.condFisica,
+        Checklist.manguera, 
+        Checklist.boquilla, 
+        Checklist.etiqueta, 
+        Checklist.fechaUltimaHidrostatica, 
+        Checklist.fechaProximaHidrostatica, 
+        Checklist.fechaUltimaRecarga, 
+        Checklist.fechaProximaRecarga, 
+        Checklist.fechaCheckList, 
+        Checklist.estado, 
+        Checklist.usuario
+      FROM Extintores
+      INNER JOIN Checklist
+      ON Extintores.id = Checklist.extintorId
     `;
 
-    const result = await pool.request()
-      .input("fechaInicio", sql.DateTime, fechaInicio)
-      .input("fechaFin", sql.DateTime, fechaFin)
-      .query(query);
+    const result = await pool.request().query(query);
 
     if (result.recordset.length === 0) {
       return res.status(404).json({
-        msg: "Checklist no encontrado",
+        msg: "No tienes Checklists registrados",
       });
     }
 
@@ -325,7 +339,6 @@ const obtenerCheckListsforTable = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 export {
   agregarCheckList,
   actualizarCheckList,

@@ -28,6 +28,12 @@ const Header = () => {
       </div>
       <div className="flex flex-col md:flex-row justify-end mt-auto">
         <div className="flex flex-col md:flex-row items-center gap-4 mt-5">
+        <Link
+            to="/planta"
+            className="font-bold uppercase text-red-400 hover:text-red-500"
+          >
+            PLANTAS
+          </Link>
           <Link
             to="/extintores"
             className="font-bold uppercase text-red-400 hover:text-red-500"
