@@ -625,6 +625,7 @@ const ExtintoresProvider = ({ children }) => {
         plantas,
         setPlanta,
         planta,
+        setListaChecklist
       }}
     >
       {children}
