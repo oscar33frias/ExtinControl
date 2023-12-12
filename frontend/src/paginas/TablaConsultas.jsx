@@ -6,22 +6,28 @@ import "react-toastify/dist/ReactToastify.css";
 
 const TablaConsulta = () => {
   const { listaChecklist } = useExtintores();
+  console.log("🚀 ~ file: TablaConsultas.jsx:9 ~ TablaConsulta ~ listaChecklist:", listaChecklist)
   const [mesSeleccionado, setMesSeleccionado] = useState("");
   const [anioSeleccionado, setAnioSeleccionado] = useState("");
   const [listaFiltrada, setListaFiltrada] = useState([]);
 
   const handleBuscar = () => {
+    if (!Array.isArray(listaChecklist)) {
+      console.error('listaChecklist no es un array:', listaChecklist);
+      return;
+    }
+  
     // Filtrar la lista de checklist por mes y año
     const checklistFiltrados = listaChecklist.filter((item) => {
       const mesItem = new Date(item.fechaCheckList).getMonth() + 1;
       const anioItem = new Date(item.fechaCheckList).getFullYear();
-
+  
       const cumpleMes = mesSeleccionado === "" || mesItem.toString() === mesSeleccionado;
       const cumpleAnio = anioSeleccionado === "" || anioItem.toString() === anioSeleccionado;
-
+  
       return cumpleMes && cumpleAnio;
     });
-
+  
     // Actualizar la lista filtrada
     setListaFiltrada(checklistFiltrados);
   };

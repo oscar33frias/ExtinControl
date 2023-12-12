@@ -327,7 +327,7 @@ const obtenerCheckListsforTable = async (req, res) => {
 
     if (result.recordset.length === 0) {
       return res.status(404).json({
-        msg: "No tienes Checklists registrados",
+        
       });
     }
 

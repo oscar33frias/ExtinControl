@@ -60,6 +60,7 @@ const ExtintoresProvider = ({ children }) => {
     };
     obtenerExtintores();
     obtenerChecklistTabla();
+    obtenerPlantas();
   }, [colaborador, auth, planta]);
 
   const obtenerPlantas = async () => {
@@ -132,6 +133,7 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const nuevoExtintor = async (extintor) => {
+    console.log("🚀 ~ file: ExtintoresProvider.jsx:135 ~ nuevoExtintor ~ extintor:", extintor)
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -434,11 +436,12 @@ const ExtintoresProvider = ({ children }) => {
           config
         );
 
-        toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
 
         setMarkers([posiciones]);
         setTimeout(() => {}, 3000);
       }
+      toast.success("posiciones agregadas con exito", { position: toast.POSITION.TOP_CENTER });
+
     } catch (error) {
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,

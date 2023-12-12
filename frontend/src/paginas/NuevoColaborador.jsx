@@ -32,7 +32,7 @@ const NuevoColaborador = () => {
   };
 
 
-  if (cargando) return <p>Cargando...</p>;
+  
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
@@ -44,9 +44,7 @@ const NuevoColaborador = () => {
           <FormularioColaborador />
         </div>
 
-        {cargando ? (
-          <p className="mt-8 text-xl font-semibold">Cargando...</p>
-        ) : colaborador.id ? (
+      
           <div className="mt-8 bg-blue-100 p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4 text-center">Resultado:</h2>
             <div className="flex items-center justify-between">
@@ -60,7 +58,7 @@ const NuevoColaborador = () => {
               </button>
             </div>
           </div>
-        ) : null}
+       
       </div>
     </div>
   );

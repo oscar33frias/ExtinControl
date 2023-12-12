@@ -49,7 +49,7 @@ const Extintor = () => {
         <h1 className="font-black text-2xl md:text-4xl">{codigo}</h1>
         <div ref={qrCodeRef}>
           <QrCodeGenerator
-            codigo={"http://192.168.1.3:3000/extintorescheck/editar/" + id}
+            codigo={"http://172.30.71.154:3000/extintorescheck/editar/" + id}
           />
         </div>
         <button onClick={exportImage} className="mt-4 md:mt-0">

@@ -43,10 +43,10 @@ const obtenerExtintores = async (req, res) => {
 };
 
 const EXTN = "EXTN";
-
 const nuevoExtintor = async (req, res) => {
   try {
-    const { codigo, marca, capacidad, posicion, plantaId } = req.body;
+    const { codigo, marca, capacidad, posicion, plantaId, tipo, ubicacion } =
+      req.body;
     const { id: usuarioId } = req.usuario;
     const pool = await sql.connect();
 
@@ -58,10 +58,11 @@ const nuevoExtintor = async (req, res) => {
       .input("posicion", sql.Int, posicion)
       .input("usuarioId", sql.Int, usuarioId)
       .input("plantaId", sql.Int, plantaId)
-      .query(`
-        INSERT INTO Extintores (codigo, marca, capacidad, posicion, usuario_id, plantaId)
+      .input("tipo", sql.NVarChar(200), tipo)
+      .input("ubicacion", sql.NVarChar(200), ubicacion).query(`
+        INSERT INTO Extintores (codigo, marca, capacidad, posicion, usuario_id, plantaId, tipo, ubicacion)
         OUTPUT INSERTED.*
-        VALUES (@codigo, @marca, @capacidad, @posicion, @usuarioId, @plantaId)
+        VALUES (@codigo, @marca, @capacidad, @posicion, @usuarioId, @plantaId, @tipo, @ubicacion)
       `);
 
     res.json(result.recordset[0]);
@@ -137,21 +138,23 @@ const obtenerExtintor = async (req, res) => {
       "Error al obtener extintor, checklists y colaboradores:",
       error.message
     );
-    res.status(500).json({ msg: "Error en el servidor desde obtener extintor" });
+    res
+      .status(500)
+      .json({ msg: "Error en el servidor desde obtener extintor" });
   }
 };
 
 const editarExtintor = async (req, res) => {
   const { id } = req.params;
   const usuarioId = req.usuario.id;
-  const { codigo, marca, capacidad } = req.body;
+  const { codigo, marca, capacidad, tipo, ubicacion, posicion } = req.body;
 
   try {
     const pool = await sql.connect();
 
     const query = `
       UPDATE Extintores
-      SET codigo = @codigo, marca = @marca, capacidad = @capacidad
+      SET codigo = @codigo, marca = @marca, capacidad = @capacidad, tipo = @tipo, ubicacion = @ubicacion, posicion = @posicion
       OUTPUT INSERTED.*
       WHERE id = @ExtintoresId AND usuario_id = @usuarioId
     `;
@@ -161,6 +164,10 @@ const editarExtintor = async (req, res) => {
       .input("codigo", sql.NVarChar(200), codigo)
       .input("marca", sql.NVarChar(200), marca)
       .input("capacidad", sql.Float, capacidad)
+      .input("tipo", sql.NVarChar(200), tipo)
+      .input("ubicacion", sql.NVarChar(200), ubicacion)
+      .input("posicion", sql.Int, posicion)
+
       .input("ExtintoresId", sql.Int, id)
       .input("usuarioId", sql.Int, usuarioId)
       .query(query);
@@ -177,7 +184,6 @@ const editarExtintor = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 const eliminarExtintor = async (req, res) => {
   const { id } = req.params;
   const usuarioId = req.usuario.id;
@@ -327,7 +333,7 @@ const eliminarColaborador = async (req, res) => {
 };
 
 const agregarPosicion = async (req, res) => {
-  const { x, y, id,plantaId } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
+  const { x, y, id, plantaId } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
   try {
     const pool = await sql.connect();
 
@@ -374,9 +380,12 @@ const obtenerPosiciones = async (req, res) => {
   }
 };
 const eliminarTodasPosiciones = async (req, res) => {
-  const plantaId = (req.params.id);
-  console.log("🚀 ~ file: extintoresController.js:378 ~ eliminarTodasPosiciones ~ plantaId:", plantaId)
-  
+  const plantaId = req.params.id;
+  console.log(
+    "🚀 ~ file: extintoresController.js:378 ~ eliminarTodasPosiciones ~ plantaId:",
+    plantaId
+  );
+
   try {
     const pool = await sql.connect();
 
@@ -386,9 +395,9 @@ const eliminarTodasPosiciones = async (req, res) => {
     `;
 
     await pool
-    .request()
-    .input("plantaId", sql.Int, plantaId)
-    .query(eliminarQuery);
+      .request()
+      .input("plantaId", sql.Int, plantaId)
+      .query(eliminarQuery);
 
     res.json({ msg: "Todas las posiciones han sido eliminadas con éxito" });
   } catch (error) {
@@ -396,7 +405,6 @@ const eliminarTodasPosiciones = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 
 export {
   obtenerExtintores,
@@ -409,5 +417,5 @@ export {
   buscarColaborador,
   agregarPosicion,
   obtenerPosiciones,
-  eliminarTodasPosiciones
+  eliminarTodasPosiciones,
 };
