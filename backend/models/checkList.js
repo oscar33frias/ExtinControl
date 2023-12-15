@@ -20,7 +20,7 @@ CREATE TABLE checkList (
   fechaCheckList DATETIME DEFAULT GETDATE(),
   estado NVARCHAR(30), 
   usuario VARCHAR(255)  ,
-  prioridad VARCHAR(255)  CHECK (prioridad IN ('Baja', 'Media', 'Alta')),
+  comentarios VARCHAR(255),
   extintorId Int ,
 )
 `;

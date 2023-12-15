@@ -21,7 +21,7 @@ const Sidebar = () => {
         <>
           <Link
             to="crear-extintor"
-            className="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300"
+            className="animate-bounce block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300"
           >
             Registrar Extintor
           </Link>

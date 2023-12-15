@@ -23,7 +23,7 @@ const CheckList = ({ checklist }) => {
     manguera,
     manometro,
     obstruido,
-    prioridad,
+    comentarios,
     sello,
     senalamiento,
     usuario,
@@ -109,7 +109,7 @@ const CheckList = ({ checklist }) => {
               </span>
             </p>
             <p className="text-sm font-bold ">
-              Prioridad <span className=" text-green-600">{prioridad}</span>
+              Comentarios <span className=" text-green-600">{comentarios}</span>
             </p>
             <p className="text-sm font-bold ">
               Completado por: <span className=" text-blue-600">{usuario}</span>

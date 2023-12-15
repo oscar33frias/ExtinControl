@@ -3,34 +3,48 @@ import useExtintores from "../hooks/useExtintores";
 import TablaChecklist from "../components/TablaChecklist";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from "xlsx";
 
 const TablaConsulta = () => {
   const { listaChecklist } = useExtintores();
-  console.log("🚀 ~ file: TablaConsultas.jsx:9 ~ TablaConsulta ~ listaChecklist:", listaChecklist)
+  console.log(
+    "🚀 ~ file: TablaConsultas.jsx:9 ~ TablaConsulta ~ listaChecklist:",
+    listaChecklist
+  );
   const [mesSeleccionado, setMesSeleccionado] = useState("");
   const [anioSeleccionado, setAnioSeleccionado] = useState("");
   const [listaFiltrada, setListaFiltrada] = useState([]);
 
   const handleBuscar = () => {
     if (!Array.isArray(listaChecklist)) {
-      console.error('listaChecklist no es un array:', listaChecklist);
+      console.error("listaChecklist no es un array:", listaChecklist);
       return;
     }
-  
+
     // Filtrar la lista de checklist por mes y año
     const checklistFiltrados = listaChecklist.filter((item) => {
       const mesItem = new Date(item.fechaCheckList).getMonth() + 1;
       const anioItem = new Date(item.fechaCheckList).getFullYear();
-  
-      const cumpleMes = mesSeleccionado === "" || mesItem.toString() === mesSeleccionado;
-      const cumpleAnio = anioSeleccionado === "" || anioItem.toString() === anioSeleccionado;
-  
+
+      const cumpleMes =
+        mesSeleccionado === "" || mesItem.toString() === mesSeleccionado;
+      const cumpleAnio =
+        anioSeleccionado === "" || anioItem.toString() === anioSeleccionado;
+
       return cumpleMes && cumpleAnio;
     });
-  
+
     // Actualizar la lista filtrada
     setListaFiltrada(checklistFiltrados);
   };
+
+  const exportarAExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(listaFiltrada);
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "CheckListExtintores.xlsx");
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">CONSULTA TUS CHECKLIST</h1>
@@ -59,7 +73,6 @@ const TablaConsulta = () => {
           <option value="11">Noviembre</option>
           <option value="12">Diciembre</option>
 
-
           {/* Agrega las opciones para los demás meses */}
         </select>
 
@@ -82,6 +95,12 @@ const TablaConsulta = () => {
         Filtrar por Mes y Año
       </button>
 
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+        onClick={exportarAExcel}
+      >
+        Exportar a Excel
+      </button>
       <div className="overflow-x-auto w-full max-h-96 shadow-md sm:rounded-lg mt-4">
         <TablaChecklist listaChecklist={listaFiltrada} />
       </div>

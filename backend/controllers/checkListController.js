@@ -14,7 +14,7 @@ const agregarCheckList = async (req, res) => {
     manguera,
     manometro,
     obstruido,
-    prioridad,
+    comentarios,
     sello,
     senalamiento,
     usuario,
@@ -68,7 +68,7 @@ const agregarCheckList = async (req, res) => {
       .input("manguera", sql.NVarChar(200), manguera)
       .input("boquilla", sql.NVarChar(200), boquilla)
       .input("etiqueta", sql.NVarChar(200), etiqueta)
-      .input("prioridad", sql.VarChar(255), prioridad)
+      .input("comentarios", sql.VarChar(255), comentarios)
       .input("estado", sql.VarChar(20), estado)
       .input("usuario", sql.VarChar(255), usuario) // Agrega usuario aquí
       .input("extintorId", sql.Int, extintorId)
@@ -76,8 +76,8 @@ const agregarCheckList = async (req, res) => {
       .input("fechaProximaHidrostatica", sql.DateTime, fechaProximaHidrostatica)
       .input("fechaUltimaRecarga", sql.DateTime, fechaUltimaRecarga)
       .input("fechaProximaRecarga", sql.DateTime, fechaProximaRecarga).query(`
-      INSERT INTO checkList (codigo, obstruido,  instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, fechaUltimaHidrostatica, fechaProximaHidrostatica, fechaUltimaRecarga, fechaProximaRecarga, prioridad, estado, usuario, extintorId)
-      VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @fechaUltimaHidrostatica, @fechaProximaHidrostatica, @fechaUltimaRecarga, @fechaProximaRecarga, @prioridad, @estado, @usuario, @extintorId)
+      INSERT INTO checkList (codigo, obstruido,  instrucciones, senalamiento, manometro, sello, condFisica, manguera, boquilla, etiqueta, fechaUltimaHidrostatica, fechaProximaHidrostatica, fechaUltimaRecarga, fechaProximaRecarga, comentarios, estado, usuario, extintorId)
+      VALUES (@codigo, @obstruido, @instrucciones, @senalamiento, @manometro, @sello, @condFisica, @manguera, @boquilla, @etiqueta, @fechaUltimaHidrostatica, @fechaProximaHidrostatica, @fechaUltimaRecarga, @fechaProximaRecarga, @comentarios, @estado, @usuario, @extintorId)
   `);
     const result = await pool.request().input("extintorId", sql.Int, extintorId)
       .query(`
@@ -136,7 +136,7 @@ const actualizarCheckList = async (req, res) => {
         manguera = @manguera,
         boquilla = @boquilla,
         etiqueta = @etiqueta,
-        prioridad = @prioridad,
+        comentarios = @comentarios,
         usuario = @usuario,
         estado = @estado,
         fechaUltimaHidrostatica=@fechaUltimaHidrostatica,
@@ -158,7 +158,7 @@ const actualizarCheckList = async (req, res) => {
       .input("manguera", sql.NVarChar(200), updatedCheckList.manguera)
       .input("boquilla", sql.NVarChar(200), updatedCheckList.boquilla)
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
-      .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
+      .input("comentarios", sql.VarChar(255), updatedCheckList.comentarios)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
       .input("estado", sql.VarChar(30), updatedCheckList.estado)
       .input("fechaUltimaHidrostatica", sql.DateTime, updatedCheckList.fechaUltimaHidrostatica)
@@ -217,7 +217,7 @@ const actualizarCheckListMovil = async (req, res) => {
         manguera = @manguera,
         boquilla = @boquilla,
         etiqueta = @etiqueta,
-        prioridad = @prioridad,
+        comentarios = @comentarios,
         usuario = @usuario,
         estado = @estado
       WHERE id = @id
@@ -235,7 +235,7 @@ const actualizarCheckListMovil = async (req, res) => {
       .input("manguera", sql.NVarChar(200), updatedCheckList.manguera)
       .input("boquilla", sql.NVarChar(200), updatedCheckList.boquilla)
       .input("etiqueta", sql.NVarChar(200), updatedCheckList.etiqueta)
-      .input("prioridad", sql.VarChar(255), updatedCheckList.prioridad)
+      .input("comentarios", sql.VarChar(255), updatedCheckList.comentarios)
       .input("usuario", sql.VarChar(255), updatedCheckList.usuario)
       .input("estado", sql.NVarChar(29), updatedCheckList.estado)
       .query(updateQuery);

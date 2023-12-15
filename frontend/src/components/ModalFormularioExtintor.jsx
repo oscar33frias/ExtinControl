@@ -4,7 +4,7 @@ import useExtintores from "../hooks/useExtintores";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const PRIORIDAD = ["Baja", "Media", "Alta"];
+const comentarios = ["Baja", "Media", "Alta"];
 const CHECK = ["Si", "No"];
 const CONDICION = ["Buena", "Dañado"];
 const ESTADO = ["Pendiente", "Completo"];
@@ -23,7 +23,7 @@ const ModalFormularioCheckList = () => {
   const [fechaProximaHidrostatica, setFechaProximaHidrostatica] = useState("");
   const [fechaUltimaRecarga, setFechaUltimaRecarga] = useState("");
   const [fechaProximaRecarga, setFechaProximaRecarga] = useState("");
-  const [prioridad, setPrioridad] = useState("");
+  const [comentarios, setcomentarios] = useState("");
   const [id, setId] = useState("");
   const [estado, setEstado] = useState("");
 
@@ -50,7 +50,7 @@ const ModalFormularioCheckList = () => {
       setMangera(checkList.manguera);
       setBoquilla(checkList.boquilla);
       setEtiqueta(checkList.etiqueta);
-      setPrioridad(checkList.prioridad);
+      setcomentarios(checkList.comentarios);
       setFechaUltimaHidrostatica(
         checkList.fechaUltimaHidrostatica?.split("T")[0]
       );
@@ -73,7 +73,7 @@ const ModalFormularioCheckList = () => {
     setMangera("");
     setBoquilla("");
     setEtiqueta("");
-    setPrioridad("");
+    setcomentarios("");
     setFechaUltimaHidrostatica("");
     setFechaProximaHidrostatica("");
     setFechaUltimaRecarga("");
@@ -100,8 +100,7 @@ const ModalFormularioCheckList = () => {
         fechaProximaHidrostatica,
         fechaUltimaRecarga,
         fechaProximaRecarga,
-        prioridad,
-
+        comentarios,
         estado,
       ].includes("")
     ) {
@@ -120,8 +119,7 @@ const ModalFormularioCheckList = () => {
         fechaProximaHidrostatica,
         fechaUltimaRecarga,
         fechaProximaRecarga,
-
-        prioridad,
+        comentarios,
         estado,
       };
       for (let campo in campos) {
@@ -147,8 +145,7 @@ const ModalFormularioCheckList = () => {
       manguera,
       boquilla,
       etiqueta,
-
-      prioridad,
+      comentarios,
       fechaUltimaHidrostatica,
       fechaProximaHidrostatica,
       fechaUltimaRecarga,
@@ -168,8 +165,7 @@ const ModalFormularioCheckList = () => {
     setMangera("");
     setBoquilla("");
     setEtiqueta("");
-
-    setPrioridad("");
+    setcomentarios("");
     setFechaUltimaHidrostatica("");
     setFechaProximaHidrostatica("");
     setFechaUltimaRecarga("");
@@ -520,33 +516,25 @@ const ModalFormularioCheckList = () => {
                         onChange={(e) => setFechaProximaRecarga(e.target.value)}
                       />
                     </div>
-
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="prioridad"
+                        htmlFor="comentarios"
                       >
-                        Prioridad
+                        Comentarios
                       </label>
-                      <select
-                        type="prioridad"
+                      <textarea
                         id="nombre"
                         className=" border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={prioridad}
-                        onChange={(e) => setPrioridad(e.target.value)}
-                      >
-                        <option value="">Selecionar</option>
-
-                        {PRIORIDAD.map((opcion) => (
-                          <option key={opcion}>{opcion}</option>
-                        ))}
-                      </select>
+                        value={comentarios}
+                        onChange={(e) => setcomentarios(e.target.value)}
+                      />
                     </div>
 
                     <div>
                       <label
                         className=" text-gray-700 uppercase font-bold text-sm"
-                        htmlFor="prioridad"
+                        htmlFor="comentarios"
                       >
                         Estado
                       </label>

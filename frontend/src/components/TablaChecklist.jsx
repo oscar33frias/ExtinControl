@@ -1,17 +1,17 @@
 import React from "react";
 
 const TablaChecklist = ({ listaChecklist }) => {
-     // Verifica si listaChecklist es undefined o no es un array
+  // Verifica si listaChecklist es undefined o no es un array
   if (!listaChecklist || !Array.isArray(listaChecklist)) {
     // Puedes mostrar un mensaje de error o realizar otra acción adecuada
     return <p>Error: La lista de checklist no es válida.</p>;
   }
 
   return (
- <div className="relative overflow-x-auto max-h-30 shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto max-h-30 shadow-md sm:rounded-lg">
       <table className="w-full text-xs text-left rtl:text-right text-gray-400 dark:text-gray-100">
         <thead className="text-xs text-gray-400 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-100">
-             <tr>
+          <tr>
             <th scope="col" className="px-6 py-3">
               Código
             </th>
@@ -96,24 +96,54 @@ const TablaChecklist = ({ listaChecklist }) => {
               <td className="px-6 py-4 font-medium text-gray-500 whitespace-nowrap dark:text-black">
                 {item.codigo}
               </td>
-              <td className="px-6 py-4 dark:text-black">{item.marca || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.capacidad || "N/A"}</td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.marca || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.capacidad || "N/A"}
+              </td>
               <td className="px-6 py-4 dark:text-black">
                 {new Date(item.fecha_creacion).toLocaleString()}
               </td>
-              <td className="px-6 py-4 dark:text-black">{item.posicion || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.ubicacion || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.tipo || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.plantaId || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.obstruido || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.instrucciones || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.senalamiento || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.manometro || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.sello || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.condFisica || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.manguera || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.boquilla || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.etiqueta || "N/A"}</td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.posicion || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.ubicacion || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.tipo || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.plantaId || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.obstruido || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.instrucciones || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.senalamiento || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.manometro || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.sello || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.condFisica || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.manguera || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.boquilla || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.etiqueta || "N/A"}
+              </td>
               <td className="px-6 py-4 dark:text-black">
                 {item.fechaUltimaHidrostatica
                   ? new Date(item.fechaUltimaHidrostatica).toLocaleString()
@@ -139,8 +169,12 @@ const TablaChecklist = ({ listaChecklist }) => {
                   ? new Date(item.fechaCheckList).toLocaleString()
                   : "N/A"}
               </td>
-              <td className="px-6 py-4 dark:text-black">{item.estado || "N/A"}</td>
-              <td className="px-6 py-4 dark:text-black">{item.usuario || "N/A"}</td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.estado || "N/A"}
+              </td>
+              <td className="px-6 py-4 dark:text-black">
+                {item.usuario || "N/A"}
+              </td>
               {/* Agrega más celdas según sea necesario */}
             </tr>
           ))}

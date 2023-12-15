@@ -34,6 +34,7 @@ const MapaVisual = () => {
         />
         {markers.map((marker, index) => (
   <div
+  className="ease-in-out transform hover:scale-125 transition duration-500 bg-teal-400   inline"
     key={index}
     style={{
       position: "absolute",
