@@ -1,15 +1,16 @@
 import useExtintores from "../hooks/useExtintores";
 const Colaborador = ({ colaborador }) => {
-  const { handleModalEliminarColaborador, modalEliminarColaborador } =
+  const { handleModalEliminarColaborador} =
     useExtintores();
 
   return (
-    <div className=" border-b p-5 flex justify-between items-center">
+    <div className=" border-b p-2 flex justify-between items-center">
       <div>
         <p className="font-semibold text-lg text-gray-800">
           {colaborador.nombre}
         </p>
         <p className="text-gray-600 text-sm">{colaborador.email}</p>
+        <p className="text-black   backdrop:text-sm">{colaborador.rol==2? "Administrador":"Colaborador"}</p>
       </div>
 
       <div>

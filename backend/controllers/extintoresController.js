@@ -251,26 +251,6 @@ const eliminarColaborador = async (req, res) => {
   try {
     const pool = await sql.connect();
 
-    const verificarQuery = `
-      SELECT COUNT(*) AS count
-      FROM ExtintorColaborador
-      WHERE colaborador_id = @id AND extintor_id IN (
-        SELECT id FROM Extintores WHERE usuario_id = @usuarioId
-      )
-    `;
-
-    const verificarResult = await pool
-      .request()
-      .input("id", sql.Int, id)
-      .input("usuarioId", sql.Int, usuarioId)
-      .query(verificarQuery);
-
-    if (verificarResult.recordset[0].count === 0) {
-      return res.status(404).json({
-        msg: "Colaborador no encontrado o no autorizado para eliminar",
-      });
-    }
-
     // Actualizar el rol y plantaId del usuario a null
     const actualizarQuery = `
       UPDATE usuario 
@@ -280,7 +260,7 @@ const eliminarColaborador = async (req, res) => {
 
     await pool.request().input("id", sql.Int, id).query(actualizarQuery);
 
-    res.json({ msg: "Rol y plantaId actualizados a null con éxito" });
+    res.json({ msg: "Usuario Eliminado con extito" });
   } catch (error) {
     console.error("Error al actualizar rol y plantaId:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
@@ -389,5 +369,5 @@ export {
   agregarPosicion,
   obtenerPosiciones,
   eliminarTodasPosiciones,
-  obtenerColaboradores
+  obtenerColaboradores,
 };

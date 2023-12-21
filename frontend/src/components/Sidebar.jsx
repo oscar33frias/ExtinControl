@@ -4,14 +4,13 @@ import useExtintores from "../hooks/useExtintores";
 import ModalEliminarColaborador from "./ModalEliminarColaborador";
 import Colaborador from "./Colaborador";
 
-
 const Sidebar = () => {
   const { auth } = useAuth();
   const { colaboradores } = useExtintores();
-  console.log("🚀 ~ file: Sidebar.jsx:11 ~ Sidebar ~ colaboradores:", colaboradores)
-  
-
-
+  console.log(
+    "🚀 ~ file: Sidebar.jsx:11 ~ Sidebar ~ colaboradores:",
+    colaboradores
+  );
 
   return (
     <aside className="md:w-80 lg:w-96 px-6 py-8 bg-white shadow-lg rounded-lg">
@@ -20,7 +19,7 @@ const Sidebar = () => {
           ¡Hola, Encargado {auth.nombre}!
         </h1>
       </div>
-      {auth.rol==2 && (
+      {auth.rol == 2 && (
         <>
           <Link
             to="crear-extintor"
@@ -39,8 +38,8 @@ const Sidebar = () => {
               Añadir Colaborador
             </Link>
           </div>
-          <div className="mt-6">
-            <div className="bg-white shadow rounded-lg">
+          <div className="mt-2">
+            <div className="bg-white shadow rounded-md">
               {colaboradores?.length ? (
                 colaboradores
                   .slice()
@@ -52,8 +51,8 @@ const Sidebar = () => {
                     />
                   ))
               ) : (
-                <div className="flex justify-center items-center h-60">
-                  <h1 className="text-2xl font-extrabold text-red-600">
+                <div className="flex justify-center items-center h-48">
+                  <h1 className="text-xl font-extrabold text-red-600">
                     No hay Colaboradores
                   </h1>
                 </div>

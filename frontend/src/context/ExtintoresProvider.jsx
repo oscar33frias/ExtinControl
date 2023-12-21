@@ -350,6 +350,7 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const agregarColaborador = async (datos) => {
+    
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -431,7 +432,7 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
 
-      toast.success(data.msg, { position: toast.POSITION.TOP_CENTER });
+      toast.success("Colaborador Eliminado Con Extito", { position: toast.POSITION.TOP_CENTER });
 
       setColaboradores(colaboradores.filter((c) => c.id !== colaborador.id));
       setModalEliminarCheckList(false);
