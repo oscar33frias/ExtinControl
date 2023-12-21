@@ -1,4 +1,3 @@
-import useAdmin from "../hooks/useAdmin";
 import { useEffect, useRef } from "react";
 import ModalFormularioExtintor from "../components/ModalFormularioExtintor";
 import ModalEliminarCheckList from "../components/ModalEliminarCheckList";
@@ -7,6 +6,7 @@ import { useParams, Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import QrCodeGenerator from "../components/QRcodeGenerator";
 import { ToastContainer } from "react-toastify";
+import useAuth from "../hooks/useAuth";
 
 const Extintor = () => {
   const params = useParams();
@@ -19,7 +19,7 @@ const Extintor = () => {
     checkLists,
   } = useExtintores();
 
-  const admin = useAdmin();
+  const {auth} = useAuth();
 
   useEffect(() => {
     obtenerExtintor(params.id);
@@ -58,7 +58,7 @@ const Extintor = () => {
         <h1 className="font-black text-2xl md:text-4xl mt-4 md:mt-0">
           {codigo}
         </h1>
-        {admin && (
+        {auth.rol==2 && (
           <div className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-transform duration-300 transform hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@ const Extintor = () => {
           </div>
         )}
       </div>
-      {admin && (
+      {auth.rol==2 && (
         <button
           onClick={handleModalExtintor}
           className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase 

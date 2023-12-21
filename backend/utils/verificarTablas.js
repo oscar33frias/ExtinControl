@@ -3,7 +3,7 @@ import { conectarDB } from "../config/db.js";
 import { crearTablaUsuario } from "../models/Usuarios.js";
 import { crearTablaExtintores } from "../models/Extintores.js";
 import { createTablaCheckList } from "../models/checkList.js";
-import { crearTablaExtintorColaborador } from "../models/extintorColaborador.js";
+import { crearTablaPlantaColaborador } from "../models/PlantaColaborador.js";
 import { crearTablaPosicion } from "../models/posicion.js";
 import { crearTablaPlantas } from "../models/Plantas.js";
  
@@ -86,7 +86,7 @@ export const verificarTablasYCrearCheckList = async (tabla) => {
 
 
 
-export const verificarTablasYCrearExtintorColaborador = async (tabla) => {
+export const verificarTablasYCrearPlantaColaborador = async (tabla) => {
   try {
     await conectarDB();
 
@@ -99,10 +99,10 @@ export const verificarTablasYCrearExtintorColaborador = async (tabla) => {
 
     if (tablaCheckExiste.recordset[0].existe === 0) {
       // La tabla Usuario no existe, la creamos
-      await crearTablaExtintorColaborador();
-      console.log("Tabla extintorColaborador creada");
+      await crearTablaPlantaColaborador();
+      console.log("Tabla PlantaColaborador creada");
     } else {
-      console.log("La tabla extintorColaborador ya está creada");
+      console.log("La tabla PlantaColaborador ya está creada");
     }
   } catch (error) {
     console.error(`Error: ${error.message}`);

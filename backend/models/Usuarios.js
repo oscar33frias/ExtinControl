@@ -9,7 +9,9 @@ CREATE TABLE Usuario (
   token NVARCHAR(200),
   confirmado BIT DEFAULT 0,
   createdAt DATETIME DEFAULT GETDATE(),
-  updatedAt DATETIME DEFAULT GETDATE()
+  updatedAt DATETIME DEFAULT GETDATE(),
+  rol INT,
+  plantaId INT,
 )
 `;
 

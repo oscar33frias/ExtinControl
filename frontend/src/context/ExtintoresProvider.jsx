@@ -50,7 +50,7 @@ const ExtintoresProvider = ({ children }) => {
         );
 
         setExtintores(extintoresPorPlanta);
-        setColaboradores(data.colaboradores);
+        
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.msg, {
@@ -58,35 +58,39 @@ const ExtintoresProvider = ({ children }) => {
         });
       }
     };
+
     obtenerExtintores();
     obtenerChecklistTabla();
-    obtenerPlantas();
+    obtenerColaboradores();
   }, [colaborador, auth, planta]);
 
-  const obtenerPlantas = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const { data } = await clienteAxios.get("/plantas", config);
-
-      setPlantas(data); // Asumo que los datos devueltos son un array de plantas, ajusta según tu API
-    } catch (error) {
-      console.error("Error al obtener plantas:", error);
-      // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
-    }
-  };
-
   useEffect(() => {
+    const obtenerPlantas = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const { data } = await clienteAxios.get("/plantas", config);
+
+        console.log(auth);
+        auth.rol === 2
+          ? setPlantas(data)
+          : setPlantas(data.filter((planta) => planta.id === auth.plantaId));
+        console.log(plantas);
+      } catch (error) {
+        console.error("Error al obtener plantas:", error);
+        // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
+      }
+    };
     obtenerPlantas();
-  }, []);
+  }, [auth]);
 
   useEffect(() => {}, [markers, haymarkers]);
 
@@ -133,7 +137,10 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const nuevoExtintor = async (extintor) => {
-    console.log("🚀 ~ file: ExtintoresProvider.jsx:135 ~ nuevoExtintor ~ extintor:", extintor)
+    console.log(
+      "🚀 ~ file: ExtintoresProvider.jsx:135 ~ nuevoExtintor ~ extintor:",
+      extintor
+    );
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -177,7 +184,7 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.get(`/extintores/${id}`, config);
       setExtintor(data.extintor);
       setCheckLists(data.checklists);
-      setColaboradores(data.colaboradores);
+     
     } catch (error) {
       console.log(error);
     } finally {
@@ -367,6 +374,40 @@ const ExtintoresProvider = ({ children }) => {
       });
     }
   };
+  const obtenerColaboradores = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await clienteAxios.get(
+        "/usuarios/obtener-colaboradores",
+        config
+      );
+      let colaboradores = response.data.colaboradores;
+      const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
+      colaboradores = colaboradores.filter(
+        (colaborador) =>
+          colaborador.rol == 2 || colaborador.plantaId == plantaId
+      );
+      console.log(
+        "🚀 ~ file: ExtintoresProvider.jsx:397 ~ obtenerColaboradores ~ colaboradores:",
+        colaboradores
+      );
+      setColaboradores(colaboradores);
+    
+
+    } catch (error) {
+      console.error("Error al obtener colaboradores:", error);
+      // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
+    }
+  };
 
   const handleModalEliminarColaborador = (colaborador) => {
     setColaborador(colaborador);
@@ -406,6 +447,9 @@ const ExtintoresProvider = ({ children }) => {
       setModalEliminarColaborador(false);
     }
   };
+
+
+  
   const agregarPosicion = async (datos) => {
     try {
       const token = localStorage.getItem("token");
@@ -436,12 +480,12 @@ const ExtintoresProvider = ({ children }) => {
           config
         );
 
-
         setMarkers([posiciones]);
         setTimeout(() => {}, 3000);
       }
-      toast.success("posiciones agregadas con exito", { position: toast.POSITION.TOP_CENTER });
-
+      toast.success("posiciones agregadas con exito", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (error) {
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,
@@ -628,7 +672,7 @@ const ExtintoresProvider = ({ children }) => {
         plantas,
         setPlanta,
         planta,
-        setListaChecklist
+        setListaChecklist,
       }}
     >
       {children}

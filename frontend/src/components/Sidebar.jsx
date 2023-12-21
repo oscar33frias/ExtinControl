@@ -3,13 +3,16 @@ import useAuth from "../hooks/useAuth";
 import useExtintores from "../hooks/useExtintores";
 import ModalEliminarColaborador from "./ModalEliminarColaborador";
 import Colaborador from "./Colaborador";
-import useAdmin from "../hooks/useAdmin";
+
 
 const Sidebar = () => {
   const { auth } = useAuth();
   const { colaboradores } = useExtintores();
+  console.log("🚀 ~ file: Sidebar.jsx:11 ~ Sidebar ~ colaboradores:", colaboradores)
+  
 
-  const admin = useAdmin();
+
+
   return (
     <aside className="md:w-80 lg:w-96 px-6 py-8 bg-white shadow-lg rounded-lg">
       <div className="mb-6">
@@ -17,7 +20,7 @@ const Sidebar = () => {
           ¡Hola, Encargado {auth.nombre}!
         </h1>
       </div>
-      {admin && (
+      {auth.rol==2 && (
         <>
           <Link
             to="crear-extintor"

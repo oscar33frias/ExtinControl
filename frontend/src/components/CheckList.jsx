@@ -1,8 +1,8 @@
 import formatearFecha from "../helpers/formatearFecha";
 import imagenExtinto from "../img/extintor-preview.png";
 import useExtintores from "../hooks/useExtintores";
-import useAdmin from "../hooks/useAdmin";
 import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 const CheckList = ({ checklist }) => {
   const { handleModalEditarCheckList, handleModalEliminarCheckList } =
@@ -29,8 +29,7 @@ const CheckList = ({ checklist }) => {
     usuario,
   } = checklist;
 
-  
-  const admin = useAdmin();
+  const {auth} = useAuth()
   return (
     <div className="border p-6 bg-white shadow-lg rounded-xl mb-4">
       <div className="flex justify-between items-start flex-wrap mb-5">
@@ -118,7 +117,7 @@ const CheckList = ({ checklist }) => {
         </div>
 
         <div className="flex flex-col mt-5">
-          {admin && (
+          {auth.rol === 2 && (
             <div className="flex space-x-3">
               <button
                 className="bg-indigo-600 px-5 py-2 text-white uppercase font-semibold text-sm rounded-full shadow-md hover:bg-indigo-700 transition-colors duration-300"

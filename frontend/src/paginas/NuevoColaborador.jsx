@@ -4,10 +4,9 @@ import useExtintores from "../hooks/useExtintores";
 
 const NuevoColaborador = () => {
   const {
-    extintores,
+    
     colaborador,
     agregarColaborador,
-    cargando,
     colaboradores
   } = useExtintores();
 
@@ -16,22 +15,11 @@ const NuevoColaborador = () => {
 
   }, [colaboradores]);
   
-  const agregarColaboradorAExtintores = async () => {
-    try {
-      if (colaborador.email) {
-        for (const extintor of extintores) {
-          await agregarColaborador({
-            email: colaborador.email,
-            extintorId: extintor.id,
-          });
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const agregarColaboradorAExtintores = () => {
+    agregarColaborador()
+    console.log("?? ~ file: NuevoColaborador.jsx:12 ~ colaborador:", colaborador)
 
-
+  }
   
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">

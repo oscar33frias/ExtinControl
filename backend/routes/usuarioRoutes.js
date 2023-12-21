@@ -6,9 +6,10 @@ import {
   olvidePassword,
   comprobarPassword,
   nuevoPassword,
-  perfil
+  perfil,
 } from "../controllers/usuarioController.js";
-import checkAuth from "../middleware/checkAuth.js"
+import {obtenerColaboradores} from "../controllers/extintoresController.js"
+import checkAuth from "../middleware/checkAuth.js";
 
 const router = express.Router();
 router.post("/", registrar);
@@ -19,6 +20,7 @@ router
   .route("/olvide-password/:token")
   .get(comprobarPassword)
   .post(nuevoPassword);
-  router.get('/perfil',checkAuth,perfil)
+router.get("/perfil", checkAuth, perfil);
+router.get("/obtener-colaboradores",checkAuth,obtenerColaboradores)
 
 export default router;

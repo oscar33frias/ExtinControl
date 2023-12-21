@@ -4,30 +4,17 @@ const obtenerExtintores = async (req, res) => {
     const pool = await sql.connect();
     const usuarioId = req.usuario.id;
 
-    // Consulta para obtener extintores
-    const extintoresResult = await pool
-      .request()
-      .input("usuarioId", sql.Int, usuarioId).query(`
-        SELECT e.* 
-        FROM Extintores e 
-        LEFT JOIN ExtintorColaborador ec ON e.id = ec.extintor_id
-        WHERE e.usuario_id = @usuarioId OR ec.colaborador_id = @usuarioId
-      `);
-
-    // Consulta para obtener colaboradores
-    const colaboradoresResult = await pool
-      .request()
-      .input("usuarioId", sql.Int, usuarioId).query(`
-       SELECT DISTINCT u.id, u.email
-       FROM usuario u
-       INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
-       WHERE ec.extintor_id IN (
-         SELECT e.id
-         FROM Extintores e
-         WHERE e.usuario_id = @usuarioId
-       )
-     `);
-
+    // Consulta para obtener todos los extintores
+    const extintoresResult = await pool.request().query(`
+  SELECT e.* 
+  FROM Extintores e
+`);
+    // Consulta para obtener usuarios con rol diferente de cero
+    const colaboradoresResult = await pool.request().query(`
+ SELECT DISTINCT u.id, u.email
+ FROM usuario u
+ WHERE u.rol <> 0
+`);
     const colaboradores = colaboradoresResult.recordset;
 
     const extintores = extintoresResult.recordset;
@@ -97,8 +84,8 @@ const obtenerExtintor = async (req, res) => {
       .input("extintorId", sql.Int, id)
       .input("usuarioId", sql.Int, usuarioId).query(`
         SELECT COUNT(*) AS count
-        FROM ExtintorColaborador
-        WHERE extintor_id = @extintorId AND colaborador_id = @usuarioId
+        FROM usuario u
+        WHERE u.rol <> 0
       `);
 
     const colaboradorCount = colaboradorResponse.recordset[0].count;
@@ -120,15 +107,11 @@ const obtenerExtintor = async (req, res) => {
     const checklists = checklistsResponse.recordset;
 
     // Obtener los colaboradores relacionados con ese extintor
-    const colaboradoresResponse = await pool
-      .request()
-      .input("extintorId", sql.Int, id).query(`
-        SELECT u.*
-        FROM usuario u
-        INNER JOIN ExtintorColaborador ec ON u.id = ec.colaborador_id
-        WHERE ec.extintor_id = @extintorId
-      `);
-
+    const colaboradoresResponse = await pool.request().query(`
+     SELECT DISTINCT u.id, u.email
+     FROM usuario u
+     WHERE u.rol <> 0
+   `);
     const colaboradores = colaboradoresResponse.recordset;
 
     // Enviar el extintor, sus checklists y sus colaboradores en la respuesta
@@ -233,64 +216,34 @@ const buscarColaborador = async (req, res) => {
 };
 
 const agregarColaborador = async (req, res) => {
-  const { email, extintorId } = req.body; // Obtener el correo electrónico y el ID del extintor del cuerpo de la solicitud
+  const { email, rol, idPlanta } = req.body;
 
   try {
     const pool = await sql.connect();
 
-    // Verificar si el colaborador ya está agregado al extintor
-    const verificarQuery = `
-      SELECT COUNT(*) AS count
-      FROM ExtintorColaborador
-      WHERE extintor_id = @extintorId AND colaborador_id = (
-        SELECT id FROM usuario WHERE email = @email
-      )
-    `;
-
-    const verificarResult = await pool
-      .request()
-      .input("extintorId", sql.Int, extintorId)
-      .input("email", sql.VarChar, email)
-      .query(verificarQuery);
-
-    if (verificarResult.recordset[0].count > 0) {
-      return res
-        .status(400)
-        .json({ msg: "El colaborador ya está agregado al extintor" });
-    }
-
-    // Obtener el ID del colaborador por correo electrónico
+    // Obtener el ID del colaborador por correo electrónico y actualizar el rol y idPlanta
     const colaboradorQuery = `
+      UPDATE usuario 
+      SET rol = @rol, plantaId = @idPlanta
+      WHERE email = @email
       SELECT id FROM usuario WHERE email = @email
     `;
 
     const colaboradorResult = await pool
       .request()
       .input("email", sql.VarChar, email)
+      .input("rol", sql.Int, rol)
+      .input("idPlanta", sql.Int, idPlanta)
       .query(colaboradorQuery);
 
     const colaborador_id = colaboradorResult.recordset[0].id;
 
-    // Agregar al colaborador al extintor
-    const agregarQuery = `
-      INSERT INTO ExtintorColaborador (extintor_id, colaborador_id)
-      OUTPUT INSERTED.*
-      VALUES (@extintorId, @colaboradorId)
-    `;
-
-    const agregarResult = await pool
-      .request()
-      .input("extintorId", sql.Int, extintorId)
-      .input("colaboradorId", sql.Int, colaborador_id)
-      .query(agregarQuery);
-
-    res.json({ msg: "Colaborador agregado con éxito" });
+    res.json({ msg: "Rol y plantaId actualizados con éxito" });
   } catch (error) {
-    console.error("Error al agregar colaborador:", error.message);
+    console.error("Error al actualizar rol y plantaId:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
-
 const eliminarColaborador = async (req, res) => {
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;
@@ -318,20 +271,38 @@ const eliminarColaborador = async (req, res) => {
       });
     }
 
-    const eliminarQuery = `
-      DELETE FROM ExtintorColaborador
-      WHERE colaborador_id = @id
+    // Actualizar el rol y plantaId del usuario a null
+    const actualizarQuery = `
+      UPDATE usuario 
+      SET rol = NULL, plantaId = NULL
+      WHERE id = @id
     `;
 
-    await pool.request().input("id", sql.Int, id).query(eliminarQuery);
+    await pool.request().input("id", sql.Int, id).query(actualizarQuery);
 
-    res.json({ msg: "Colaborador eliminado con éxito" });
+    res.json({ msg: "Rol y plantaId actualizados a null con éxito" });
   } catch (error) {
-    console.error("Error al eliminar colaborador:", error.message);
+    console.error("Error al actualizar rol y plantaId:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
+const obtenerColaboradores = async (req, res) => {
+  try {
+    const pool = await sql.connect();
 
+    const obtenerQuery = `
+
+      SELECT *  
+      FROM usuario
+    `;
+    const obtenerResult = await pool.request().query(obtenerQuery);
+
+    res.json({ colaboradores: obtenerResult.recordset });
+  } catch (error) {
+    console.error("Error al obtener colaboradores:", error.message);
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
 const agregarPosicion = async (req, res) => {
   const { x, y, id, plantaId } = req.body; // Obtener las coordenadas x e y del cuerpo de la solicitud
   try {
@@ -418,4 +389,5 @@ export {
   agregarPosicion,
   obtenerPosiciones,
   eliminarTodasPosiciones,
+  obtenerColaboradores
 };

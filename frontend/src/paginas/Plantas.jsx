@@ -2,11 +2,14 @@ import { ToastContainer } from "react-toastify";
 import ModalFormularioPlanta from "../components/ModalFormularioPlanta";
 import useExtintores from "../hooks/useExtintores";
 import CardPlanta from "../components/CardPlanta";
+import useAuth from "../hooks/useAuth";
 
-const Plantas = () => {
+
+const Plantas =  () => {
   const { handleModalPlanta, plantas } = useExtintores();
-
-  return (
+const { auth } = useAuth();
+console.log(auth)
+return (
     <>
       <ToastContainer />
       <header className="px-4 py-5 bg-gray-900 border-b border-red-600">
@@ -14,7 +17,7 @@ const Plantas = () => {
           <h2 className="text-2xl md:text-4xl text-red-500 font-black text-center">
             Extintores ATR
           </h2>
-          <button
+          {auth.rol === 2 && (     <button
             className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase 
           font-bold bg-green-400 text-white text-center mt-5 flex gap-2
           items-center justify-center hover:bg-green-500 transition-colors"
@@ -35,16 +38,17 @@ const Plantas = () => {
               />
             </svg>
             Nuevo Planta
-          </button>
+          </button>)}
+     
         </div>
       </header>
 
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {plantas.map((planta) => (
           <CardPlanta key={planta.id} planta={planta} />
         ))}
-      </div>
+      </div> 
+    
    
 
       <ModalFormularioPlanta />

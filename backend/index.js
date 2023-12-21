@@ -4,7 +4,7 @@ import {
   verificarTablasYCrearUsuario,
   verificarTablasYCrearExtintor,
   verificarTablasYCrearCheckList,
-  verificarTablasYCrearExtintorColaborador,
+  verificarTablasYCrearPlantaColaborador,
   verificarTablasYCrearPosicion,
   verificarTablasYCrearPlanta,
 } from "./utils/verificarTablas.js";
@@ -39,7 +39,7 @@ const main = async () => {
     await verificarTablasYCrearUsuario("Usuario");
     await verificarTablasYCrearExtintor("Extintores");
     await verificarTablasYCrearCheckList("checkList");
-    await verificarTablasYCrearExtintorColaborador("ExtintorColaborador");
+    await verificarTablasYCrearPlantaColaborador("PlantaColaborador");
     await verificarTablasYCrearPosicion("Posicion");
     await verificarTablasYCrearPlanta("Plantas");
     app.use("/api/usuarios", usuarioRoutes);

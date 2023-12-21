@@ -83,7 +83,9 @@ const autenticar = async (req, res) => {
       id: usuario.id,
       nombre: usuario.nombre,
       email: usuario.email,
-      token
+      token,
+      rol: usuario.rol,
+      plantaId: usuario.plantaId,
     });
 
   } catch (error) {

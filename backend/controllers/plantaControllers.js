@@ -11,11 +11,9 @@ const obtenerPlantas = async (req, res) => {
   try {
     const pool = await sql.connect();
     console.log("dentro de obtener plantas");
-
     const plantasResult = await pool.request().query(`
         SELECT *
         FROM Plantas
-       
       `);
 
     const plantas = plantasResult.recordset;
@@ -72,7 +70,7 @@ const obtenerPlanta = async (req, res) => {
       .input("usuarioId", sql.Int, usuarioId).query(`
         SELECT *
         FROM Plantas
-        WHERE id = @id AND usuario_id = @usuarioId
+        WHERE id = @id 
       `);
 
     if (plantaResponse.recordset.length === 0) {

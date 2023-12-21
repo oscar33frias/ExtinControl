@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import useExtintores from "../hooks/useExtintores";
 import useAuth from "../hooks/useAuth";
 import Busqueda from "./busqueda";
-
 const Header = () => {
   const { handleBuscador, cerrarSesionExtintores } = useExtintores();
   const { cerrarSesionAuth } = useAuth();
+  const{auth} = useAuth()
+  console.log("🚀 ~ file: Header.jsx:11 ~ Header ~ admin:", )
+  
 
   const handleCerrarSesion = () => {
     cerrarSesionExtintores();
@@ -46,12 +48,13 @@ const Header = () => {
           >
             CheckLists
           </Link>
-          <Link
+          {auth.rol==2 && (  <Link
             to="/extintores/agregar-puntos-mapa"
             className="font-bold uppercase text-red-400 hover:text-red-500"
           >
             Indicar Posiciones en el Mapa
-          </Link>
+          </Link>)}
+        
 
           <Link
             to="/extintores/ver-mapa"
