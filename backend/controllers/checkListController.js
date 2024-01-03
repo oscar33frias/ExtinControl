@@ -35,12 +35,7 @@ const agregarCheckList = async (req, res) => {
   fechaUltimaRecarga = formatFecha(fechaUltimaRecarga);
   fechaProximaRecarga = formatFecha(fechaProximaRecarga);
 
-  console.log(
-    fechaProximaHidrostatica,
-    fechaProximaRecarga,
-    fechaUltimaHidrostatica,
-    fechaUltimaRecarga
-  );
+
   try {
     const pool = await sql.connect();
 
@@ -54,7 +49,7 @@ const agregarCheckList = async (req, res) => {
     if (!isExtintorOwnedByUser.recordset.length) {
       return res
         .status(404)
-        .json({ msg: "Extintor no encontrado o no pertenece al usuario" });
+        .json({ msg: "Extintor no encontrado" });
     }
     await pool
       .request()
@@ -257,18 +252,17 @@ const eliminarCheckList = async (req, res) => {
       SELECT *
       FROM checkList
       INNER JOIN Extintores ON checkList.extintorId = Extintores.id
-      WHERE checkList.id = @id AND Extintores.usuario_id = @usuarioId;
+      WHERE checkList.id = @id ;
     `;
 
     const checkListResult = await pool
       .request()
       .input("id", sql.Int, id)
-      .input("usuarioId", sql.Int, req.usuario.id)
       .query(checkListQuery);
 
     if (checkListResult.recordset.length === 0) {
       return res.status(404).json({
-        msg: "El checklist no existe o no tienes permisos para eliminarlo",
+        msg: "El checklist ",
       });
     }
 

@@ -8,7 +8,6 @@ import SinPermisos from "./SinPermisos";
 const Plantas = () => {
   const { handleModalPlanta, plantas } = useExtintores();
   const { auth } = useAuth();
-  console.log(auth);
   return (
     <>
       <ToastContainer />

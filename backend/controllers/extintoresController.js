@@ -1,4 +1,5 @@
 import sql from "mssql";
+
 const obtenerExtintores = async (req, res) => {
   try {
     const pool = await sql.connect();
@@ -139,7 +140,7 @@ const editarExtintor = async (req, res) => {
       UPDATE Extintores
       SET codigo = @codigo, marca = @marca, capacidad = @capacidad, tipo = @tipo, ubicacion = @ubicacion, posicion = @posicion
       OUTPUT INSERTED.*
-      WHERE id = @ExtintoresId AND usuario_id = @usuarioId
+      WHERE id = @ExtintoresId 
     `;
 
     const result = await pool
@@ -152,7 +153,6 @@ const editarExtintor = async (req, res) => {
       .input("posicion", sql.Int, posicion)
 
       .input("ExtintoresId", sql.Int, id)
-      .input("usuarioId", sql.Int, usuarioId)
       .query(query);
 
     if (result.recordset.length === 0) {
@@ -175,19 +175,18 @@ const eliminarExtintor = async (req, res) => {
     const pool = await sql.connect();
     const query = `
       DELETE FROM Extintores
-      WHERE id = @ExtintoresId AND usuario_id = @usuarioId
+      WHERE id = @ExtintoresId
     `;
 
     const result = await pool
       .request()
       .input("ExtintoresId", sql.Int, id)
-      .input("usuarioId", sql.Int, usuarioId)
       .query(query);
 
     if (result.rowsAffected[0] === 0) {
       return res
         .status(404)
-        .json({ msg: "Extintor no encontrado o no autorizado para eliminar" });
+        .json({ msg: "Extintor no encontrado " });
     }
 
     res.json({ msg: "Extintor eliminado con éxito" });
@@ -238,9 +237,8 @@ const agregarColaborador = async (req, res) => {
 
     const colaborador_id = colaboradorResult.recordset[0].id;
 
-    res.json({ msg: "Rol y plantaId actualizados con éxito" });
+    res.json({ msg: "Colaborador agregado con exito" });
   } catch (error) {
-    console.error("Error al actualizar rol y plantaId:", error.message);
     res.status(500).json({ msg: "Error en el servidor" });
   }
 };
@@ -332,10 +330,7 @@ const obtenerPosiciones = async (req, res) => {
 };
 const eliminarTodasPosiciones = async (req, res) => {
   const plantaId = req.params.id;
-  console.log(
-    "🚀 ~ file: extintoresController.js:378 ~ eliminarTodasPosiciones ~ plantaId:",
-    plantaId
-  );
+ 
 
   try {
     const pool = await sql.connect();

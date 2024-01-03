@@ -2,7 +2,6 @@
 import express from "express";
 import multer from "multer";
 import {
-  eliminarPlanta,
   obtenerPlanta,
   obtenerPlantas,
   nuevaPlanta,
@@ -24,6 +23,5 @@ router
 router
   .route("/:id")
   .get(checkAuth, obtenerPlanta)
-  .delete(checkAuth, eliminarPlanta);
 
 export default router;

@@ -25,7 +25,7 @@ const config_casa = {
 
 export const conectarDB = async () => {
   try {
-    await sql.connect(config_trabajo);
+    await sql.connect(config_casa);
     console.log("Conexión exitosa a SQL Server");
   } catch (error) {
     console.error(`Error: ${error.message}`);
