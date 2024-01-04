@@ -50,7 +50,6 @@ const ExtintoresProvider = ({ children }) => {
         );
 
         setExtintores(extintoresPorPlanta);
-        
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.msg, {
@@ -79,11 +78,9 @@ const ExtintoresProvider = ({ children }) => {
 
         const { data } = await clienteAxios.get("/plantas", config);
 
-        console.log(auth);
         auth.rol === 2
           ? setPlantas(data)
           : setPlantas(data.filter((planta) => planta.id === auth.plantaId));
-        console.log(plantas);
       } catch (error) {
         console.error("Error al obtener plantas:", error);
         // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
@@ -137,10 +134,7 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
   const nuevoExtintor = async (extintor) => {
-    console.log(
-      "🚀 ~ file: ExtintoresProvider.jsx:135 ~ nuevoExtintor ~ extintor:",
-      extintor
-    );
+    
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -184,7 +178,6 @@ const ExtintoresProvider = ({ children }) => {
       const { data } = await clienteAxios.get(`/extintores/${id}`, config);
       setExtintor(data.extintor);
       setCheckLists(data.checklists);
-     
     } catch (error) {
       console.log(error);
     } finally {
@@ -350,7 +343,9 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const agregarColaborador = async (datos) => {
-    
+    const { id: plantaId } = JSON.parse(localStorage.getItem("plantaLocal"));
+    const colaborador = { ...datos, plantaId };
+    console.log("🚀 ~ file: ExtintoresProvider.jsx:348 ~ agregarColaborador ~ colaborador:", colaborador)
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -361,9 +356,9 @@ const ExtintoresProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await clienteAxios.post(
+        const { data } = await clienteAxios.post(
         `/extintores/colaboradores/agregar`,
-        datos,
+        colaborador,
         config
       );
 
@@ -397,13 +392,8 @@ const ExtintoresProvider = ({ children }) => {
         (colaborador) =>
           colaborador.rol == 2 || colaborador.plantaId == plantaId
       );
-      console.log(
-        "🚀 ~ file: ExtintoresProvider.jsx:397 ~ obtenerColaboradores ~ colaboradores:",
-        colaboradores
-      );
-      setColaboradores(colaboradores);
     
-
+      setColaboradores(colaboradores);
     } catch (error) {
       console.error("Error al obtener colaboradores:", error);
       // Aquí puedes manejar el error según tus necesidades (por ejemplo, mostrar un mensaje de error)
@@ -432,7 +422,9 @@ const ExtintoresProvider = ({ children }) => {
         config
       );
 
-      toast.success("Colaborador Eliminado Con Extito", { position: toast.POSITION.TOP_CENTER });
+      toast.success("Colaborador Eliminado Con Extito", {
+        position: toast.POSITION.TOP_CENTER,
+      });
 
       setColaboradores(colaboradores.filter((c) => c.id !== colaborador.id));
       setModalEliminarCheckList(false);
@@ -449,16 +441,11 @@ const ExtintoresProvider = ({ children }) => {
     }
   };
 
-
-  
   const agregarPosicion = async (datos) => {
     try {
       const token = localStorage.getItem("token");
       const plantaId = JSON.parse(localStorage.getItem("plantaLocal")).id;
-      console.log(
-        "🚀 ~ file: ExtintoresProvider.jsx:411 ~ agregarPosicion ~ id:",
-        plantaId
-      );
+     
 
       let posiciones = datos.posiciones;
 
@@ -514,7 +501,6 @@ const ExtintoresProvider = ({ children }) => {
       );
       setListaChecklist(checkListPorPlanta);
 
-      console.log(checkListPorPlanta);
     } catch (error) {
       toast.error(error.response.data.msg, {
         position: toast.POSITION.TOP_CENTER,
@@ -542,11 +528,7 @@ const ExtintoresProvider = ({ children }) => {
       const posiciones = data.posiciones.filter(
         (posicion) => posicion.plantaId == plantaId
       );
-      console.log(
-        "🚀 ~ file: ExtintoresProvider.jsx:495 ~ obtenerPosiciones ~ posiciones:",
-        posiciones
-      );
-
+    
       setHaymarkers(posiciones.length > 0);
 
       setMarkers(posiciones);

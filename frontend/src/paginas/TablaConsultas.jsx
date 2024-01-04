@@ -7,10 +7,7 @@ import * as XLSX from "xlsx";
 
 const TablaConsulta = () => {
   const { listaChecklist } = useExtintores();
-  console.log(
-    "🚀 ~ file: TablaConsultas.jsx:9 ~ TablaConsulta ~ listaChecklist:",
-    listaChecklist
-  );
+
   const [mesSeleccionado, setMesSeleccionado] = useState("");
   const [anioSeleccionado, setAnioSeleccionado] = useState("");
   const [listaFiltrada, setListaFiltrada] = useState([]);

@@ -7,10 +7,6 @@ import Colaborador from "./Colaborador";
 const Sidebar = () => {
   const { auth } = useAuth();
   const { colaboradores } = useExtintores();
-  console.log(
-    "🚀 ~ file: Sidebar.jsx:11 ~ Sidebar ~ colaboradores:",
-    colaboradores
-  );
 
   return (
     <aside className="md:w-80 lg:w-96 px-6 py-8 bg-white shadow-lg rounded-lg">

@@ -184,9 +184,7 @@ const eliminarExtintor = async (req, res) => {
       .query(query);
 
     if (result.rowsAffected[0] === 0) {
-      return res
-        .status(404)
-        .json({ msg: "Extintor no encontrado " });
+      return res.status(404).json({ msg: "Extintor no encontrado " });
     }
 
     res.json({ msg: "Extintor eliminado con éxito" });
@@ -215,29 +213,36 @@ const buscarColaborador = async (req, res) => {
 };
 
 const agregarColaborador = async (req, res) => {
-  const { email, rol, idPlanta } = req.body;
-
+  const { email, rol, plantaId } = req.body;
+  console.log("🚀 ~ file: extintoresController.js:217 ~ agregarColaborador ~ req.body:", req.body)
+ 
   try {
     const pool = await sql.connect();
 
     // Obtener el ID del colaborador por correo electrónico y actualizar el rol y idPlanta
     const colaboradorQuery = `
       UPDATE usuario 
-      SET rol = @rol, plantaId = @idPlanta
+      SET rol = @rol, plantaId = @plantaId
       WHERE email = @email
-      SELECT id FROM usuario WHERE email = @email
+      SELECT id,email,rol,plantaId FROM usuario WHERE email = @email
     `;
-
     const colaboradorResult = await pool
       .request()
       .input("email", sql.VarChar, email)
       .input("rol", sql.Int, rol)
-      .input("idPlanta", sql.Int, idPlanta)
+      .input("plantaId", sql.Int, plantaId)
       .query(colaboradorQuery);
 
-    const colaborador_id = colaboradorResult.recordset[0].id;
+    if (colaboradorResult.recordset.length === 0) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
 
-    res.json({ msg: "Colaborador agregado con exito" });
+    const resultador = colaboradorResult.recordset[0];
+    console.log("🚀 ~ file: extintoresController.js:240 ~ agregarColaborador ~ resultador:", resultador)
+    res.json({
+      msg: "Colaborador agregado con exito",
+      colaborador: resultador,
+    });
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -330,7 +335,6 @@ const obtenerPosiciones = async (req, res) => {
 };
 const eliminarTodasPosiciones = async (req, res) => {
   const plantaId = req.params.id;
- 
 
   try {
     const pool = await sql.connect();

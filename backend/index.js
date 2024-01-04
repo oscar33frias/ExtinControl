@@ -21,7 +21,7 @@ dotenv.config();
 
 const directorioImagenesCasa = "/Users/oscarfriaszavalza/Desktop/EXTINTORES_PROGRAMAS /ExtinControl/backend/upload";
 const directorioImagenesTrabajo = "C:/Users/oscar.frias/Documents/Extintores/ExtinControl/backend/upload";// Configuración para servir archivos estáticos desde el directorio de imágenes
-app.use("/backend/upload", express.static(directorioImagenesCasa));
+app.use("/backend/upload", express.static(directorioImagenesTrabajo));
 
 const corsOptions = {
   origin: function (origin, callback) {

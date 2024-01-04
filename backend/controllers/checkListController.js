@@ -326,7 +326,6 @@ const obtenerCheckListsforTable = async (req, res) => {
     }
 
     const checkLists = result.recordset;
-    console.log(checkLists);
     res.json(checkLists);
   } catch (error) {
     console.error(error);

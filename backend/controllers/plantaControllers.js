@@ -31,7 +31,7 @@ const nuevaPlanta = async (req, res) => {
     const imagen = req.file;
 
     const nombreArchivo = `imagen_${Date.now()}.png`;
-    const rutaArchivo = path.join(directorioImagenesCasa, nombreArchivo);
+    const rutaArchivo = path.join(directorioImagenesTrabajo, nombreArchivo);
 
     await fs.writeFile(rutaArchivo, imagen.buffer);
 

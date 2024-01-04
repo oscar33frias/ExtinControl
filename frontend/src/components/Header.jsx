@@ -6,7 +6,6 @@ const Header = () => {
   const { handleBuscador, cerrarSesionExtintores } = useExtintores();
   const { cerrarSesionAuth } = useAuth();
   const{auth} = useAuth()
-  console.log("🚀 ~ file: Header.jsx:11 ~ Header ~ admin:", )
   
 
   const handleCerrarSesion = () => {
