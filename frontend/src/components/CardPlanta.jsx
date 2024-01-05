@@ -3,7 +3,7 @@ import useExtintores from "../hooks/useExtintores";
 
 const CardPlanta = ({ planta }) => {
   const { nombrePlanta, ubicacion, nombreArchivo, id } = planta;
-  const baseURL = import.meta.env.VITE_BACKEND_URL_TRABAJO;
+  const baseURL = import.meta.env.VITE_BACKEND_URL;
   const rutaImagen = `${baseURL}/backend/upload/${nombreArchivo}`;
   const { setPlanta } = useExtintores();
   

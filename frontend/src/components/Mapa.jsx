@@ -16,7 +16,7 @@ const Mapa = () => {
     obtenerPosiciones();
   }, []);
 
-  const baseURL = import.meta.env.VITE_BACKEND_URL_TRABAJO;
+  const baseURL = import.meta.env.VITE_BACKEND_URL;
   const nombreArchivo = JSON.parse(localStorage.getItem("plantaLocal")).nombreArchivo;
   const rutaImagen = `${baseURL}/backend/upload/${nombreArchivo}`;
 
