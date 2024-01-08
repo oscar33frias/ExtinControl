@@ -1,4 +1,3 @@
-import React from "react";
 
 const TablaChecklist = ({ listaChecklist }) => {
   // Verifica si listaChecklist es undefined o no es un array
@@ -33,9 +32,7 @@ const TablaChecklist = ({ listaChecklist }) => {
             <th scope="col" className="px-6 py-3">
               Tipo
             </th>
-            <th scope="col" className="px-6 py-3">
-              Planta ID
-            </th>
+
             <th scope="col" className="px-6 py-3">
               Obstruido
             </th>
@@ -114,9 +111,7 @@ const TablaChecklist = ({ listaChecklist }) => {
               <td className="px-6 py-4 dark:text-black">
                 {item.tipo || "N/A"}
               </td>
-              <td className="px-6 py-4 dark:text-black">
-                {item.plantaId || "N/A"}
-              </td>
+
               <td className="px-6 py-4 dark:text-black">
                 {item.obstruido || "N/A"}
               </td>

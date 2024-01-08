@@ -19,7 +19,7 @@ const Extintor = () => {
     checkLists,
   } = useExtintores();
 
-  const {auth} = useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     obtenerExtintor(params.id);
@@ -49,7 +49,11 @@ const Extintor = () => {
         <h1 className="font-black text-2xl md:text-4xl">{codigo}</h1>
         <div ref={qrCodeRef}>
           <QrCodeGenerator
-            codigo={import.meta.env.VITE_FRONTEND_URL_MOVIL+"/extintorescheck/editar/" + id}
+            codigo={
+              import.meta.env.VITE_FRONTEND_URL_MOVIL +
+              "/extintorescheck/editar/" +
+              id
+            }
           />
         </div>
         <button onClick={exportImage} className="mt-4 md:mt-0">
@@ -58,7 +62,7 @@ const Extintor = () => {
         <h1 className="font-black text-2xl md:text-4xl mt-4 md:mt-0">
           {codigo}
         </h1>
-        {auth.rol==2 && (
+        {auth.rol == 2 && (
           <div className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-transform duration-300 transform hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,30 +87,29 @@ const Extintor = () => {
           </div>
         )}
       </div>
-      {auth.rol==2 && (
-        <button
-          onClick={handleModalExtintor}
-          className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase 
+
+      <button
+        onClick={handleModalExtintor}
+        className="text-sm px-5 py-3 w-full md:w-auto rounded-lg uppercase 
       font-bold bg-green-400 text-white text-center mt-5 flex gap-2
        items-center justify-center hover:bg-green-500 transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          Nuevo CheckList
-        </button>
-      )}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        Nuevo CheckList
+      </button>
 
       <p className=" font-bold text-xl mt-10"> CheckList del Extintor</p>
       <div className=" bg-white shadow mt-10 rounded-lg">

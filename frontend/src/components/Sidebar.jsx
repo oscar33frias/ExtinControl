@@ -15,14 +15,15 @@ const Sidebar = () => {
           ¡Hola, Encargado {auth.nombre}!
         </h1>
       </div>
-      {auth.rol == 2 && (
-        <>
-          <Link
+      <Link
             to="crear-extintor"
             className="animate-bounce block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300"
           >
             Registrar Extintor
           </Link>
+      {auth.rol == 2 && (
+        <>
+         
           <div className="mt-8">
             <h2 className="text-2xl font-semibold text-yellow-500 mb-4">
               Colaboradores
@@ -56,7 +57,7 @@ const Sidebar = () => {
             </div>
           </div>
         </>
-      )}
+     )} 
 
       <ModalEliminarColaborador />
     </aside>
