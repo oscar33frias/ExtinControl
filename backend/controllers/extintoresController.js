@@ -59,6 +59,7 @@ const nuevoExtintor = async (req, res) => {
     res.status(500).json({ msg: "Error en el servidor al crear el extintor" });
   }
 };
+
 const obtenerExtintor = async (req, res) => {
   const { id } = req.params;
   const { id: usuarioId } = req.usuario;

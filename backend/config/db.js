@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  server: process.env.SERVER,
-  database: process.env.DATABASE,
+  user: process.env.VAR_USER,
+  password: process.env.VAR_PASSWORD,
+  server: process.env.VAR_SERVER,
+  database: process.env.VAR_DATABASE,
   options: {
     encrypt: false, // Cambiar a true si se necesita una conexión segura
   },

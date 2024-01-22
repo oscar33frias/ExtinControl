@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useExtintores from "../hooks/useExtintores";
 import { toast } from "react-toastify";
@@ -31,9 +31,9 @@ const ModalFormularioPlanta = () => {
       formData.append("nombrePlanta", nombrePlanta);
       formData.append("ubicacion", ubicacion);
       formData.append("imagen", imagenPlanta);
-    
+      
       crearPlanta(formData);
-    
+
       setNombrePlanta("");
       setUbicacion("");
       setImagenPlanta(null); // Asegúrate de limpiar el estado de la imagen después de enviarla

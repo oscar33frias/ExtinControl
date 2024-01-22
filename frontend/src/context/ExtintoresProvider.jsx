@@ -586,6 +586,7 @@ const ExtintoresProvider = ({ children }) => {
   };
 
   const crearPlanta = async (planta) => {
+    console.log("🚀 ~ crearPlanta ~ planta:", planta)
     try {
       const token = localStorage.getItem("token");
       if (!token) return;

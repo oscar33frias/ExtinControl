@@ -1,11 +1,8 @@
 import sql from "mssql";
-
 import fs from "fs/promises"; // Módulo para operaciones de sistema de archivos
 import path from "path";
-const directorioImagenesCasa =
-  "/Users/oscarfriaszavalza/Desktop/EXTINTORES_PROGRAMAS /ExtinControl/backend/upload";
-const directorioImagenesTrabajo =
-  "C:/Users/oscar.frias/Documents/Extintores/ExtinControl/backend/upload"; // Configuración para servir archivos estáticos desde el directorio de imágenes
+
+const directorioImagenes =process.env.DIRECTORIO_IMAGENES;
 
 const obtenerPlantas = async (req, res) => {
   try {
@@ -31,7 +28,7 @@ const nuevaPlanta = async (req, res) => {
     const imagen = req.file;
 
     const nombreArchivo = `imagen_${Date.now()}.png`;
-    const rutaArchivo = path.join(directorioImagenesTrabajo, nombreArchivo);
+    const rutaArchivo = path.join(directorioImagenes, nombreArchivo);
 
     await fs.writeFile(rutaArchivo, imagen.buffer);
 
@@ -50,6 +47,7 @@ const nuevaPlanta = async (req, res) => {
     res.json(result.recordset[0]);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor al crear la planta" });
+    console.log("Error al crear planta:", error.message);
   }
 };
 

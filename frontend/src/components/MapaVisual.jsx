@@ -3,7 +3,7 @@ import useExtintores from "../hooks/useExtintores";
 
 
 const MapaVisual = () => {
-  const { markers, obtenerPosiciones ,extintores,planta} = useExtintores();
+  const { markers, obtenerPosiciones ,extintores} = useExtintores();
   useEffect(() => {
     obtenerPosiciones();
   }, []);
