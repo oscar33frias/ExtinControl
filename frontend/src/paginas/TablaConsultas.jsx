@@ -14,7 +14,6 @@ const TablaConsulta = () => {
 
   const handleBuscar = () => {
     if (!Array.isArray(listaChecklist)) {
-      console.error("listaChecklist no es un array:", listaChecklist);
       return;
     }
 
